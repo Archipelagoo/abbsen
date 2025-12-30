@@ -539,21 +539,12 @@
         </div>
         
         <!-- Photo Preview Modal -->
-        <div id="photo-preview-modal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4">
-          <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center">
+        <div id="photo-preview-modal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4" onclick="closePhotoPreview()">
+          <div class="relative max-w-4xl w-full max-h-[90%] flex flex-col items-center">
             <button onclick="closePhotoPreview()" class="absolute top-2 right-2 bg-white/20 hover:bg-white/40 text-white w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold z-10 transition">
               ×
             </button>
-            <img id="photo-preview-image" class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl" alt="Preview foto">
-            <div class="flex gap-4 mt-4">
-              <button onclick="prevPhotoPreview()" class="bg-white/20 hover:bg-white/40 text-white px-6 py-2 rounded-xl font-semibold transition flex items-center gap-2">
-                ← Sebelumnya
-              </button>
-              <span id="photo-preview-counter" class="text-white font-semibold py-2">1 / 1</span>
-              <button onclick="nextPhotoPreview()" class="bg-white/20 hover:bg-white/40 text-white px-6 py-2 rounded-xl font-semibold transition flex items-center gap-2">
-                Selanjutnya →
-              </button>
-            </div>
+            <img id="photo-preview-image" class="max-w-full max-h-[85%] object-contain rounded-xl shadow-2xl" alt="Preview foto" onclick="event.stopPropagation()">
           </div>
         </div>
         
@@ -867,20 +858,35 @@
       const videoWidth = video.videoWidth;
       const videoHeight = video.videoHeight;
       
-      // Detect screen orientation
+      // Detect orientations
       const screenIsPortrait = window.innerHeight > window.innerWidth;
       const videoIsPortrait = videoHeight > videoWidth;
       
       console.log(`Video: ${videoWidth}x${videoHeight}, Screen portrait: ${screenIsPortrait}, Video portrait: ${videoIsPortrait}`);
       
-      // Set canvas to match video dimensions exactly
-      canvas.width = videoWidth;
-      canvas.height = videoHeight;
+      // Check if we need to rotate the image
+      // On mobile, if screen is landscape but video is portrait (or vice versa), we may need to rotate
+      const needsRotation = screenIsPortrait !== videoIsPortrait && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
-      // Draw video frame
-      ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+      if (needsRotation) {
+        // Swap dimensions for rotated canvas
+        canvas.width = videoHeight;
+        canvas.height = videoWidth;
+        
+        // Rotate and draw
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(screenIsPortrait ? Math.PI / 2 : -Math.PI / 2);
+        ctx.drawImage(video, -videoWidth / 2, -videoHeight / 2, videoWidth, videoHeight);
+        ctx.restore();
+      } else {
+        // No rotation needed - draw normally
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
+        ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+      }
       
-      // Add watermark (adapts to orientation)
+      // Add watermark (adapts to final canvas orientation)
       addWatermark(ctx, canvas.width, canvas.height);
       
       // Store photo temporarily and show preview
@@ -891,7 +897,7 @@
       if (previewImg) {
         previewImg.src = pendingPhotoData;
         previewImg.style.maxWidth = '100%';
-        previewImg.style.maxHeight = '60vh';
+        previewImg.style.maxHeight = '60%';
         previewImg.style.width = 'auto';
         previewImg.style.height = 'auto';
         previewImg.style.objectFit = 'contain';
@@ -958,7 +964,7 @@
       const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
       const dayStr = days[now.getDay()];
       
-      // Location
+      // Location - limit to half page width
       const locationStr = currentLocation?.address || 'Lokasi tidak tersedia';
       
       // Scale factor based on shorter dimension for consistent sizing
@@ -967,9 +973,9 @@
       
       // Padding
       const padding = 20 * scale;
-      const maxLocationWidth = width - (padding * 2);
+      const maxLocationWidth = (width / 2) - padding; // Limit to half page
       
-      // ========== RIGHT TOP - TimeMark label ==========
+      // ========== RIGHT TOP - TimeMark label (Time=orange, Mark=white) ==========
       ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
       ctx.shadowBlur = 4 * scale;
       ctx.shadowOffsetX = 1 * scale;
@@ -977,9 +983,21 @@
       
       const timeMarkSize = 14 * scale;
       ctx.font = `bold ${timeMarkSize}px Arial, sans-serif`;
-      ctx.fillStyle = '#F97316';
       ctx.textAlign = 'right';
-      ctx.fillText('TimeMark', width - padding, padding + timeMarkSize);
+      
+      // Measure "Mark" to position correctly
+      const markText = 'Mark';
+      const timeText = 'Time';
+      const markWidth = ctx.measureText(markText).width;
+      const timeWidth = ctx.measureText(timeText).width;
+      
+      // Draw "Mark" in white
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(markText, width - padding, padding + timeMarkSize);
+      
+      // Draw "Time" in orange before "Mark"
+      ctx.fillStyle = '#F97316';
+      ctx.fillText(timeText, width - padding - markWidth, padding + timeMarkSize);
       
       // ========== LEFT BOTTOM - All watermark content ==========
       ctx.textAlign = 'left';
@@ -992,10 +1010,9 @@
       const logoSize = isLandscape ? 45 * scale : 55 * scale;
       const lineGap = 6 * scale;
       
-      // Wrap location text
+      // Wrap location text (limited to half page)
       ctx.font = `${locationSize}px Arial, sans-serif`;
       const locationLines = wrapText(ctx, '📍 ' + locationStr, maxLocationWidth);
-      const locationHeight = locationLines.length * (locationSize + 3 * scale);
       
       // Calculate positions from bottom
       let currentY = height - padding;
@@ -1009,33 +1026,19 @@
       }
       currentY -= lineGap;
       
-      // Draw Day
-      ctx.font = `${daySize}px Arial, sans-serif`;
+      // Draw Date (now below Day)
+      ctx.font = `${dateSize}px Arial, sans-serif`;
+      ctx.fillText(dateStr, padding, currentY);
+      currentY -= (dateSize + lineGap);
+      
+      // Draw Day (now above Date)
+      ctx.font = `bold ${daySize}px Arial, sans-serif`;
       ctx.fillText(dayStr, padding, currentY);
       currentY -= (daySize + lineGap);
       
-      // Draw Time | Date on same line
+      // Draw Time
       ctx.font = `bold ${timeSize}px Arial, sans-serif`;
       ctx.fillText(timeStr, padding, currentY);
-      
-      const timeWidth = ctx.measureText(timeStr).width;
-      const sepX = padding + timeWidth + 10 * scale;
-      
-      // Orange separator
-      ctx.shadowColor = 'transparent';
-      ctx.strokeStyle = '#F97316';
-      ctx.lineWidth = 3 * scale;
-      ctx.beginPath();
-      ctx.moveTo(sepX, currentY - timeSize * 0.7);
-      ctx.lineTo(sepX, currentY + 4 * scale);
-      ctx.stroke();
-      
-      // Date after separator
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-      ctx.shadowBlur = 4 * scale;
-      ctx.font = `${dateSize}px Arial, sans-serif`;
-      ctx.fillText(dateStr, sepX + 10 * scale, currentY);
-      
       currentY -= (timeSize + lineGap);
       
       // Draw Logo
@@ -1137,23 +1140,12 @@
     }
     
     // Photo Preview Modal Functions
-    let currentPreviewIndex = 0;
-    let previewPhotosArray = [];
-    
     function openUploadPhotoPreview(index) {
-      currentPreviewIndex = index;
-      previewPhotosArray = [...state.photos];
-      showPhotoPreviewModal();
-    }
-    
-    function showPhotoPreviewModal() {
       const modal = document.getElementById('photo-preview-modal');
       const img = document.getElementById('photo-preview-image');
-      const counter = document.getElementById('photo-preview-counter');
       
-      if (previewPhotosArray[currentPreviewIndex]) {
-        img.src = previewPhotosArray[currentPreviewIndex];
-        counter.textContent = `${currentPreviewIndex + 1} / ${previewPhotosArray.length}`;
+      if (state.photos[index]) {
+        img.src = state.photos[index];
         modal.classList.remove('hidden');
         modal.classList.add('flex');
       }
@@ -1163,31 +1155,6 @@
       const modal = document.getElementById('photo-preview-modal');
       modal.classList.add('hidden');
       modal.classList.remove('flex');
-      previewPhotosArray = [];
-    }
-    
-    function prevPhotoPreview() {
-      if (currentPreviewIndex > 0) {
-        currentPreviewIndex--;
-        updatePhotoPreviewDisplay();
-      }
-    }
-    
-    function nextPhotoPreview() {
-      if (currentPreviewIndex < previewPhotosArray.length - 1) {
-        currentPreviewIndex++;
-        updatePhotoPreviewDisplay();
-      }
-    }
-    
-    function updatePhotoPreviewDisplay() {
-      const img = document.getElementById('photo-preview-image');
-      const counter = document.getElementById('photo-preview-counter');
-      
-      if (previewPhotosArray[currentPreviewIndex]) {
-        img.src = previewPhotosArray[currentPreviewIndex];
-        counter.textContent = `${currentPreviewIndex + 1} / ${previewPhotosArray.length}`;
-      }
     }
     
     // ==================== SUBMIT ====================
@@ -1699,5 +1666,5 @@
       ])
     });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6190c1b735ea7a',t:'MTc2NzA5ODAwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b61a64443c94acd',t:'MTc2NzA5ODg4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
