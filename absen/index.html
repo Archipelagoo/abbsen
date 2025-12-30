@@ -741,6 +741,7 @@
     let pendingPhotoData = null; // Temporary store for photo before confirmation
     let deviceOrientation = { alpha: 0, beta: 0, gamma: 0 }; // Gyroscope data
     let isGyroAvailable = false;
+    let currentDeviceOrientation = 0; // 0, 90, -90, 180
     
     function openCamera() {
       const modal = document.getElementById('camera-modal');
@@ -826,12 +827,26 @@
         });
     }
     
-    // Gyroscope functions for detecting device rotation
+    // Orientation detection using multiple methods
     function startGyroscope() {
-      // Try DeviceOrientationEvent first
+      // Method 1: Screen Orientation API (most reliable)
+      if (screen.orientation) {
+        updateOrientationFromScreen();
+        screen.orientation.addEventListener('change', updateOrientationFromScreen);
+        isGyroAvailable = true;
+      }
+      
+      // Method 2: window.orientation (legacy but works on many devices)
+      if (typeof window.orientation !== 'undefined') {
+        updateOrientationFromWindow();
+        window.addEventListener('orientationchange', updateOrientationFromWindow);
+        isGyroAvailable = true;
+      }
+      
+      // Method 3: DeviceOrientation API (gyroscope)
       if (window.DeviceOrientationEvent) {
-        // For iOS 13+ we need to request permission
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+          // iOS 13+ needs permission
           DeviceOrientationEvent.requestPermission()
             .then(permissionState => {
               if (permissionState === 'granted') {
@@ -839,74 +854,151 @@
                 isGyroAvailable = true;
               }
             })
-            .catch(console.error);
+            .catch(() => {});
         } else {
-          // Non iOS 13+ devices
           window.addEventListener('deviceorientation', handleOrientation, true);
           isGyroAvailable = true;
         }
       }
+      
+      // Method 4: Match media (CSS based detection)
+      setupMediaQueryListener();
+      
+      // Initial update
+      updateOrientationStatus();
+    }
+    
+    function setupMediaQueryListener() {
+      const landscapeQuery = window.matchMedia('(orientation: landscape)');
+      
+      function handleMediaChange(e) {
+        if (e.matches) {
+          // Landscape detected via media query
+          if (currentDeviceOrientation === 0) {
+            currentDeviceOrientation = 90;
+          }
+        } else {
+          currentDeviceOrientation = 0;
+        }
+        updateOrientationStatus();
+      }
+      
+      landscapeQuery.addEventListener('change', handleMediaChange);
+      // Initial check
+      if (landscapeQuery.matches && currentDeviceOrientation === 0) {
+        currentDeviceOrientation = 90;
+        updateOrientationStatus();
+      }
+    }
+    
+    function updateOrientationFromScreen() {
+      const angle = screen.orientation.angle;
+      const type = screen.orientation.type;
+      
+      if (type.includes('landscape')) {
+        currentDeviceOrientation = angle === 270 ? -90 : 90;
+      } else if (type.includes('portrait')) {
+        currentDeviceOrientation = angle === 180 ? 180 : 0;
+      }
+      updateOrientationStatus();
+    }
+    
+    function updateOrientationFromWindow() {
+      const angle = window.orientation;
+      if (angle === 90) {
+        currentDeviceOrientation = 90;
+      } else if (angle === -90 || angle === 270) {
+        currentDeviceOrientation = -90;
+      } else if (angle === 180) {
+        currentDeviceOrientation = 180;
+      } else {
+        currentDeviceOrientation = 0;
+      }
+      updateOrientationStatus();
     }
     
     function stopGyroscope() {
       window.removeEventListener('deviceorientation', handleOrientation, true);
+      window.removeEventListener('orientationchange', updateOrientationFromWindow);
+      if (screen.orientation) {
+        screen.orientation.removeEventListener('change', updateOrientationFromScreen);
+      }
       isGyroAvailable = false;
     }
     
     function handleOrientation(event) {
       deviceOrientation = {
-        alpha: event.alpha || 0, // compass direction
-        beta: event.beta || 0,   // front-back tilt (-180 to 180)
-        gamma: event.gamma || 0  // left-right tilt (-90 to 90)
+        alpha: event.alpha || 0,
+        beta: event.beta || 0,
+        gamma: event.gamma || 0
       };
       
-      // Update orientation indicator
+      // Use gyroscope to refine orientation detection
+      const gamma = deviceOrientation.gamma;
+      const beta = deviceOrientation.beta;
+      
+      if (Math.abs(gamma) > 45) {
+        currentDeviceOrientation = gamma > 0 ? 90 : -90;
+      } else if (beta < -120 || beta > 120) {
+        currentDeviceOrientation = 180;
+      } else if (Math.abs(gamma) < 20 && Math.abs(beta) < 60) {
+        currentDeviceOrientation = 0;
+      }
+      
       updateOrientationStatus();
     }
     
     function updateOrientationStatus() {
       const orientationText = document.getElementById('orientation-text');
-      if (!orientationText) return;
+      const orientationStatus = document.getElementById('orientation-status');
+      if (!orientationText || !orientationStatus) return;
       
-      const rotation = getDeviceRotation();
+      // Also check screen dimensions as fallback
+      const isScreenLandscape = window.innerWidth > window.innerHeight;
+      
+      // Use screen dimensions if no gyro data
+      let rotation = currentDeviceOrientation;
+      if (rotation === 0 && isScreenLandscape) {
+        rotation = 90;
+      }
+      
+      // Remove all color classes first
+      orientationStatus.classList.remove('text-blue-600', 'text-green-600', 'text-orange-600');
       
       if (rotation === 90) {
-        orientationText.textContent = '🔄 Landscape (kiri) - Foto akan dirotasi';
-        orientationText.parentElement.classList.remove('text-blue-600');
-        orientationText.parentElement.classList.add('text-green-600');
+        orientationText.textContent = '🔄 Landscape (kiri) - Foto akan dirotasi 📷';
+        orientationStatus.classList.add('text-green-600');
       } else if (rotation === -90) {
-        orientationText.textContent = '🔄 Landscape (kanan) - Foto akan dirotasi';
-        orientationText.parentElement.classList.remove('text-blue-600');
-        orientationText.parentElement.classList.add('text-green-600');
+        orientationText.textContent = '🔄 Landscape (kanan) - Foto akan dirotasi 📷';
+        orientationStatus.classList.add('text-green-600');
       } else if (rotation === 180) {
         orientationText.textContent = '⚠️ HP terbalik';
-        orientationText.parentElement.classList.remove('text-green-600');
-        orientationText.parentElement.classList.add('text-orange-600');
+        orientationStatus.classList.add('text-orange-600');
       } else {
         orientationText.textContent = '📱 Portrait (normal)';
-        orientationText.parentElement.classList.remove('text-green-600', 'text-orange-600');
-        orientationText.parentElement.classList.add('text-blue-600');
+        orientationStatus.classList.add('text-blue-600');
       }
     }
     
-    // Determine photo orientation based on gyroscope
+    // Get the current device rotation for photo capture
     function getDeviceRotation() {
-      const gamma = deviceOrientation.gamma; // left-right tilt
-      const beta = deviceOrientation.beta;   // front-back tilt
+      // Check screen dimensions first (most reliable)
+      const isScreenLandscape = window.innerWidth > window.innerHeight;
       
-      // gamma: -90 to 90
-      // When holding phone normally (portrait): gamma close to 0
-      // When rotated left (landscape, home button right): gamma close to 90
-      // When rotated right (landscape, home button left): gamma close to -90
-      
-      if (gamma > 45) {
-        return 90; // Landscape - rotated left (home button on right)
-      } else if (gamma < -45) {
-        return -90; // Landscape - rotated right (home button on left)
-      } else if (beta < -45) {
-        return 180; // Upside down
+      if (isScreenLandscape) {
+        // Screen is landscape, determine which direction
+        if (currentDeviceOrientation === -90) {
+          return -90;
+        }
+        return 90;
       }
-      return 0; // Portrait normal
+      
+      // Check if gyroscope detected landscape even if screen hasn't rotated
+      if (Math.abs(currentDeviceOrientation) === 90) {
+        return currentDeviceOrientation;
+      }
+      
+      return 0;
     }
     
     function showCameraView() {
@@ -976,40 +1068,43 @@
       const videoWidth = video.videoWidth;
       const videoHeight = video.videoHeight;
       
-      // Get device rotation from gyroscope
-      const gyroRotation = isGyroAvailable ? getDeviceRotation() : 0;
+      // Check if VIDEO is already landscape (width > height)
+      const isVideoLandscape = videoWidth > videoHeight;
       
-      // Also check screen orientation as fallback
-      const screenOrientation = screen.orientation?.angle || window.orientation || 0;
+      // Check if SCREEN is landscape
+      const isScreenLandscape = window.innerWidth > window.innerHeight;
       
-      // Determine if we need to rotate the image
-      // gyroRotation: 90 = landscape left, -90 = landscape right, 0 = portrait
-      const needsRotation = Math.abs(gyroRotation) === 90;
+      // Get device rotation
+      const rotation = getDeviceRotation();
       
-      console.log(`Video: ${videoWidth}x${videoHeight}, Gyro rotation: ${gyroRotation}°, Screen: ${screenOrientation}°, Needs rotation: ${needsRotation}`);
+      // Determine if we need to rotate
+      // Case 1: Video is portrait BUT user is holding phone landscape
+      // Case 2: Video is already landscape - no rotation needed
+      const needsRotation = !isVideoLandscape && (isScreenLandscape || Math.abs(rotation) === 90);
+      
+      console.log(`Video: ${videoWidth}x${videoHeight}, isVideoLandscape: ${isVideoLandscape}, isScreenLandscape: ${isScreenLandscape}, rotation: ${rotation}, needsRotation: ${needsRotation}`);
       
       if (needsRotation) {
-        // For landscape photos, we need to rotate the canvas
-        // Swap width and height
+        // Video is portrait but phone is landscape - rotate the image
         canvas.width = videoHeight;
         canvas.height = videoWidth;
         
         ctx.save();
         
-        if (gyroRotation === 90) {
-          // Rotated left (home button on right) - rotate 90° clockwise
-          ctx.translate(canvas.width, 0);
-          ctx.rotate(Math.PI / 2);
-        } else if (gyroRotation === -90) {
-          // Rotated right (home button on left) - rotate 90° counter-clockwise
+        if (rotation === -90) {
+          // Rotated right (home button on left) - rotate counter-clockwise
           ctx.translate(0, canvas.height);
           ctx.rotate(-Math.PI / 2);
+        } else {
+          // Default: Rotated left or just landscape - rotate clockwise
+          ctx.translate(canvas.width, 0);
+          ctx.rotate(Math.PI / 2);
         }
         
         ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
         ctx.restore();
       } else {
-        // Portrait - use video as-is
+        // Either portrait mode OR video is already landscape
         canvas.width = videoWidth;
         canvas.height = videoHeight;
         ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
@@ -1795,5 +1890,5 @@
       ])
     });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b61fae604084acd',t:'MTc2NzEwMjM1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6200fd81194acd',t:'MTc2NzEwMjYwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
