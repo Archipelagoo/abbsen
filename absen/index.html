@@ -518,8 +518,8 @@
               <div id="photo-preview" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 ${state.photos.map((photo, i) => `
                   <div class="relative group">
-                    <img src="${photo}" class="w-full aspect-square object-cover rounded-xl shadow">
-                    <button onclick="removePhoto(${i})" 
+                    <img src="${photo}" class="w-full aspect-square object-cover rounded-xl shadow cursor-pointer hover:opacity-90 transition" onclick="openPhotoPreview('${i}')">
+                    <button onclick="event.stopPropagation(); removePhoto(${i})" 
                             class="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-sm font-bold">
                       ×
                     </button>
@@ -538,6 +538,25 @@
           </div>
         </div>
         
+        <!-- Photo Preview Modal -->
+        <div id="photo-preview-modal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4">
+          <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center">
+            <button onclick="closePhotoPreview()" class="absolute top-2 right-2 bg-white/20 hover:bg-white/40 text-white w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold z-10 transition">
+              ×
+            </button>
+            <img id="photo-preview-image" class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl" alt="Preview foto">
+            <div class="flex gap-4 mt-4">
+              <button onclick="prevPhotoPreview()" class="bg-white/20 hover:bg-white/40 text-white px-6 py-2 rounded-xl font-semibold transition flex items-center gap-2">
+                ← Sebelumnya
+              </button>
+              <span id="photo-preview-counter" class="text-white font-semibold py-2">1 / 1</span>
+              <button onclick="nextPhotoPreview()" class="bg-white/20 hover:bg-white/40 text-white px-6 py-2 rounded-xl font-semibold transition flex items-center gap-2">
+                Selanjutnya →
+              </button>
+            </div>
+          </div>
+        </div>
+        
         <!-- Camera Modal -->
         <div id="camera-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
           <div class="bg-white rounded-2xl p-4 max-w-2xl w-full max-h-[95vh] overflow-auto">
@@ -548,7 +567,7 @@
             
             <!-- Camera View -->
             <div id="camera-view">
-              <video id="camera-video" autoplay playsinline class="w-full rounded-xl mb-4"></video>
+              <video id="camera-video" autoplay playsinline class="w-full rounded-xl mb-4" style="object-fit: contain; max-height: 60vh;"></video>
               <div id="location-status" class="text-sm text-slate-600 mb-3 flex items-center gap-2">
                 <span class="animate-pulse">📍</span> Mengambil lokasi...
               </div>
@@ -564,8 +583,8 @@
             
             <!-- Preview View (Hidden by default) -->
             <div id="preview-view" class="hidden">
-              <div class="mb-4">
-                <img id="preview-image" class="w-full rounded-xl shadow-lg" alt="Preview foto">
+              <div class="mb-4 flex justify-center">
+                <img id="preview-image" class="max-w-full rounded-xl shadow-lg" style="max-height: 60vh; object-fit: contain;" alt="Preview foto">
               </div>
               <p class="text-center text-slate-600 mb-4 font-medium">Apakah foto sudah bagus?</p>
               <div class="flex gap-3">
@@ -756,10 +775,22 @@
         currentLocation = { address: 'GPS tidak didukung' };
       }
       
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: 'environment',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          } 
+        })
         .then(stream => {
           cameraStream = stream;
           video.srcObject = stream;
+          
+          // Wait for video to load metadata to get actual dimensions
+          video.onloadedmetadata = () => {
+            video.play();
+          };
+          
           modal.classList.remove('hidden');
           modal.classList.add('flex');
           
@@ -825,23 +856,35 @@
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       
-      // Use actual video dimensions (preserves landscape/portrait orientation)
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      // Get actual video dimensions from the stream
+      const videoWidth = video.videoWidth;
+      const videoHeight = video.videoHeight;
       
-      // Draw video frame
-      ctx.drawImage(video, 0, 0);
+      // Detect if device is in landscape or portrait based on video stream
+      const isLandscape = videoWidth > videoHeight;
+      
+      console.log(`Video dimensions: ${videoWidth}x${videoHeight}, Landscape: ${isLandscape}`);
+      
+      // Set canvas to match video dimensions exactly (preserves orientation)
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
+      
+      // Draw video frame exactly as captured
+      ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
       
       // Add watermark (adapts to orientation)
       addWatermark(ctx, canvas.width, canvas.height);
       
       // Store photo temporarily and show preview
-      pendingPhotoData = canvas.toDataURL('image/jpeg', 0.9);
+      pendingPhotoData = canvas.toDataURL('image/jpeg', 0.92);
       
-      // Show preview
+      // Show preview with correct aspect ratio
       const previewImg = document.getElementById('preview-image');
       if (previewImg) {
         previewImg.src = pendingPhotoData;
+        // Set style to preserve aspect ratio
+        previewImg.style.maxWidth = '100%';
+        previewImg.style.height = 'auto';
       }
       
       showPreviewView();
@@ -914,81 +957,65 @@
       
       // Padding adjustments
       const leftPadding = isLandscape ? 25 * scale : 20 * scale;
+      const rightPadding = isLandscape ? 25 * scale : 20 * scale;
       const bottomPadding = isLandscape ? 25 * scale : 20 * scale;
       
-      // Max width for watermark (half of the image width)
-      const maxWatermarkWidth = width / 2;
+      // Max width for location text (image width minus paddings)
+      const maxLocationWidth = width - leftPadding - rightPadding;
       
-      // Shadow settings
+      // ========== RIGHT TOP - TimeMark label ==========
       ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
       ctx.shadowBlur = 6 * scale;
       ctx.shadowOffsetX = 2 * scale;
       ctx.shadowOffsetY = 2 * scale;
       
+      const timeMarkFontSize = isLandscape ? 14 * scale : 16 * scale;
+      ctx.font = `bold ${timeMarkFontSize}px Arial, sans-serif`;
+      ctx.fillStyle = '#F97316'; // Orange color
+      ctx.textAlign = 'right';
+      ctx.fillText('TimeMark', width - rightPadding, 30 * scale);
+      
       // ========== LEFT BOTTOM - All watermark content ==========
       ctx.textAlign = 'left';
       
-      // Calculate positions from bottom up
-      const lineSpacing = isLandscape ? 8 * scale : 10 * scale;
+      // Calculate line spacing
+      const lineSpacing = isLandscape ? 6 * scale : 8 * scale;
       
-      // Location (bottom-most)
+      // Font sizes
       const locationFontSize = isLandscape ? 13 * scale : 15 * scale;
-      const locationY = height - bottomPadding;
-      ctx.font = `${locationFontSize}px Arial, sans-serif`;
-      ctx.fillStyle = '#FFFFFF';
-      
-      // Truncate location if too long (max half width)
-      let displayLocation = '📍 ' + locationStr;
-      while (ctx.measureText(displayLocation).width > maxWatermarkWidth - leftPadding && displayLocation.length > 20) {
-        displayLocation = displayLocation.slice(0, -4) + '...';
-      }
-      ctx.fillText(displayLocation, leftPadding, locationY);
-      
-      // Day (above location)
       const dayFontSize = isLandscape ? 16 * scale : 18 * scale;
-      const dayY = locationY - locationFontSize - lineSpacing;
-      ctx.font = `${dayFontSize}px Arial, sans-serif`;
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillText(dayStr, leftPadding, dayY);
-      
-      // Time + separator + Date (above day)
-      const timeFontSize = isLandscape ? 32 * scale : 38 * scale;
       const dateFontSize = isLandscape ? 16 * scale : 18 * scale;
-      const timeY = dayY - dayFontSize - lineSpacing;
-      
-      // Time
-      ctx.font = `bold ${timeFontSize}px Arial, sans-serif`;
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillText(timeStr, leftPadding, timeY);
-      
-      // Orange separator
-      const timeTextWidth = ctx.measureText(timeStr).width;
-      const separatorX = leftPadding + timeTextWidth + 12 * scale;
-      
-      ctx.shadowColor = 'transparent';
-      ctx.strokeStyle = '#F97316';
-      ctx.lineWidth = 4 * scale;
-      ctx.beginPath();
-      ctx.moveTo(separatorX, timeY - 24 * scale);
-      ctx.lineTo(separatorX, timeY + 6 * scale);
-      ctx.stroke();
-      
-      // Date (after separator, above time baseline)
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-      ctx.shadowBlur = 6 * scale;
-      ctx.font = `${dateFontSize}px Arial, sans-serif`;
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillText(dateStr, separatorX + 12 * scale, timeY);
-      
-      // Logo (above time)
+      const timeFontSize = isLandscape ? 32 * scale : 38 * scale;
       const logoSize = isLandscape ? 55 * scale : 65 * scale;
+      
+      // Wrap location text into multiple lines
+      ctx.font = `${locationFontSize}px Arial, sans-serif`;
+      const locationLines = wrapText(ctx, '📍 ' + locationStr, maxLocationWidth);
+      
+      // Calculate total height needed for location lines
+      const locationTotalHeight = locationLines.length * (locationFontSize + 4 * scale);
+      
+      // Calculate all positions from bottom up
+      const locationBottomY = height - bottomPadding;
+      const locationTopY = locationBottomY - locationTotalHeight + locationFontSize;
+      
+      // Day position (above location)
+      const dayY = locationTopY - lineSpacing - 4 * scale;
+      
+      // Date position (above day)
+      const dateY = dayY - dayFontSize - lineSpacing;
+      
+      // Time position (above date)
+      const timeY = dateY - dateFontSize - lineSpacing;
+      
+      // Logo position (above time)
       const logoY = timeY - timeFontSize - lineSpacing - logoSize;
       
+      // Draw Logo
       if (logoImage) {
         ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
         ctx.shadowBlur = 8 * scale;
         
-        // Draw logo with rounded corners
         const logoX = leftPadding;
         const logoRadius = 8 * scale;
         
@@ -1013,9 +1040,9 @@
         ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
         ctx.shadowBlur = 10 * scale;
         ctx.fillStyle = '#FFFFFF';
-        ctx.beginPath();
         const logoX = leftPadding;
         const logoRadius = 8 * scale;
+        ctx.beginPath();
         ctx.moveTo(logoX + logoRadius, logoY);
         ctx.lineTo(logoX + logoSize - logoRadius, logoY);
         ctx.quadraticCurveTo(logoX + logoSize, logoY, logoX + logoSize, logoY + logoRadius);
@@ -1036,9 +1063,73 @@
         ctx.textAlign = 'left';
       }
       
+      // Draw Time
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      ctx.shadowBlur = 6 * scale;
+      ctx.font = `bold ${timeFontSize}px Arial, sans-serif`;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(timeStr, leftPadding, timeY);
+      
+      // Orange separator after time
+      const timeTextWidth = ctx.measureText(timeStr).width;
+      const separatorX = leftPadding + timeTextWidth + 12 * scale;
+      
+      ctx.shadowColor = 'transparent';
+      ctx.strokeStyle = '#F97316';
+      ctx.lineWidth = 4 * scale;
+      ctx.beginPath();
+      ctx.moveTo(separatorX, timeY - 24 * scale);
+      ctx.lineTo(separatorX, timeY + 6 * scale);
+      ctx.stroke();
+      
+      // Draw Date (after separator, same line as time)
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      ctx.shadowBlur = 6 * scale;
+      ctx.font = `${dateFontSize}px Arial, sans-serif`;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(dateStr, separatorX + 12 * scale, timeY);
+      
+      // Draw Day (above date line, below time)
+      ctx.font = `${dayFontSize}px Arial, sans-serif`;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(dayStr, leftPadding, dateY);
+      
+      // Draw Location (multiple lines if needed)
+      ctx.font = `${locationFontSize}px Arial, sans-serif`;
+      ctx.fillStyle = '#FFFFFF';
+      locationLines.forEach((line, index) => {
+        const lineY = locationTopY + (index * (locationFontSize + 4 * scale));
+        ctx.fillText(line, leftPadding, lineY);
+      });
+      
       // Reset
       ctx.shadowColor = 'transparent';
       ctx.shadowBlur = 0;
+    }
+    
+    // Helper function to wrap text into multiple lines
+    function wrapText(ctx, text, maxWidth) {
+      const words = text.split(' ');
+      const lines = [];
+      let currentLine = '';
+      
+      words.forEach(word => {
+        const testLine = currentLine ? currentLine + ' ' + word : word;
+        const metrics = ctx.measureText(testLine);
+        
+        if (metrics.width > maxWidth && currentLine) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      });
+      
+      if (currentLine) {
+        lines.push(currentLine);
+      }
+      
+      return lines;
     }
     
     function handleFileUpload(event) {
@@ -1057,6 +1148,53 @@
     function removePhoto(index) {
       state.photos.splice(index, 1);
       render();
+    }
+    
+    // Photo Preview Modal Functions
+    let currentPreviewIndex = 0;
+    
+    function openPhotoPreview(index) {
+      currentPreviewIndex = parseInt(index);
+      const modal = document.getElementById('photo-preview-modal');
+      const img = document.getElementById('photo-preview-image');
+      const counter = document.getElementById('photo-preview-counter');
+      
+      if (state.photos[currentPreviewIndex]) {
+        img.src = state.photos[currentPreviewIndex];
+        counter.textContent = `${currentPreviewIndex + 1} / ${state.photos.length}`;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+    
+    function closePhotoPreview() {
+      const modal = document.getElementById('photo-preview-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    
+    function prevPhotoPreview() {
+      if (currentPreviewIndex > 0) {
+        currentPreviewIndex--;
+        updatePhotoPreview();
+      }
+    }
+    
+    function nextPhotoPreview() {
+      if (currentPreviewIndex < state.photos.length - 1) {
+        currentPreviewIndex++;
+        updatePhotoPreview();
+      }
+    }
+    
+    function updatePhotoPreview() {
+      const img = document.getElementById('photo-preview-image');
+      const counter = document.getElementById('photo-preview-counter');
+      
+      if (state.photos[currentPreviewIndex]) {
+        img.src = state.photos[currentPreviewIndex];
+        counter.textContent = `${currentPreviewIndex + 1} / ${state.photos.length}`;
+      }
     }
     
     // ==================== SUBMIT ====================
@@ -1568,5 +1706,5 @@
       ])
     });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b617d48a610ea7a',t:'MTc2NzA5NzIwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b618a0bd5f5ea7a',t:'MTc2NzA5NzczMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
