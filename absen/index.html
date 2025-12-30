@@ -770,8 +770,14 @@
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
       // For mobile, we don't specify dimensions to let the device use its native resolution
+      // Also detect if screen is landscape to request appropriate aspect ratio
+      const isLandscapeScreen = window.innerWidth > window.innerHeight;
+      
       const videoConstraints = isMobile ? {
-        facingMode: { ideal: 'environment' }
+        facingMode: { ideal: 'environment' },
+        // Request dimensions matching screen orientation
+        width: isLandscapeScreen ? { ideal: 1920 } : { ideal: 1080 },
+        height: isLandscapeScreen ? { ideal: 1080 } : { ideal: 1920 }
       } : {
         facingMode: 'environment',
         width: { ideal: 1920 },
@@ -794,6 +800,18 @@
           
           // Show camera view, hide preview
           showCameraView();
+          
+          // Listen for orientation changes and restart camera
+          window.cameraOrientationHandler = () => {
+            if (cameraStream) {
+              // Give a small delay for orientation to settle
+              setTimeout(() => {
+                closeCamera();
+                openCamera();
+              }, 300);
+            }
+          };
+          screen.orientation?.addEventListener('change', window.cameraOrientationHandler);
         })
         .catch(err => {
           showToast('Tidak dapat mengakses kamera: ' + err.message, 'error');
@@ -847,6 +865,12 @@
       pendingPhotoData = null;
       modal.classList.add('hidden');
       modal.classList.remove('flex');
+      
+      // Remove orientation listener
+      if (window.cameraOrientationHandler) {
+        screen.orientation?.removeEventListener('change', window.cameraOrientationHandler);
+        window.cameraOrientationHandler = null;
+      }
     }
     
     function capturePhoto() {
@@ -858,33 +882,20 @@
       const videoWidth = video.videoWidth;
       const videoHeight = video.videoHeight;
       
-      // Detect orientations
-      const screenIsPortrait = window.innerHeight > window.innerWidth;
-      const videoIsPortrait = videoHeight > videoWidth;
+      // Detect current device orientation
+      const screenOrientation = screen.orientation?.angle || window.orientation || 0;
+      const isScreenLandscape = Math.abs(screenOrientation) === 90 || Math.abs(screenOrientation) === 270 || window.innerWidth > window.innerHeight;
       
-      console.log(`Video: ${videoWidth}x${videoHeight}, Screen portrait: ${screenIsPortrait}, Video portrait: ${videoIsPortrait}`);
+      // Video orientation from camera
+      const isVideoLandscape = videoWidth > videoHeight;
       
-      // Check if we need to rotate the image
-      // On mobile, if screen is landscape but video is portrait (or vice versa), we may need to rotate
-      const needsRotation = screenIsPortrait !== videoIsPortrait && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      console.log(`Video: ${videoWidth}x${videoHeight}, Screen orientation: ${screenOrientation}, Screen landscape: ${isScreenLandscape}, Video landscape: ${isVideoLandscape}`);
       
-      if (needsRotation) {
-        // Swap dimensions for rotated canvas
-        canvas.width = videoHeight;
-        canvas.height = videoWidth;
-        
-        // Rotate and draw
-        ctx.save();
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate(screenIsPortrait ? Math.PI / 2 : -Math.PI / 2);
-        ctx.drawImage(video, -videoWidth / 2, -videoHeight / 2, videoWidth, videoHeight);
-        ctx.restore();
-      } else {
-        // No rotation needed - draw normally
-        canvas.width = videoWidth;
-        canvas.height = videoHeight;
-        ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
-      }
+      // Simply use the video as-is - modern browsers handle orientation correctly
+      // The key is to match the output to how user is holding the phone
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
+      ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
       
       // Add watermark (adapts to final canvas orientation)
       addWatermark(ctx, canvas.width, canvas.height);
@@ -897,7 +908,7 @@
       if (previewImg) {
         previewImg.src = pendingPhotoData;
         previewImg.style.maxWidth = '100%';
-        previewImg.style.maxHeight = '60%';
+        previewImg.style.maxHeight = '60vh';
         previewImg.style.width = 'auto';
         previewImg.style.height = 'auto';
         previewImg.style.objectFit = 'contain';
@@ -1666,5 +1677,5 @@
       ])
     });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b61a64443c94acd',t:'MTc2NzA5ODg4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b61f676d53c4acd',t:'MTc2NzEwMjE3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
