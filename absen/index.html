@@ -504,7 +504,7 @@
     </div>
     <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
      <h2 class="text-2xl font-bold text-white text-center mb-6">Foto Absen</h2>
-     <div id="photoFoldersLoading" class="flex flex-col items-center justify-center py-12">
+     <div id="photoFoldersLoading" class="flex flex-col items-center justify-center py-12 hidden">
       <div class="loading-spinner mb-4"></div>
       <p class="text-white font-medium">Memuat folder foto...</p>
      </div>
@@ -954,103 +954,104 @@ function jsonResponse(data) {
       const timeStr = `${hours}:${minutes}`;
       const locationStr = currentLocation || 'Location unavailable';
       
-      // Scale for different resolutions
-      const scale = Math.min(width, height) / 1080;
-      const padding = 20 * scale;
-      const logoSize = 50 * scale;
-      const fontSize = 16 * scale;
-      const lineHeight = 24 * scale;
+      // Detect orientation - portrait or landscape
+      const isPortrait = height > width;
       
-      // LEFT BOTTOM - Info card
-      const cardX = padding;
-      const cardHeight = logoSize + lineHeight * 3 + padding * 2;
-      const cardY = height - cardHeight - padding;
-      const cardWidth = Math.min(400 * scale, width * 0.6);
+      // Scale based on shorter side for consistent sizing
+      const baseSize = Math.min(width, height);
+      const scale = baseSize / 1080;
+      const padding = 30 * scale;
+      const logoSize = 80 * scale;
+      const fontSize = 22 * scale;
+      const lineHeight = 32 * scale;
       
-      // Draw card background
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.beginPath();
-      ctx.roundRect(cardX, cardY, cardWidth, cardHeight, 10 * scale);
-      ctx.fill();
+      // Shadow for all text
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+      ctx.shadowBlur = 6 * scale;
+      ctx.shadowOffsetX = 2 * scale;
+      ctx.shadowOffsetY = 2 * scale;
       
-      // Draw logo placeholder (black version)
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(cardX + padding, cardY + padding, logoSize, logoSize);
+      // Calculate watermark position - LEFT BOTTOM
+      let startX = padding;
+      let startY = height - padding;
       
       // Try to load and draw logo
+      const WATERMARK_LOGO = 'https://drive.google.com/thumbnail?id=1zaavYZSem-yNHztE724qeIAWw9uGJgen&sz=w200';
       try {
         const logoImg = new Image();
         logoImg.crossOrigin = 'anonymous';
         await new Promise((resolve) => {
           logoImg.onload = resolve;
           logoImg.onerror = resolve;
-          logoImg.src = LOGO_URL;
-          setTimeout(resolve, 1000);
+          logoImg.src = WATERMARK_LOGO;
+          setTimeout(resolve, 800);
         });
         
         if (logoImg.complete && logoImg.naturalWidth > 0) {
-          ctx.drawImage(logoImg, cardX + padding, cardY + padding, logoSize, logoSize);
-          // Apply black filter
-          ctx.globalCompositeOperation = 'source-atop';
-          ctx.fillStyle = '#000000';
-          ctx.fillRect(cardX + padding, cardY + padding, logoSize, logoSize);
-          ctx.globalCompositeOperation = 'source-over';
+          const logoY = startY - logoSize - lineHeight * 3 - padding;
+          ctx.drawImage(logoImg, startX, logoY, logoSize, logoSize);
+          
+          // Text below logo
+          let textY = logoY + logoSize + lineHeight;
+          
+          // Date
+          ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(dateStr, startX, textY);
+          textY += lineHeight;
+          
+          // Time
+          ctx.font = `bold ${fontSize * 1.4}px Poppins, sans-serif`;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(timeStr, startX, textY);
+          textY += lineHeight;
+          
+          // Location with emoji
+          ctx.font = `${fontSize * 0.9}px Poppins, sans-serif`;
+          ctx.fillStyle = '#ffffff';
+          const maxLocWidth = isPortrait ? width * 0.8 : width * 0.5;
+          const truncatedLoc = truncateText(ctx, locationStr, maxLocWidth);
+          ctx.fillText('📍 ' + truncatedLoc, startX, textY);
+        } else {
+          // Fallback without logo
+          let textY = startY - lineHeight * 2;
+          
+          ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(dateStr, startX, textY);
+          textY += lineHeight;
+          
+          ctx.font = `bold ${fontSize * 1.4}px Poppins, sans-serif`;
+          ctx.fillText(timeStr, startX, textY);
+          textY += lineHeight;
+          
+          ctx.font = `${fontSize * 0.9}px Poppins, sans-serif`;
+          const maxLocWidth = isPortrait ? width * 0.8 : width * 0.5;
+          const truncatedLoc = truncateText(ctx, locationStr, maxLocWidth);
+          ctx.fillText('📍 ' + truncatedLoc, startX, textY);
         }
-      } catch (e) {}
+      } catch (e) {
+        // Error fallback
+        let textY = startY - lineHeight * 2;
+        
+        ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(dateStr, startX, textY);
+        textY += lineHeight;
+        
+        ctx.font = `bold ${fontSize * 1.4}px Poppins, sans-serif`;
+        ctx.fillText(timeStr, startX, textY);
+        textY += lineHeight;
+        
+        ctx.font = `${fontSize * 0.9}px Poppins, sans-serif`;
+        ctx.fillText('📍 ' + locationStr, startX, textY);
+      }
       
-      // Text info
-      ctx.fillStyle = '#333333';
-      ctx.font = `${fontSize}px Poppins, sans-serif`;
-      
-      const textX = cardX + padding + logoSize + padding;
-      let textY = cardY + padding + fontSize;
-      
-      ctx.fillText(dateStr, textX, textY);
-      textY += lineHeight;
-      
-      ctx.font = `bold ${fontSize * 1.2}px Poppins, sans-serif`;
-      ctx.fillText(timeStr, textX, textY);
-      textY += lineHeight;
-      
-      ctx.font = `${fontSize * 0.9}px Poppins, sans-serif`;
-      ctx.fillStyle = '#666666';
-      const maxTextWidth = cardWidth - logoSize - padding * 3;
-      const truncatedLocation = truncateText(ctx, locationStr, maxTextWidth);
-      ctx.fillText(truncatedLocation, textX, textY);
-      
-      // RIGHT TOP - Timemark badge
-      const badgeText1 = 'Time';
-      const badgeText2 = 'mark';
-      const verifiedText = '100% photo verified';
-      
-      ctx.font = `bold ${fontSize * 1.5}px Poppins, sans-serif`;
-      const badge1Width = ctx.measureText(badgeText1).width;
-      const badge2Width = ctx.measureText(badgeText2).width;
-      
-      ctx.font = `${fontSize}px Poppins, sans-serif`;
-      const verifiedWidth = ctx.measureText(verifiedText).width;
-      
-      const badgeX = width - Math.max(badge1Width + badge2Width, verifiedWidth) - padding * 2;
-      const badgeY = padding + fontSize * 1.5;
-      
-      // Draw "Time" in orange
-      ctx.font = `bold ${fontSize * 1.5}px Poppins, sans-serif`;
-      ctx.fillStyle = '#f59e0b';
-      ctx.fillText(badgeText1, badgeX, badgeY);
-      
-      // Draw "mark" in white
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(badgeText2, badgeX + badge1Width, badgeY);
-      
-      // Draw verified text
-      ctx.font = `${fontSize}px Poppins, sans-serif`;
-      ctx.fillText(verifiedText, badgeX, badgeY + lineHeight);
-      
-      // Add shadow to text for visibility
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-      ctx.shadowBlur = 4 * scale;
-      ctx.shadowOffsetX = 2 * scale;
-      ctx.shadowOffsetY = 2 * scale;
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
     }
 
     function truncateText(ctx, text, maxWidth) {
@@ -1226,15 +1227,33 @@ function jsonResponse(data) {
     }
 
     // ==================== PHOTO RECAP ====================
+    // Cache for folders and photos
+    let cachedFolders = null;
+    let cachedPhotos = {};
+    
     async function showPhotoRecap() {
       showPage('photoFoldersPage');
       
-      document.getElementById('photoFoldersLoading').classList.remove('hidden');
+      // Use cache if available
+      if (cachedFolders) {
+        renderPhotoFolders(cachedFolders);
+        // Refresh in background
+        fetchPhotoFolders().then(folders => {
+          cachedFolders = folders;
+          renderPhotoFolders(folders);
+        });
+        return;
+      }
+      
       document.getElementById('photoFolders').classList.add('hidden');
       document.getElementById('noPhotosMessage').classList.add('hidden');
       
       const folders = await fetchPhotoFolders();
-      
+      cachedFolders = folders;
+      renderPhotoFolders(folders);
+    }
+    
+    function renderPhotoFolders(folders) {
       document.getElementById('photoFoldersLoading').classList.add('hidden');
       
       if (folders.length === 0) {
@@ -1256,11 +1275,25 @@ function jsonResponse(data) {
       showPage('photoGalleryPage');
       document.getElementById('galleryTitle').textContent = `Foto: ${folderName}`;
       
-      document.getElementById('photoGalleryLoading').classList.remove('hidden');
+      // Use cache if available
+      if (cachedPhotos[folderId]) {
+        renderPhotoGallery(cachedPhotos[folderId]);
+        // Refresh in background
+        fetchPhotosFromFolder(folderId).then(photos => {
+          cachedPhotos[folderId] = photos;
+          renderPhotoGallery(photos);
+        });
+        return;
+      }
+      
       document.getElementById('photoGallery').innerHTML = '';
       
       const photos = await fetchPhotosFromFolder(folderId);
-      
+      cachedPhotos[folderId] = photos;
+      renderPhotoGallery(photos);
+    }
+    
+    function renderPhotoGallery(photos) {
       document.getElementById('photoGalleryLoading').classList.add('hidden');
       
       if (photos.length === 0) {
@@ -1270,11 +1303,8 @@ function jsonResponse(data) {
       
       const container = document.getElementById('photoGallery');
       container.innerHTML = photos.map((photo, index) => `
-        <div class="gallery-photo bg-white rounded-xl overflow-hidden shadow-lg cursor-pointer" onclick="viewGalleryPhoto(${index})">
-          <img src="${photo.thumbnailUrl}" alt="${photo.name}" class="w-full h-32 object-cover">
-          <div class="p-2">
-            <p class="text-xs text-gray-600 truncate">${photo.name}</p>
-          </div>
+        <div class="gallery-photo rounded-xl overflow-hidden shadow-lg cursor-pointer" onclick="viewGalleryPhoto(${index})">
+          <img src="${photo.thumbnailUrl}" alt="Foto" class="w-full h-32 object-cover">
         </div>
       `).join('');
       
@@ -1479,8 +1509,6 @@ function jsonResponse(data) {
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Mengirim...';
       
-      showLoading(true, 'Mengupload foto...');
-      
       const now = new Date();
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       const monthsId = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -1489,14 +1517,12 @@ function jsonResponse(data) {
       const jamFormatted = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
       
       try {
-        // Upload photos to Drive
-        for (let i = 0; i < capturedPhotos.length; i++) {
-          showLoading(true, `Mengupload foto ${i + 1}/${capturedPhotos.length}...`);
-          await uploadPhotoToDrive(capturedPhotos[i].fullData, capturedPhotos[i].timestamp);
-        }
+        // Upload photos to Drive (background, no popup)
+        const photoPromises = capturedPhotos.map(photo => 
+          uploadPhotoToDrive(photo.fullData, photo.timestamp)
+        );
         
-        // Submit attendance to sheet
-        showLoading(true, 'Mengirim absensi...');
+        // Submit attendance to sheet (parallel with photo uploads)
         
         const attendanceData = workers.map((worker, index) => ({
           row: index + 3,
@@ -1518,14 +1544,15 @@ function jsonResponse(data) {
           });
         }
         
-        // Save to Data SDK
+        // Wait for all uploads and save to Data SDK in parallel
+        const dataPromises = [];
         if (window.dataSdk) {
           const dateStr = now.toLocaleDateString('id-ID');
           const timeStr = now.toLocaleTimeString('id-ID');
           
           for (const worker of workers) {
             if (workerStatus[worker.id]) {
-              await window.dataSdk.create({
+              dataPromises.push(window.dataSdk.create({
                 type: 'attendance',
                 date: dateStr,
                 time: timeStr,
@@ -1533,10 +1560,13 @@ function jsonResponse(data) {
                 worker_photo: worker.photo || '',
                 status: workerStatus[worker.id],
                 photo_url: ''
-              });
+              }));
             }
           }
         }
+        
+        // Wait for all parallel operations
+        await Promise.all([...photoPromises, ...dataPromises]);
         
         showToast('Absensi berhasil dikirim! ✅');
         resetAllStatus();
@@ -1547,7 +1577,6 @@ function jsonResponse(data) {
         console.error('Submit error:', error);
         showToast('Gagal mengirim absensi!', 'error');
       } finally {
-        showLoading(false);
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<svg class="w-6 h-6 transform -rotate-45" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Kirim Absensi';
       }
@@ -1798,5 +1827,5 @@ function jsonResponse(data) {
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6c493f6009e9d5',t:'MTc2NzIxMDQxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6c60974024e9d5',t:'MTc2NzIxMTM3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
