@@ -126,40 +126,23 @@
     .navy-card {
       background: linear-gradient(135deg, #1e3a5f 0%, #0f2744 100%);
     }
-    
-    .processing-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-    
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid #fff;
-      border-top-color: #10b981;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full dark-blue-bg">
   <div id="app" class="h-full overflow-auto"></div><!-- Toast Container -->
-  <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100]"></div><!-- Processing Overlay -->
-  <div id="processing-overlay" class="processing-overlay hidden">
-   <div class="text-center">
-    <div class="spinner mx-auto mb-4"></div>
-    <p class="text-white font-semibold">Menambahkan TimeMark...</p>
+  <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100]"></div><!-- Photo Preview Confirmation Modal -->
+  <div id="photo-confirm-modal" class="fixed inset-0 bg-black/90 z-[60] hidden items-center justify-center p-4">
+   <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl">
+    <div class="p-4 bg-slate-100 border-b">
+     <h3 class="text-lg font-bold text-slate-800 text-center">Preview Foto</h3>
+     <p id="photo-counter" class="text-sm text-slate-500 text-center mt-1"></p>
+    </div>
+    <div class="p-4"><img id="confirm-preview-image" class="w-full max-h-[60vh] object-contain rounded-xl" alt="Preview">
+    </div>
+    <div class="p-4 bg-slate-50 flex gap-3"><button onclick="retakePhoto()" class="flex-1 py-3 bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-xl transition flex items-center justify-center gap-2"> 🔄 Ambil Ulang </button> <button onclick="confirmPhoto()" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition flex items-center justify-center gap-2"> ✅ Gunakan Foto </button>
+    </div>
    </div>
   </div>
   <script>
@@ -197,6 +180,11 @@
       calendarDate: new Date(),
       selectedRecapDate: null
     };
+    
+    // Photo preview queue state
+    let photoQueue = [];
+    let currentPreviewIndex = 0;
+    let pendingFiles = [];
     
     let config = {
       app_title: 'ABSEN ONLINE DAILY WORKER I.B.L.'
@@ -776,41 +764,121 @@
     // Preload logo on page load
     loadLogoImage();
     
+    // ==================== PHOTO UPLOAD WITH PREVIEW CONFIRMATION ====================
     async function handleFileUpload(event) {
       const files = event.target.files;
       if (files.length === 0) return;
       
-      // Show processing overlay
-      const overlay = document.getElementById('processing-overlay');
-      overlay.classList.remove('hidden');
-      
       // Request fresh location
       requestLocation();
       
-      // Process each file
-      const processedPhotos = [];
+      // Store pending files and reset queue
+      pendingFiles = Array.from(files);
+      photoQueue = [];
+      currentPreviewIndex = 0;
       
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        try {
-          const photoWithWatermark = await processImageWithWatermark(file);
-          processedPhotos.push(photoWithWatermark);
-        } catch (err) {
-          console.error('Error processing image:', err);
-        }
-      }
-      
-      // Add to state and render
-      state.photos = [...state.photos, ...processedPhotos];
-      
-      // Hide overlay
-      overlay.classList.add('hidden');
+      // Process first photo
+      await processNextPhoto();
       
       // Reset input
       event.target.value = '';
+    }
+    
+    async function processNextPhoto() {
+      if (currentPreviewIndex >= pendingFiles.length) {
+        // All photos processed, close modal
+        closeConfirmModal();
+        return;
+      }
       
-      render();
-      showToast(`${processedPhotos.length} foto dengan TimeMark berhasil ditambahkan!`, 'success');
+      const file = pendingFiles[currentPreviewIndex];
+      
+      try {
+        const photoWithWatermark = await processImageWithWatermark(file);
+        // Store the processed photo temporarily
+        photoQueue[currentPreviewIndex] = photoWithWatermark;
+        // Show preview modal
+        showPhotoConfirmModal(photoWithWatermark);
+      } catch (err) {
+        console.error('Error processing image:', err);
+        // Skip to next photo on error
+        currentPreviewIndex++;
+        await processNextPhoto();
+      }
+    }
+    
+    function showPhotoConfirmModal(photoData) {
+      const modal = document.getElementById('photo-confirm-modal');
+      const img = document.getElementById('confirm-preview-image');
+      const counter = document.getElementById('photo-counter');
+      
+      img.src = photoData;
+      counter.textContent = `Foto ${currentPreviewIndex + 1} dari ${pendingFiles.length}`;
+      
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    
+    function closeConfirmModal() {
+      const modal = document.getElementById('photo-confirm-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      
+      // Clear pending data
+      pendingFiles = [];
+      photoQueue = [];
+      currentPreviewIndex = 0;
+    }
+    
+    function confirmPhoto() {
+      // Add photo to state
+      const photo = photoQueue[currentPreviewIndex];
+      if (photo) {
+        state.photos.push(photo);
+        updatePhotoGrid();
+        showToast('Foto berhasil ditambahkan!', 'success');
+      }
+      
+      // Move to next photo
+      currentPreviewIndex++;
+      processNextPhoto();
+    }
+    
+    function retakePhoto() {
+      // Close modal first
+      const modal = document.getElementById('photo-confirm-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      
+      // Remove current file from pending and adjust queue
+      pendingFiles.splice(currentPreviewIndex, 1);
+      photoQueue.splice(currentPreviewIndex, 1);
+      
+      // Clear all pending files if this was the only one or user wants to retake
+      pendingFiles = [];
+      photoQueue = [];
+      currentPreviewIndex = 0;
+      
+      // Trigger file input to open camera again
+      const fileInput = document.querySelector('input[type="file"][accept="image/*"]');
+      if (fileInput) {
+        fileInput.click();
+      }
+    }
+    
+    function updatePhotoGrid() {
+      const photoPreview = document.getElementById('photo-preview');
+      if (photoPreview) {
+        photoPreview.innerHTML = state.photos.map((photo, i) => `
+          <div class="relative group">
+            <img src="${photo}" class="w-full aspect-square object-cover rounded-xl shadow cursor-pointer hover:opacity-90 transition" onclick="openPhotoPreview(${i})">
+            <button onclick="event.stopPropagation(); removePhoto(${i})" 
+                    class="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-sm font-bold">
+              ×
+            </button>
+          </div>
+        `).join('');
+      }
     }
     
     function processImageWithWatermark(file) {
@@ -1541,5 +1609,5 @@
       ])
     });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6a5181047accfd',t:'MTc2NzE4OTc4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6a71e747c0e9cf',t:'MTc2NzE5MTExMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
