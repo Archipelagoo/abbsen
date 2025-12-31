@@ -1046,82 +1046,80 @@ function jsonResponse(data) {
       const timeStr = `${hours}:${minutes}`;
       const locationStr = currentLocation || 'Location unavailable';
       
-      // Detect ACTUAL photo orientation from canvas dimensions
-      // This works for both Android and iPhone
-      const isPortrait = height > width;
-      
-      console.log(`Photo orientation: ${isPortrait ? 'PORTRAIT' : 'LANDSCAPE'} (${width}x${height})`);
-      
-      // Scale based on shorter side for consistent sizing across orientations
+      // Scale based on shorter side for consistent sizing
       const baseSize = Math.min(width, height);
       const scale = baseSize / 1080;
       
-      // Watermark sizing - bigger for better visibility
-      const padding = 40 * scale;
-      const logoSize = 100 * scale;
-      const fontSize = 26 * scale;
-      const lineHeight = 38 * scale;
+      // Watermark sizing
+      const padding = 30 * scale;
+      const logoSize = 70 * scale;
+      const fontSize = 22 * scale;
+      const lineHeight = 32 * scale;
       
-      // Shadow for all elements
+      // Shadow for text readability
       ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-      ctx.shadowBlur = 8 * scale;
-      ctx.shadowOffsetX = 3 * scale;
-      ctx.shadowOffsetY = 3 * scale;
+      ctx.shadowBlur = 6 * scale;
+      ctx.shadowOffsetX = 2 * scale;
+      ctx.shadowOffsetY = 2 * scale;
       
-      // Calculate total watermark height
-      const totalWatermarkHeight = logoSize + lineHeight * 3.5;
-      
-      // Position: LEFT BOTTOM
+      // ========== KIRI BAWAH ==========
+      const totalHeight = logoSize + lineHeight * 3;
       const startX = padding;
-      const startY = height - padding - totalWatermarkHeight;
-      
-      // Draw semi-transparent background for better readability
-      ctx.shadowColor = 'transparent';
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-      const bgPadding = 15 * scale;
-      const bgWidth = isPortrait ? width * 0.85 : width * 0.45;
-      const bgHeight = totalWatermarkHeight + bgPadding * 2;
-      ctx.beginPath();
-      ctx.roundRect(startX - bgPadding, startY - bgPadding, bgWidth, bgHeight, 12 * scale);
-      ctx.fill();
-      
-      // Re-enable shadow for content
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-      ctx.shadowBlur = 8 * scale;
-      
-      // Draw logo
+      const startY = height - padding - totalHeight;
       let currentY = startY;
-      const logoImg = await preloadWatermarkLogo();
       
+      // Baris 1: Logo
+      const logoImg = await preloadWatermarkLogo();
       if (logoImg && logoImg.complete && logoImg.naturalWidth > 0) {
         ctx.drawImage(logoImg, startX, currentY, logoSize, logoSize);
-        currentY += logoSize + lineHeight * 0.5;
-      } else {
-        // Fallback: Draw text logo
-        ctx.font = `bold ${fontSize * 1.2}px Poppins, sans-serif`;
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText('ARCHIPELAGO', startX, currentY + fontSize);
-        currentY += fontSize + lineHeight * 0.3;
       }
+      currentY += logoSize + lineHeight * 0.3;
       
-      // Date - white color
+      // Baris 2: Hari & Tanggal (putih)
       ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
       ctx.fillStyle = '#ffffff';
       ctx.fillText(dateStr, startX, currentY);
       currentY += lineHeight;
       
-      // Time - ORANGE color
-      ctx.font = `bold ${fontSize * 1.5}px Poppins, sans-serif`;
-      ctx.fillStyle = '#f59e0b'; // Orange color
+      // Baris 3: Waktu (orange)
+      ctx.font = `bold ${fontSize * 1.4}px Poppins, sans-serif`;
+      ctx.fillStyle = '#f59e0b';
       ctx.fillText(timeStr, startX, currentY);
-      currentY += lineHeight * 1.2;
+      currentY += lineHeight * 1.1;
       
-      // Location with emoji - white color
-      ctx.font = `${fontSize * 0.85}px Poppins, sans-serif`;
+      // Baris 4: Lokasi (putih)
+      ctx.font = `${fontSize * 0.8}px Poppins, sans-serif`;
       ctx.fillStyle = '#ffffff';
-      const maxLocWidth = bgWidth - padding * 2;
+      const maxLocWidth = width * 0.6;
       const truncatedLoc = truncateText(ctx, locationStr, maxLocWidth);
       ctx.fillText('📍 ' + truncatedLoc, startX, currentY);
+      
+      // ========== KANAN ATAS ==========
+      const rightPadding = padding;
+      const topY = padding + fontSize;
+      
+      // "Time" (orange) + "mark" (putih)
+      ctx.font = `bold ${fontSize * 1.2}px Poppins, sans-serif`;
+      const timeText = 'Time';
+      const markText = 'mark';
+      const timeWidth = ctx.measureText(timeText).width;
+      const markWidth = ctx.measureText(markText).width;
+      const totalTextWidth = timeWidth + markWidth;
+      
+      const rightX = width - rightPadding - totalTextWidth;
+      
+      ctx.fillStyle = '#f59e0b'; // Orange
+      ctx.fillText(timeText, rightX, topY);
+      
+      ctx.fillStyle = '#ffffff'; // Putih
+      ctx.fillText(markText, rightX + timeWidth, topY);
+      
+      // "100% photo verified" (putih, lebih kecil)
+      ctx.font = `${fontSize * 0.7}px Poppins, sans-serif`;
+      ctx.fillStyle = '#ffffff';
+      const verifiedText = '100% photo verified';
+      const verifiedWidth = ctx.measureText(verifiedText).width;
+      ctx.fillText(verifiedText, width - rightPadding - verifiedWidth, topY + lineHeight * 0.8);
       
       // Reset shadow
       ctx.shadowColor = 'transparent';
@@ -1903,5 +1901,5 @@ function jsonResponse(data) {
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6c69c8e0f0e9d5',t:'MTc2NzIxMTc1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6c721a2635e9d5',t:'MTc2NzIxMjA5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
