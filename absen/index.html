@@ -209,15 +209,6 @@
       right: 20px;
     }
     
-    .location-status {
-      font-size: 12px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
     .refresh-icon.spinning {
       animation: spin 1s linear infinite;
     }
@@ -235,10 +226,6 @@
     .status-card-clickable:hover {
       transform: scale(1.05);
       box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    }
-    
-    .status-card-clickable:active {
-      transform: scale(0.98);
     }
   </style>
   <style>@view-transition { navigation: auto; }</style>
@@ -289,10 +276,7 @@
       </div><button onclick="showPage('recapMenuPage')" class="px-5 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all font-semibold shadow-lg flex items-center gap-2">
        <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
-       </svg> Recap Absen </button> <button onclick="openSetupGuide()" class="px-5 py-3 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-all font-semibold shadow-lg flex items-center gap-2">
-       <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
-        <path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
-       </svg> Setup Sheets </button>
+       </svg> Recap Absen </button>
      </div>
      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
       <div class="relative w-full md:w-1/2"><input type="text" id="searchInput" placeholder="Cari nama pekerja..." class="w-full px-5 py-3 rounded-xl border-2 border-gray-300 focus:border-indigo-500 focus:outline-none transition-all text-gray-800 pl-12 bg-white">
@@ -339,16 +323,9 @@
    </div><!-- RECAP MENU PAGE -->
    <div id="recapMenuPage" class="page flex-col min-h-full w-full soft-navy-bg">
     <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-       <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
-      </div>
-      <div class="flex items-center gap-2">
-       <div class="text-right">
-        <div id="currentDateRecap" class="text-sm font-medium text-gray-300"></div>
-        <div class="flex items-center gap-2"><span id="currentTimeRecap" class="text-2xl font-bold clock-time"></span> <span id="timezoneRecap" class="text-2xl font-bold clock-time"></span>
-        </div>
-       </div>
+       <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">RECAP MENU</h1>
       </div>
      </div>
     </header>
@@ -358,10 +335,7 @@
       </svg> Back to Home </button>
     </div>
     <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
-     <h2 class="text-2xl font-bold text-white text-center mb-6 flex items-center justify-center gap-2">
-      <svg class="w-8 h-8" fill="white" viewbox="0 0 24 24">
-       <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
-      </svg> Menu Recap</h2>
+     <h2 class="text-2xl font-bold text-white text-center mb-6">Menu Recap</h2>
      <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><button onclick="showTodayRecap()" class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all text-left group">
        <div class="mb-4">
         <svg class="w-12 h-12" fill="#1e3a5f" viewbox="0 0 24 24">
@@ -383,63 +357,49 @@
    </div><!-- TODAY RECAP PAGE -->
    <div id="todayRecapPage" class="page flex-col min-h-full w-full soft-navy-bg">
     <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-       <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
-      </div>
+     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
+      <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">RECAP HARI INI</h1>
      </div>
     </header>
-    <div class="flex justify-between gap-3 p-4 max-w-7xl mx-auto w-full">
-     <div class="flex gap-3"><button onclick="showWorkerHoursPage('today')" class="px-5 py-2 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-all font-medium flex items-center gap-2">
-       <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
-        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-       </svg> Recap Jam Kerja </button> <button id="refreshBtnToday" onclick="refreshDataFromSheet('today')" class="px-5 py-2 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition-all font-medium flex items-center gap-2">
-       <svg class="w-5 h-5 refresh-icon" fill="white" viewbox="0 0 24 24">
-        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
-       </svg> Refresh Data </button>
-     </div>
+    <div class="flex justify-between gap-3 p-4 max-w-7xl mx-auto w-full flex-wrap"><button id="refreshBtnToday" onclick="refreshDataFromSheet('today')" class="px-5 py-2 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition-all font-medium flex items-center gap-2">
+      <svg class="w-5 h-5 refresh-icon" fill="white" viewbox="0 0 24 24">
+       <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+      </svg> Refresh Data </button>
      <div class="flex gap-3"><button onclick="showPage('recapMenuPage')" class="px-5 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-2">
        <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
        </svg> Kembali </button> <button onclick="showPage('absensiPage')" class="px-5 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-medium flex items-center gap-2">
        <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-       </svg> Back to Home </button>
+       </svg> Home </button>
      </div>
     </div>
     <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
-     <h2 class="text-2xl font-bold text-white text-center mb-2">Recap Hari Ini</h2>
      <div id="todayRecapDate" class="text-center text-lg font-semibold text-gray-300 mb-4"></div>
-     <div id="todayStatusCards" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
-     </div>
-     <div id="todayRecapContent" class="bg-white rounded-2xl shadow-lg overflow-hidden">
-     </div>
+     <div id="todayStatusCards" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6"></div>
+     <div id="todayRecapContent" class="bg-white rounded-2xl shadow-lg overflow-hidden"></div>
     </main>
    </div><!-- CALENDAR PAGE -->
    <div id="calendarPage" class="page flex-col min-h-full w-full soft-navy-bg">
     <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-       <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
-      </div>
+     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
+      <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">PILIH TANGGAL</h1>
      </div>
     </header>
     <div class="flex justify-end gap-3 p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('recapMenuPage')" class="px-5 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-2">
       <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-      </svg> Kembali </button> <button onclick="showPage('absensiPage')" class="px-5 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-medium flex items-center gap-2">
-      <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
-       <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </svg> Back to Home </button>
+      </svg> Kembali </button>
     </div>
     <main class="flex-1 p-6 max-w-lg mx-auto w-full">
-     <h2 class="text-2xl font-bold text-white text-center mb-6">Pilih Tanggal</h2>
      <div class="bg-white rounded-2xl shadow-lg p-6">
       <div class="flex items-center justify-between mb-6"><button onclick="changeMonth(-1)" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg></button>
        <h2 id="calendarMonth" class="text-xl font-bold text-gray-800"></h2><button onclick="changeMonth(1)" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg></button>
       </div>
       <div class="grid grid-cols-7 gap-1 mb-2">
@@ -465,70 +425,51 @@
         Sab
        </div>
       </div>
-      <div id="calendarDays" class="grid grid-cols-7 gap-1">
-      </div>
+      <div id="calendarDays" class="grid grid-cols-7 gap-1"></div>
      </div>
     </main>
    </div><!-- DATE RECAP PAGE -->
    <div id="dateRecapPage" class="page flex-col min-h-full w-full soft-navy-bg">
     <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-       <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
-      </div>
+     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
+      <h1 id="dateRecapTitle" class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">RECAP TANGGAL</h1>
      </div>
     </header>
-    <div class="flex justify-between gap-3 p-4 max-w-7xl mx-auto w-full">
-     <div class="flex gap-3"><button onclick="showWorkerHoursPage('date')" class="px-5 py-2 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-all font-medium flex items-center gap-2">
-       <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
-        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-       </svg> Recap Jam Kerja </button> <button id="refreshBtnDate" onclick="refreshDataFromSheet('date')" class="px-5 py-2 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition-all font-medium flex items-center gap-2">
-       <svg class="w-5 h-5 refresh-icon" fill="white" viewbox="0 0 24 24">
-        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
-       </svg> Refresh Data </button>
-     </div>
+    <div class="flex justify-between gap-3 p-4 max-w-7xl mx-auto w-full flex-wrap"><button id="refreshBtnDate" onclick="refreshDataFromSheet('date')" class="px-5 py-2 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition-all font-medium flex items-center gap-2">
+      <svg class="w-5 h-5 refresh-icon" fill="white" viewbox="0 0 24 24">
+       <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+      </svg> Refresh Data </button>
      <div class="flex gap-3"><button onclick="showPage('calendarPage')" class="px-5 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-2">
        <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
        </svg> Kembali </button> <button onclick="showPage('absensiPage')" class="px-5 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-medium flex items-center gap-2">
        <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-       </svg> Back to Home </button>
+       </svg> Home </button>
      </div>
     </div>
     <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
-     <h2 id="dateRecapTitle" class="text-2xl font-bold text-white text-center mb-4">Recap Tanggal</h2>
-     <div id="dateStatusCards" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
-     </div>
-     <div id="dateRecapContent" class="bg-white rounded-2xl shadow-lg overflow-hidden">
-     </div>
+     <div id="dateStatusCards" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6"></div>
+     <div id="dateRecapContent" class="bg-white rounded-2xl shadow-lg overflow-hidden"></div>
     </main>
    </div><!-- PHOTO FOLDERS PAGE -->
    <div id="photoFoldersPage" class="page flex-col min-h-full w-full soft-navy-bg">
     <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-       <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
-      </div>
+     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
+      <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">FOTO ABSEN</h1>
      </div>
     </header>
     <div class="flex justify-end gap-3 p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('recapMenuPage')" class="px-5 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-2">
       <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-      </svg> Kembali </button> <button onclick="showPage('absensiPage')" class="px-5 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-medium flex items-center gap-2">
-      <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
-       <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </svg> Back to Home </button>
+      </svg> Kembali </button>
     </div>
     <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
-     <h2 class="text-2xl font-bold text-white text-center mb-6">Foto Absen</h2>
      <div id="photoFoldersLoading" class="flex flex-col items-center justify-center py-12">
       <div class="loading-spinner mb-4"></div>
       <p class="text-white font-medium">Memuat folder foto...</p>
-      <p class="text-gray-400 text-sm mt-2">Mohon tunggu sebentar</p>
      </div>
-     <div id="photoFolders" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 hidden">
-     </div>
+     <div id="photoFolders" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 hidden"></div>
      <div id="noPhotosMessage" class="hidden text-center py-12 text-gray-300">
       <svg class="w-16 h-16 mx-auto mb-4" fill="white" viewbox="0 0 24 24">
        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
@@ -539,79 +480,37 @@
    </div><!-- PHOTO GALLERY PAGE -->
    <div id="photoGalleryPage" class="page flex-col min-h-full w-full soft-navy-bg">
     <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-       <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
-      </div>
+     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
+      <h1 id="galleryTitle" class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">GALERI FOTO</h1>
      </div>
     </header>
     <div class="flex justify-end gap-3 p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('photoFoldersPage')" class="px-5 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-2">
       <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-      </svg> Kembali </button> <button onclick="showPage('absensiPage')" class="px-5 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-medium flex items-center gap-2">
-      <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
-       <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </svg> Back to Home </button>
+      </svg> Kembali </button>
     </div>
     <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
-     <h2 id="galleryTitle" class="text-2xl font-bold text-white text-center mb-6">Galeri Foto</h2>
      <div id="photoGalleryLoading" class="flex flex-col items-center justify-center py-12">
       <div class="loading-spinner mb-4"></div>
       <p class="text-white font-medium">Memuat foto...</p>
-      <p class="text-gray-400 text-sm mt-2">Mohon tunggu sebentar</p>
      </div>
-     <div id="photoGallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-     </div>
-    </main>
-   </div><!-- WORKER HOURS PAGE -->
-   <div id="workerHoursPage" class="page flex-col min-h-full w-full soft-navy-bg">
-    <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-       <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
-      </div>
-     </div>
-    </header>
-    <div class="flex justify-end gap-3 p-4 max-w-7xl mx-auto w-full"><button id="workerHoursBackBtn" onclick="goBackFromWorkerHours()" class="px-5 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-2">
-      <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
-       <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-      </svg> Kembali </button> <button onclick="showPage('absensiPage')" class="px-5 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-medium flex items-center gap-2">
-      <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
-       <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </svg> Back to Home </button>
-    </div>
-    <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
-     <h2 class="text-2xl font-bold text-white text-center mb-2">Recap Jam Kerja</h2>
-     <p id="workerHoursDateLabel" class="text-center text-gray-300 mb-6"></p>
-     <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
-      <div class="relative"><input type="text" id="workerHoursSearch" placeholder="Cari nama pekerja..." class="w-full px-5 py-3 rounded-xl border-2 border-gray-300 focus:border-indigo-500 focus:outline-none transition-all text-gray-800 pl-12 bg-white">
-       <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-       </svg>
-      </div>
-     </div>
-     <div id="workerHoursResults" class="space-y-4">
-      <div class="bg-white rounded-2xl shadow-lg p-8 text-center text-gray-500">
-       <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="currentColor" viewbox="0 0 24 24">
-        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
-       </svg>
-       <p>Ketik nama pekerja untuk melihat recap jam kerja</p>
-      </div>
-     </div>
+     <div id="photoGallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
     </main>
    </div><!-- STATUS CARD POPUP -->
    <div id="statusCardPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
     <div class="bg-white rounded-2xl max-w-md w-full max-h-[80%] overflow-hidden shadow-2xl fade-in">
-     <div id="statusCardPopupHeader" class="px-6 py-4 flex items-center justify-between">
+     <div id="statusCardPopupHeader" class="px-6 py-4 flex items-center justify-between bg-gray-500">
       <h3 id="statusCardPopupTitle" class="text-xl font-bold text-white">Daftar Pekerja</h3><button onclick="closeStatusCardPopup()" class="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition-all">
-       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
        </svg></button>
      </div>
-     <div id="statusCardPopupContent" class="p-6 overflow-y-auto max-h-96">
-     </div>
+     <div id="statusCardPopupContent" class="p-6 overflow-y-auto max-h-96"></div>
     </div>
    </div><!-- PHOTO VIEWER POPUP -->
    <div id="photoViewer" class="popup-overlay hidden"><button onclick="closePhotoViewer()" class="absolute top-4 right-4 bg-black bg-opacity-50 text-white w-10 h-10 rounded-full flex items-center justify-center z-10">
-     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
      </svg></button> <button onclick="prevPhoto()" class="nav-btn prev">
      <svg class="w-6 h-6" fill="white" viewbox="0 0 24 24">
       <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
@@ -621,184 +520,6 @@
      </svg></button>
     <div id="photoViewerCounter" class="text-white mt-4 text-sm">
      1 / 1
-    </div>
-   </div><!-- Setup Guide Modal -->
-   <div id="setupGuideModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90%] overflow-auto">
-     <div class="p-6">
-      <div class="flex items-center justify-between mb-4">
-       <h2 class="text-xl font-bold text-gray-800">Setup Google Integration</h2><button onclick="closeSetupGuide()" class="p-2 hover:bg-gray-100 rounded-lg">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg></button>
-      </div>
-      <div class="space-y-4 text-sm text-gray-700">
-       <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-        <p class="font-semibold text-blue-800">Google Apps Script untuk Upload Foto &amp; Absensi</p>
-        <p class="text-blue-700 text-xs mt-1">Copy kode di bawah ini ke Apps Script Anda</p>
-       </div>
-       <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-xs overflow-x-auto max-h-64">
-        <pre id="appsScriptCode">// Google Apps Script for Absen Archipelago
-const DRIVE_FOLDER_ID = '1CJ46h8M89mzc3XKEg-4hJPV-2voMN3OD';
-const SPREADSHEET_ID = '1FllBcwBjTr_jfPylhyWwHt6ZE16j6fJpSa0C9hYEw44';
-
-function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents);
-    if (data.action === 'uploadPhoto') return uploadPhoto(data);
-    if (data.action === 'submitAttendance') return submitAttendance(data);
-    return jsonResponse({ success: false, error: 'Unknown action' });
-  } catch (error) {
-    return jsonResponse({ success: false, error: error.toString() });
-  }
-}
-
-function doGet(e) {
-  try {
-    const action = e.parameter.action;
-    if (action === 'getFolders') return getFolders();
-    if (action === 'getPhotos') return getPhotos(e.parameter.folderId);
-    if (action === 'getRecapData') return getRecapData();
-    return jsonResponse({ status: 'OK' });
-  } catch (error) {
-    return jsonResponse({ success: false, error: error.toString() });
-  }
-}
-
-function uploadPhoto(data) {
-  const parentFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
-  const folderName = data.folderName;
-  const fileName = data.fileName;
-  const base64Data = data.photoData.split(',')[1];
-  const blob = Utilities.newBlob(Utilities.base64Decode(base64Data), 'image/jpeg', fileName);
-  
-  let dateFolder;
-  const folders = parentFolder.getFoldersByName(folderName);
-  if (folders.hasNext()) dateFolder = folders.next();
-  else dateFolder = parentFolder.createFolder(folderName);
-  
-  const file = dateFolder.createFile(blob);
-  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  
-  return jsonResponse({ success: true, fileId: file.getId() });
-}
-
-function submitAttendance(data) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('Absen recap');
-  if (!sheet) sheet = ss.insertSheet('Absen recap');
-  
-  sheet.getRange('A1').setValue('Tanggal');
-  sheet.getRange('A2').setValue('Jam');
-  
-  if (data.workers &amp;&amp; data.workers.length &gt; 0) {
-    for (let i = 0; i &lt; data.workers.length; i++) {
-      sheet.getRange(i + 3, 1).setValue(data.workers[i]);
-    }
-  }
-  
-  const lastCol = sheet.getLastColumn();
-  const newCol = Math.max(lastCol + 1, 2);
-  
-  sheet.getRange(1, newCol).setValue(data.tanggal);
-  sheet.getRange(2, newCol).setValue(data.jam);
-  
-  const colors = {
-    'Start Work': '#22c55e', 'Finish Work': '#3b82f6',
-    'Sakit': '#f97316', 'Standby': '#a855f7', 'Belum Absen': '#ef4444'
-  };
-  
-  for (let j = 0; j &lt; data.attendance.length; j++) {
-    const item = data.attendance[j];
-    const cell = sheet.getRange(item.row, newCol);
-    cell.setValue(item.status);
-    cell.setBackground(colors[item.status] || '#ef4444');
-    cell.setFontColor('#ffffff');
-    cell.setHorizontalAlignment('center');
-  }
-  
-  return jsonResponse({ success: true });
-}
-
-function getRecapData() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName('Absen recap');
-  
-  if (!sheet) {
-    return jsonResponse({ success: true, data: [] });
-  }
-  
-  const lastRow = sheet.getLastRow();
-  const lastCol = sheet.getLastColumn();
-  
-  if (lastRow &lt; 3 || lastCol &lt; 2) {
-    return jsonResponse({ success: true, data: [] });
-  }
-  
-  const allData = sheet.getRange(1, 1, lastRow, lastCol).getValues();
-  const result = [];
-  
-  for (let col = 1; col &lt; lastCol; col++) {
-    const tanggal = allData[0][col];
-    const jam = allData[1][col];
-    
-    if (!tanggal) continue;
-    
-    for (let row = 2; row &lt; lastRow; row++) {
-      const workerName = allData[row][0];
-      const status = allData[row][col];
-      
-      if (workerName &amp;&amp; status) {
-        result.push({
-          date: tanggal,
-          time: jam || '',
-          worker_name: workerName,
-          status: status
-        });
-      }
-    }
-  }
-  
-  return jsonResponse({ success: true, data: result });
-}
-
-function getFolders() {
-  const parentFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
-  const folders = parentFolder.getFolders();
-  const result = [];
-  while (folders.hasNext()) {
-    const folder = folders.next();
-    result.push({ id: folder.getId(), name: folder.getName() });
-  }
-  result.sort((a, b) =&gt; b.name.localeCompare(a.name));
-  return jsonResponse({ success: true, folders: result });
-}
-
-function getPhotos(folderId) {
-  const folder = DriveApp.getFolderById(folderId);
-  const files = folder.getFiles();
-  const result = [];
-  while (files.hasNext()) {
-    const file = files.next();
-    if (file.getMimeType().startsWith('image/')) {
-      result.push({
-        id: file.getId(), name: file.getName(),
-        thumbnailUrl: 'https://drive.google.com/thumbnail?id=' + file.getId() + '&amp;sz=w200',
-        fullUrl: 'https://drive.google.com/thumbnail?id=' + file.getId() + '&amp;sz=w1920'
-      });
-    }
-  }
-  result.sort((a, b) =&gt; a.name.localeCompare(b.name));
-  return jsonResponse({ success: true, photos: result });
-}
-
-function jsonResponse(data) {
-  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
-}</pre>
-       </div><button onclick="copyAppsScript()" class="mt-2 px-4 py-2 bg-indigo-500 text-white rounded text-sm hover:bg-indigo-600"> Copy Kode </button>
-       <div class="mt-4"><label class="block text-sm font-medium text-gray-700 mb-2">URL Web App:</label> <input type="text" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/..." class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:border-indigo-500 focus:outline-none"> <button onclick="saveScriptUrl()" class="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-medium hover:bg-green-600"> Simpan URL </button>
-       </div>
-      </div>
-     </div>
     </div>
    </div><!-- Toast -->
    <div id="toast" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-xl hidden z-50"><span id="toastMessage">Berhasil!</span>
@@ -814,257 +535,234 @@ function jsonResponse(data) {
     let config = { ...defaultConfig };
     let allAbsensiData = [];
     let calendarDate = new Date();
-
     let workers = [];
     let workerStatus = {};
-    
     let capturedPhotos = [];
     let currentViewerIndex = 0;
     let currentViewerPhotos = [];
-    
     let currentLocation = null;
     let locationAddress = 'Mendapatkan lokasi...';
+    let currentRecapDate = '';
+    let currentStatusCardDate = '';
     
     const SHEET_ID = '1FllBcwBjTr_jfPylhyWwHt6ZE16j6fJpSa0C9hYEw44';
     const SHEET_NAME = 'Form responses 1';
     const SHEETS_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
-    
     const RECAP_SHEET_NAME = 'Absen recap';
     const RECAP_SHEETS_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(RECAP_SHEET_NAME)}`;
-    
     const WATERMARK_LOGO_URL = 'https://lh3.googleusercontent.com/d/1zaavYZSem-yNHztE724qeIAWw9uGJgen=s200';
-    
     let GOOGLE_SCRIPT_URL = localStorage.getItem('googleScriptUrl') || 'https://script.google.com/macros/s/AKfycbzTjKB4lTiZKafD34Ts-NWEC-qq6RTAYudu_r4X8eijJSDCUzz1RvRY1a4S2XTENBHxjQ/exec';
-
     let watermarkLogoLoaded = null;
-    let currentStatusCardDate = '';
-    
-    function preloadWatermarkLogo() {
-      return new Promise((resolve) => {
-        if (watermarkLogoLoaded) {
-          resolve(watermarkLogoLoaded);
-          return;
-        }
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => {
-          watermarkLogoLoaded = img;
-          resolve(img);
-        };
-        img.onerror = () => resolve(null);
-        img.src = WATERMARK_LOGO_URL;
-        setTimeout(() => resolve(watermarkLogoLoaded), 2000);
-      });
-    }
-    
-    preloadWatermarkLogo();
 
-    // ==================== FETCH RECAP DATA FROM GOOGLE SHEETS ====================
-    async function fetchRecapDataFromSheet() {
-      try {
-        const response = await fetch(RECAP_SHEETS_URL);
-        const text = await response.text();
-        const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?$/);
-        
-        if (!jsonMatch) return [];
-        
-        const data = JSON.parse(jsonMatch[1]);
-        const rows = data.table.rows;
-        const cols = data.table.cols;
-        
-        if (!rows || rows.length < 3) return [];
-        
-        const result = [];
-        const tanggalRow = rows[0];
-        const jamRow = rows[1];
-        const numCols = cols.length;
-        
-        for (let col = 1; col < numCols; col++) {
-          const tanggalCell = tanggalRow.c && tanggalRow.c[col];
-          const jamCell = jamRow.c && jamRow.c[col];
-          
-          let tanggal = tanggalCell ? (tanggalCell.v || tanggalCell.f || '') : '';
-          let jam = jamCell ? (jamCell.v || jamCell.f || '') : '';
-          
-          if (!tanggal) continue;
-          
-          const displayDate = String(tanggal);
-          const dateForComparison = convertToIdLocaleDate(displayDate);
-          
-          for (let row = 2; row < rows.length; row++) {
-            const workerRow = rows[row];
-            if (!workerRow.c) continue;
-            
-            const workerNameCell = workerRow.c[0];
-            const statusCell = workerRow.c[col];
-            
-            const workerName = workerNameCell ? (workerNameCell.v || workerNameCell.f || '') : '';
-            const status = statusCell ? (statusCell.v || statusCell.f || '') : '';
-            
-            if (workerName && status) {
-              result.push({
-                type: 'attendance',
-                date: dateForComparison,
-                date_display: displayDate,
-                time: String(jam),
-                worker_name: String(workerName),
-                status: String(status)
-              });
-            }
-          }
-        }
-        
-        return result;
-        
-      } catch (error) {
-        return [];
-      }
+    // ==================== UTILITIES ====================
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.className = `fixed top-4 right-4 px-6 py-3 rounded-xl shadow-xl z-50 toast ${type === 'error' ? 'bg-red-500' : 'bg-green-500'} text-white`;
+      document.getElementById('toastMessage').textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
     }
 
-    function convertToIdLocaleDate(dateStr) {
-      if (!dateStr) return '';
-      
-      const str = String(dateStr).trim();
-      
-      const monthMapId = {
-        'januari': 0, 'februari': 1, 'maret': 2, 'april': 3,
-        'mei': 4, 'juni': 5, 'juli': 6, 'agustus': 7,
-        'september': 8, 'oktober': 9, 'november': 10, 'desember': 11
-      };
-      
-      const monthMapEn = {
-        'january': 0, 'february': 1, 'march': 2, 'april': 3,
-        'may': 4, 'june': 5, 'july': 6, 'august': 7,
-        'september': 8, 'october': 9, 'november': 10, 'december': 11
-      };
-      
-      const match = str.match(/(\d{1,2})\s+(\w+)\s+(\d{4})/i);
-      if (match) {
-        const day = parseInt(match[1]);
-        const monthName = match[2].toLowerCase();
-        const year = parseInt(match[3]);
-        
-        let monthIndex = -1;
-        if (monthMapId.hasOwnProperty(monthName)) {
-          monthIndex = monthMapId[monthName];
-        } else if (monthMapEn.hasOwnProperty(monthName)) {
-          monthIndex = monthMapEn[monthName];
-        }
-        
-        if (monthIndex >= 0) {
-          const date = new Date(year, monthIndex, day);
-          return date.toLocaleDateString('id-ID');
-        }
-      }
-      
-      return str;
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      if (pageId === 'calendarPage') renderCalendar();
     }
+
+    function getUserIcon(size = 40) {
+      return `<svg width="${size}" height="${size}" fill="#1e3a5f" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+    }
+
+    function getWorkerPhotoHtml(worker, size = 60) {
+      if (worker.photo) {
+        return `<img src="${worker.photo}" alt="${worker.name}" class="worker-photo-img" style="width:${size}px;height:${size}px;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div style="display:none;width:${size}px;height:${size}px;border-radius:12px;" class="flex items-center justify-center bg-gray-200">${getUserIcon(size * 0.6)}</div>`;
+      }
+      return `<div class="flex items-center justify-center bg-gray-200" style="width:${size}px;height:${size}px;border-radius:12px;">${getUserIcon(size * 0.6)}</div>`;
+    }
+
+    // ==================== CLOCK ====================
+    function updateClock() {
+      const now = new Date();
+      const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+      const dateStr = now.toLocaleDateString('id-ID', dateOptions);
+      const timeStr = now.toLocaleTimeString('id-ID', timeOptions);
+      const offset = now.getTimezoneOffset();
+      const tz = offset === -420 ? 'WIB' : offset === -480 ? 'WITA' : offset === -540 ? 'WIT' : 'WIB';
+      
+      const dateEl = document.getElementById('currentDate');
+      const timeEl = document.getElementById('currentTime');
+      const tzEl = document.getElementById('timezone');
+      if (dateEl) dateEl.textContent = dateStr;
+      if (timeEl) timeEl.textContent = timeStr;
+      if (tzEl) tzEl.textContent = tz;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
     // ==================== LOCATION ====================
     function getCurrentLocation() {
-      updateLocationUI('loading', 'Mendapatkan lokasi...');
-      
       if (!navigator.geolocation) {
-        updateLocationUI('error', 'Geolokasi tidak didukung');
+        locationAddress = 'Geolokasi tidak didukung';
         return;
       }
-      
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          currentLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          
+          currentLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
           try {
             const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentLocation.lat}&lon=${currentLocation.lng}&zoom=18&addressdetails=1`);
             const data = await response.json();
-            
             if (data && data.display_name) {
-              const parts = data.display_name.split(',');
-              const filteredParts = parts.filter(p => !p.trim().toLowerCase().includes('indonesia'));
-              locationAddress = filteredParts.join(',').trim();
+              const parts = data.display_name.split(',').filter(p => !p.trim().toLowerCase().includes('indonesia'));
+              locationAddress = parts.join(',').trim();
             } else {
               locationAddress = `${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}`;
             }
           } catch (error) {
             locationAddress = `${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}`;
           }
-          
-          updateLocationUI('success', locationAddress);
         },
         (error) => {
-          let errorMsg = 'Gagal mendapatkan lokasi';
-          if (error.code === 1) errorMsg = 'Akses lokasi ditolak';
-          else if (error.code === 2) errorMsg = 'Lokasi tidak tersedia';
-          else if (error.code === 3) errorMsg = 'Timeout mendapatkan lokasi';
-          
-          updateLocationUI('error', errorMsg);
+          locationAddress = 'Gagal mendapatkan lokasi';
         },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 60000
-        }
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
       );
     }
-    
-    function updateLocationUI(status, text) {
-      const icon = document.getElementById('locationIcon');
-      const textEl = document.getElementById('locationText');
-      const banner = document.getElementById('locationBanner');
-      
-      if (!textEl || !icon || !banner) return;
-      
-      textEl.textContent = text;
-      
-      if (status === 'loading') {
-        icon.textContent = '⏳';
-        banner.className = 'bg-white rounded-xl p-3 mb-4 flex items-center justify-between';
-      } else if (status === 'success') {
-        icon.textContent = '📍';
-        banner.className = 'bg-green-50 border border-green-200 rounded-xl p-3 mb-4 flex items-center justify-between';
-        textEl.className = 'text-sm text-green-700';
-      } else if (status === 'error') {
-        icon.textContent = '⚠️';
-        banner.className = 'bg-red-50 border border-red-200 rounded-xl p-3 mb-4 flex items-center justify-between';
-        textEl.className = 'text-sm text-red-600';
-      }
+
+    // ==================== WATERMARK ====================
+    function preloadWatermarkLogo() {
+      return new Promise((resolve) => {
+        if (watermarkLogoLoaded) { resolve(watermarkLogoLoaded); return; }
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => { watermarkLogoLoaded = img; resolve(img); };
+        img.onerror = () => resolve(null);
+        img.src = WATERMARK_LOGO_URL;
+        setTimeout(() => resolve(watermarkLogoLoaded), 2000);
+      });
     }
-    
-    function refreshLocation() {
-      getCurrentLocation();
+    preloadWatermarkLogo();
+
+    async function addWatermark(ctx, width, height, locationStr) {
+      const now = new Date();
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const dayName = days[now.getDay()];
+      const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      
+      const baseSize = Math.min(width, height);
+      const scale = baseSize / 1080;
+      const padding = 50 * scale;
+      const logoSize = 200 * scale;
+      const fontSize = 38 * scale;
+      const cornerRadius = 20 * scale;
+      
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      ctx.shadowBlur = 10 * scale;
+      ctx.shadowOffsetX = 3 * scale;
+      ctx.shadowOffsetY = 3 * scale;
+      
+      const startX = padding;
+      const bottomY = height - padding;
+      let locationY = bottomY;
+      const maxLocationWidth = width * 0.5;
+      
+      if (locationStr && locationStr !== 'Mendapatkan lokasi...' && !locationStr.includes('Gagal')) {
+        ctx.font = `${fontSize * 0.65}px Poppins, sans-serif`;
+        ctx.fillStyle = '#ffffff';
+        const words = locationStr.split(' ');
+        let lines = [];
+        let currentLine = '📍 ';
+        words.forEach(word => {
+          const testLine = currentLine + word + ' ';
+          if (ctx.measureText(testLine).width > maxLocationWidth && currentLine !== '📍 ') {
+            lines.push(currentLine.trim());
+            currentLine = '   ' + word + ' ';
+          } else {
+            currentLine = testLine;
+          }
+        });
+        lines.push(currentLine.trim());
+        const locLineHeight = fontSize * 0.85;
+        for (let i = lines.length - 1; i >= 0; i--) {
+          ctx.fillText(lines[i], startX, locationY);
+          locationY -= locLineHeight;
+        }
+        locationY -= 8 * scale;
+      }
+      
+      const row2Y = locationY;
+      ctx.font = `bold ${fontSize * 1.5}px Poppins, sans-serif`;
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText(timeStr, startX, row2Y);
+      
+      const timeWidth = ctx.measureText(timeStr).width;
+      const lineX = startX + timeWidth + fontSize * 0.5;
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3 * scale;
+      ctx.beginPath();
+      ctx.moveTo(lineX, row2Y - fontSize * 1.2);
+      ctx.lineTo(lineX, row2Y + fontSize * 0.3);
+      ctx.stroke();
+      
+      const textStartX = lineX + fontSize * 0.5;
+      ctx.font = `bold ${fontSize * 0.85}px Poppins, sans-serif`;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(dateStr, textStartX, row2Y - fontSize * 0.5);
+      ctx.font = `${fontSize * 0.75}px Poppins, sans-serif`;
+      ctx.fillText(dayName, textStartX, row2Y + fontSize * 0.2);
+      
+      const logoY = row2Y - fontSize * 1.5 - 12 * scale - logoSize;
+      const logoImg = await preloadWatermarkLogo();
+      if (logoImg && logoImg.complete && logoImg.naturalWidth > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(startX, logoY, logoSize, logoSize, cornerRadius);
+        ctx.clip();
+        ctx.drawImage(logoImg, startX, logoY, logoSize, logoSize);
+        ctx.restore();
+      }
+      
+      const rightPadding = padding;
+      const topY = padding + fontSize;
+      ctx.font = `bold ${fontSize * 1.2}px Poppins, sans-serif`;
+      const timeTextWidth = ctx.measureText('Time').width;
+      const markWidth = ctx.measureText('mark').width;
+      const rightX = width - rightPadding - timeTextWidth - markWidth;
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText('Time', rightX, topY);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('mark', rightX + timeTextWidth, topY);
+      ctx.font = `${fontSize * 0.7}px Poppins, sans-serif`;
+      ctx.fillText('100% photo verified', rightX, topY + fontSize * 0.7);
+      
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
     }
 
-    // ==================== PHOTO UPLOAD HANDLER ====================
+    // ==================== PHOTO UPLOAD ====================
     async function handlePhotoUpload(event) {
       const files = event.target.files;
       if (!files || files.length === 0) return;
-      
-      const promises = Array.from(files).map(file => 
-        processPhotoWithWatermark(file).then(photo => {
+      for (const file of files) {
+        try {
+          const photo = await processPhotoWithWatermark(file);
           capturedPhotos.push(photo);
-        }).catch(() => {})
-      );
-      
-      await Promise.all(promises);
+        } catch (e) {}
+      }
       renderPhotoThumbnails();
-      
       event.target.value = '';
     }
 
     async function processPhotoWithWatermark(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        
         reader.onload = async (e) => {
           const img = new Image();
-          
           img.onload = async () => {
             const maxUploadSize = 800;
-            let uploadWidth = img.width;
-            let uploadHeight = img.height;
-            
+            let uploadWidth = img.width, uploadHeight = img.height;
             if (img.width > maxUploadSize || img.height > maxUploadSize) {
               const ratio = Math.min(maxUploadSize / img.width, maxUploadSize / img.height);
               uploadWidth = img.width * ratio;
@@ -1088,8 +786,7 @@ function jsonResponse(data) {
             const fullData = fullCanvas.toDataURL('image/jpeg', 0.92);
             
             const thumbCanvas = document.createElement('canvas');
-            const maxThumbSize = 200;
-            const thumbRatio = Math.min(maxThumbSize / img.width, maxThumbSize / img.height);
+            const thumbRatio = Math.min(200 / img.width, 200 / img.height);
             thumbCanvas.width = img.width * thumbRatio;
             thumbCanvas.height = img.height * thumbRatio;
             const thumbCtx = thumbCanvas.getContext('2d');
@@ -1102,169 +799,25 @@ function jsonResponse(data) {
               timestamp: new Date()
             });
           };
-          
           img.onerror = () => reject(new Error('Failed to load image'));
           img.src = e.target.result;
         };
-        
         reader.onerror = () => reject(new Error('Failed to read file'));
         reader.readAsDataURL(file);
       });
     }
 
-    async function addWatermark(ctx, width, height, locationStr) {
-      const now = new Date();
-      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      
-      const dayName = days[now.getDay()];
-      const day = now.getDate();
-      const month = months[now.getMonth()];
-      const year = now.getFullYear();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      
-      const dateStr = `${day} ${month} ${year}`;
-      const timeStr = `${hours}:${minutes}`;
-      
-      const baseSize = Math.min(width, height);
-      const scale = baseSize / 1080;
-      
-      const padding = 50 * scale;
-      const logoSize = 200 * scale;
-      const fontSize = 38 * scale;
-      const lineHeight = 45 * scale;
-      const logoToTimeGap = 12 * scale;
-      const timeToLocGap = 8 * scale;
-      const cornerRadius = 20 * scale;
-      
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-      ctx.shadowBlur = 10 * scale;
-      ctx.shadowOffsetX = 3 * scale;
-      ctx.shadowOffsetY = 3 * scale;
-      
-      const startX = padding;
-      const bottomY = height - padding;
-      
-      let locationY = bottomY;
-      const maxLocationWidth = width * 0.5;
-      
-      if (locationStr && locationStr !== 'Mendapatkan lokasi...' && !locationStr.includes('Gagal') && !locationStr.includes('ditolak')) {
-        ctx.font = `${fontSize * 0.65}px Poppins, sans-serif`;
-        ctx.fillStyle = '#ffffff';
-        
-        const words = locationStr.split(' ');
-        let lines = [];
-        let currentLine = '📍 ';
-        
-        words.forEach(word => {
-          const testLine = currentLine + word + ' ';
-          const testWidth = ctx.measureText(testLine).width;
-          if (testWidth > maxLocationWidth && currentLine !== '📍 ') {
-            lines.push(currentLine.trim());
-            currentLine = '   ' + word + ' ';
-          } else {
-            currentLine = testLine;
-          }
-        });
-        lines.push(currentLine.trim());
-        
-        const locLineHeight = fontSize * 0.85;
-        for (let i = lines.length - 1; i >= 0; i--) {
-          ctx.fillText(lines[i], startX, locationY);
-          locationY -= locLineHeight;
-        }
-        locationY -= timeToLocGap;
-      }
-      
-      const row2Y = locationY;
-      
-      ctx.font = `bold ${fontSize * 1.5}px Poppins, sans-serif`;
-      ctx.fillStyle = '#f59e0b';
-      ctx.fillText(timeStr, startX, row2Y);
-      
-      const timeWidth = ctx.measureText(timeStr).width;
-      const lineX = startX + timeWidth + fontSize * 0.5;
-      
-      ctx.strokeStyle = '#f59e0b';
-      ctx.lineWidth = 3 * scale;
-      ctx.beginPath();
-      ctx.moveTo(lineX, row2Y - fontSize * 1.2);
-      ctx.lineTo(lineX, row2Y + fontSize * 0.3);
-      ctx.stroke();
-      
-      const textStartX = lineX + fontSize * 0.5;
-      ctx.font = `bold ${fontSize * 0.85}px Poppins, sans-serif`;
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(dateStr, textStartX, row2Y - fontSize * 0.5);
-      
-      ctx.font = `${fontSize * 0.75}px Poppins, sans-serif`;
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(dayName, textStartX, row2Y + fontSize * 0.2);
-      
-      const logoY = row2Y - fontSize * 1.5 - logoToTimeGap - logoSize;
-      const logoImg = await preloadWatermarkLogo();
-      if (logoImg && logoImg.complete && logoImg.naturalWidth > 0) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(startX + cornerRadius, logoY);
-        ctx.lineTo(startX + logoSize - cornerRadius, logoY);
-        ctx.quadraticCurveTo(startX + logoSize, logoY, startX + logoSize, logoY + cornerRadius);
-        ctx.lineTo(startX + logoSize, logoY + logoSize - cornerRadius);
-        ctx.quadraticCurveTo(startX + logoSize, logoY + logoSize, startX + logoSize - cornerRadius, logoY + logoSize);
-        ctx.lineTo(startX + cornerRadius, logoY + logoSize);
-        ctx.quadraticCurveTo(startX, logoY + logoSize, startX, logoY + logoSize - cornerRadius);
-        ctx.lineTo(startX, logoY + cornerRadius);
-        ctx.quadraticCurveTo(startX, logoY, startX + cornerRadius, logoY);
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(logoImg, startX, logoY, logoSize, logoSize);
-        ctx.restore();
-      }
-      
-      const rightPadding = padding;
-      const topY = padding + fontSize;
-      
-      ctx.font = `bold ${fontSize * 1.2}px Poppins, sans-serif`;
-      const timeText = 'Time';
-      const markText = 'mark';
-      const timeTextWidth = ctx.measureText(timeText).width;
-      const markWidth = ctx.measureText(markText).width;
-      const totalTextWidth = timeTextWidth + markWidth;
-      
-      const rightX = width - rightPadding - totalTextWidth;
-      
-      ctx.fillStyle = '#f59e0b';
-      ctx.fillText(timeText, rightX, topY);
-      
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(markText, rightX + timeTextWidth, topY);
-      
-      ctx.font = `${fontSize * 0.7}px Poppins, sans-serif`;
-      ctx.fillStyle = '#ffffff';
-      const verifiedText = '100% photo verified';
-      ctx.fillText(verifiedText, rightX, topY + lineHeight * 0.7);
-      
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-    }
-
     function renderPhotoThumbnails() {
       const container = document.getElementById('photoThumbnails');
       const countEl = document.getElementById('photoCount');
-      
       if (capturedPhotos.length === 0) {
         container.classList.add('hidden');
         countEl.classList.add('hidden');
         return;
       }
-      
       container.classList.remove('hidden');
       countEl.classList.remove('hidden');
       countEl.textContent = `${capturedPhotos.length} foto dipilih`;
-      
       container.innerHTML = capturedPhotos.map((photo, index) => `
         <div class="relative">
           <img src="${photo.thumbnail}" class="photo-thumbnail" onclick="openPhotoViewer(${index}, 'captured')">
@@ -1285,7 +838,6 @@ function jsonResponse(data) {
       } else {
         currentViewerPhotos = source;
       }
-      
       currentViewerIndex = index;
       updatePhotoViewer();
       document.getElementById('photoViewer').classList.remove('hidden');
@@ -1297,185 +849,15 @@ function jsonResponse(data) {
     }
 
     function prevPhoto() {
-      if (currentViewerIndex > 0) {
-        currentViewerIndex--;
-        updatePhotoViewer();
-      }
+      if (currentViewerIndex > 0) { currentViewerIndex--; updatePhotoViewer(); }
     }
 
     function nextPhoto() {
-      if (currentViewerIndex < currentViewerPhotos.length - 1) {
-        currentViewerIndex++;
-        updatePhotoViewer();
-      }
+      if (currentViewerIndex < currentViewerPhotos.length - 1) { currentViewerIndex++; updatePhotoViewer(); }
     }
 
     function closePhotoViewer() {
       document.getElementById('photoViewer').classList.add('hidden');
-    }
-
-    // ==================== DRIVE INTEGRATION ====================
-    async function uploadPhotoToDrive(photoData, timestamp) {
-      if (!GOOGLE_SCRIPT_URL) return null;
-      
-      const now = timestamp || new Date();
-      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      const folderName = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const fileName = `Absen, ${hours}:${minutes}.jpg`;
-      
-      try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'uploadPhoto',
-            folderName: folderName,
-            fileName: fileName,
-            photoData: photoData
-          })
-        });
-        return { success: true };
-      } catch (error) {
-        return null;
-      }
-    }
-
-    async function fetchPhotoFolders() {
-      if (!GOOGLE_SCRIPT_URL) return [];
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-        
-        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getFolders`, {
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        
-        const data = await response.json();
-        return data.success ? data.folders : [];
-      } catch (error) {
-        return [];
-      }
-    }
-
-    async function fetchPhotosFromFolder(folderId) {
-      if (!GOOGLE_SCRIPT_URL) return [];
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
-        
-        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPhotos&folderId=${folderId}`, {
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        
-        const data = await response.json();
-        return data.success ? data.photos : [];
-      } catch (error) {
-        return [];
-      }
-    }
-
-    // ==================== PHOTO RECAP ====================
-    let cachedFolders = null;
-    let cachedPhotos = {};
-    
-    async function showPhotoRecap() {
-      showPage('photoFoldersPage');
-      
-      if (cachedFolders && cachedFolders.length > 0) {
-        document.getElementById('photoFoldersLoading').classList.add('hidden');
-        renderPhotoFolders(cachedFolders);
-        fetchPhotoFolders().then(folders => {
-          if (folders && folders.length > 0) {
-            cachedFolders = folders;
-            renderPhotoFolders(folders);
-          }
-        });
-        return;
-      }
-      
-      document.getElementById('photoFolders').classList.add('hidden');
-      document.getElementById('noPhotosMessage').classList.add('hidden');
-      document.getElementById('photoFoldersLoading').classList.remove('hidden');
-      
-      const folders = await fetchPhotoFolders();
-      cachedFolders = folders;
-      renderPhotoFolders(folders);
-    }
-    
-    function renderPhotoFolders(folders) {
-      document.getElementById('photoFoldersLoading').classList.add('hidden');
-      
-      if (folders.length === 0) {
-        document.getElementById('noPhotosMessage').classList.remove('hidden');
-        return;
-      }
-      
-      const container = document.getElementById('photoFolders');
-      container.classList.remove('hidden');
-      container.innerHTML = folders.map(folder => `
-        <button onclick="openPhotoFolder('${folder.id}', '${folder.name}')" class="photo-folder bg-white rounded-2xl p-6 shadow-lg text-center">
-          <svg class="w-12 h-12 mx-auto mb-3" fill="#1e3a5f" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-          <h3 class="font-semibold text-gray-800">${folder.name}</h3>
-        </button>
-      `).join('');
-    }
-
-    async function openPhotoFolder(folderId, folderName) {
-      showPage('photoGalleryPage');
-      document.getElementById('galleryTitle').textContent = `Foto: ${folderName}`;
-      
-      if (cachedPhotos[folderId] && cachedPhotos[folderId].length > 0) {
-        document.getElementById('photoGalleryLoading').classList.add('hidden');
-        document.getElementById('photoGallery').classList.remove('hidden');
-        renderPhotoGallery(cachedPhotos[folderId]);
-        fetchPhotosFromFolder(folderId).then(photos => {
-          if (photos && photos.length > 0) {
-            cachedPhotos[folderId] = photos;
-            renderPhotoGallery(photos);
-          }
-        });
-        return;
-      }
-      
-      document.getElementById('photoGallery').classList.add('hidden');
-      document.getElementById('photoGalleryLoading').classList.remove('hidden');
-      
-      const photos = await fetchPhotosFromFolder(folderId);
-      
-      document.getElementById('photoGalleryLoading').classList.add('hidden');
-      document.getElementById('photoGallery').classList.remove('hidden');
-      
-      cachedPhotos[folderId] = photos;
-      renderPhotoGallery(photos);
-    }
-    
-    function renderPhotoGallery(photos) {
-      document.getElementById('photoGalleryLoading').classList.add('hidden');
-      
-      if (photos.length === 0) {
-        document.getElementById('photoGallery').innerHTML = '<p class="col-span-full text-center text-gray-300 py-8">Tidak ada foto di folder ini</p>';
-        return;
-      }
-      
-      const container = document.getElementById('photoGallery');
-      container.innerHTML = photos.map((photo, index) => `
-        <div class="gallery-photo rounded-xl overflow-hidden shadow-lg cursor-pointer" onclick="viewGalleryPhoto(${index})">
-          <img src="${photo.thumbnailUrl}" alt="Foto" class="w-full h-32 object-cover">
-        </div>
-      `).join('');
-      
-      window.galleryPhotos = photos.map(p => p.fullUrl);
-    }
-
-    function viewGalleryPhoto(index) {
-      if (window.galleryPhotos) {
-        openPhotoViewer(index, window.galleryPhotos);
-      }
     }
 
     // ==================== WORKERS ====================
@@ -1494,10 +876,8 @@ function jsonResponse(data) {
         const text = await response.text();
         const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?$/);
         if (!jsonMatch) throw new Error('Parse error');
-        
         const data = JSON.parse(jsonMatch[1]);
         const rows = data.table.rows;
-        
         workers = [];
         for (let i = 0; i < rows.length; i++) {
           const row = rows[i];
@@ -1509,24 +889,11 @@ function jsonResponse(data) {
             });
           }
         }
-        
         workers.forEach(w => workerStatus[w.id] = null);
         return true;
       } catch (error) {
         return false;
       }
-    }
-
-    function getUserIcon(size = 40) {
-      return `<svg width="${size}" height="${size}" fill="#1e3a5f" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
-    }
-
-    function getWorkerPhotoHtml(worker, size = 60) {
-      if (worker.photo) {
-        return `<img src="${worker.photo}" alt="${worker.name}" class="worker-photo-img" style="width:${size}px;height:${size}px;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                <div style="display:none;width:${size}px;height:${size}px;border-radius:12px;" class="flex items-center justify-center bg-gray-200">${getUserIcon(size * 0.6)}</div>`;
-      }
-      return `<div class="flex items-center justify-center bg-gray-200" style="width:${size}px;height:${size}px;border-radius:12px;">${getUserIcon(size * 0.6)}</div>`;
     }
 
     function updateStatusCounter() {
@@ -1550,16 +917,13 @@ function jsonResponse(data) {
       filteredWorkers.forEach(worker => {
         const status = workerStatus[worker.id];
         const isSelected = status !== null;
-        
-        const card = document.createElement('div');
-        card.className = `worker-card bg-white rounded-2xl p-4 shadow-lg transition-all cursor-pointer ${isSelected ? 'selected' : ''}`;
-        card.dataset.workerId = worker.id;
-        
         const getStatusBtnClass = (btnStatus, color) => {
           const isActive = status === btnStatus;
           return `status-btn px-2 py-1 ${color} text-white rounded-lg text-xs ${isActive ? 'selected font-bold' : 'font-medium'} hover:opacity-80`;
         };
         
+        const card = document.createElement('div');
+        card.className = `worker-card bg-white rounded-2xl p-4 shadow-lg transition-all cursor-pointer ${isSelected ? 'selected' : ''}`;
         card.innerHTML = `
           <div class="text-center mb-3">
             <div class="mb-2 flex justify-center">${getWorkerPhotoHtml(worker, 60)}</div>
@@ -1573,7 +937,6 @@ function jsonResponse(data) {
             <button onclick="event.stopPropagation(); toggleStatus(${worker.id}, 'Standby')" class="${getStatusBtnClass('Standby', 'bg-purple-500')} text-[10px]">Standby</button>
           </div>
         `;
-        
         grid.appendChild(card);
       });
     }
@@ -1594,7 +957,7 @@ function jsonResponse(data) {
       renderWorkerGrid();
       showToast('Status absen direset!');
     }
-    
+
     function resetAllStatusSilent() {
       workers.forEach(w => workerStatus[w.id] = null);
       renderWorkerGrid();
@@ -1603,15 +966,12 @@ function jsonResponse(data) {
     // ==================== SEARCH ====================
     document.getElementById('searchInput').addEventListener('input', function(e) {
       const query = e.target.value.toLowerCase().trim();
-      
       if (query === '') {
         document.getElementById('searchResults').classList.add('hidden');
         document.getElementById('workerGrid').classList.remove('hidden');
         return;
       }
-      
       const filtered = workers.filter(w => w.name.toLowerCase().includes(query));
-      
       if (filtered.length > 0) {
         document.getElementById('workerGrid').classList.add('hidden');
         document.getElementById('searchResults').classList.remove('hidden');
@@ -1625,19 +985,15 @@ function jsonResponse(data) {
     function renderSearchResults(filteredWorkers) {
       const container = document.getElementById('searchResultsGrid');
       container.innerHTML = '';
-      
       filteredWorkers.forEach(worker => {
         const status = workerStatus[worker.id];
         const isSelected = status !== null;
-        
         const getStatusBtnClass = (btnStatus, color) => {
           const isActive = status === btnStatus;
           return `status-btn px-2 py-1 ${color} text-white rounded-lg text-xs ${isActive ? 'selected font-bold' : 'font-medium'} hover:opacity-80`;
         };
-        
         const card = document.createElement('div');
         card.className = `worker-card bg-white rounded-2xl p-4 shadow-lg transition-all cursor-pointer fade-in ${isSelected ? 'selected' : ''}`;
-        
         card.innerHTML = `
           <div class="text-center mb-3">
             <div class="mb-2 flex justify-center">${getWorkerPhotoHtml(worker, 60)}</div>
@@ -1651,14 +1007,12 @@ function jsonResponse(data) {
             <button onclick="event.stopPropagation(); setStatus(${worker.id}, 'Standby')" class="${getStatusBtnClass('Standby', 'bg-purple-500')} text-[10px]">Standby</button>
           </div>
         `;
-        
         container.appendChild(card);
       });
     }
 
     function setStatus(workerId, status) {
       workerStatus[workerId] = workerStatus[workerId] === status ? null : status;
-      
       setTimeout(() => {
         document.getElementById('searchInput').value = '';
         document.getElementById('searchResults').classList.add('hidden');
@@ -1667,92 +1021,117 @@ function jsonResponse(data) {
       }, 500);
     }
 
-    // ==================== DEVICE DETECTION & PHOTO HANDLING ====================
-    
+    // ==================== DEVICE & PHOTO SAVE ====================
     function isIOSDevice() {
-      return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-             (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     }
-    
-    function isAndroidDevice() {
-      return /Android/i.test(navigator.userAgent);
-    }
-    
+
     function base64ToBlob(base64Data, contentType = 'image/jpeg') {
       const byteString = atob(base64Data.split(',')[1]);
       const arrayBuffer = new ArrayBuffer(byteString.length);
       const uint8Array = new Uint8Array(arrayBuffer);
-      
       for (let i = 0; i < byteString.length; i++) {
         uint8Array[i] = byteString.charCodeAt(i);
       }
-      
       return new Blob([uint8Array], { type: contentType });
     }
-    
+
     function forceDownloadPhoto(photoData, fileName) {
       const blob = base64ToBlob(photoData);
       const blobUrl = URL.createObjectURL(blob);
-      
       const link = document.createElement('a');
       link.href = blobUrl;
       link.download = fileName;
       link.style.cssText = 'position:absolute;left:-9999px;visibility:hidden;';
       document.body.appendChild(link);
-      
       link.click();
-      
-      setTimeout(() => {
-        document.body.removeChild(link);
-        URL.revokeObjectURL(blobUrl);
-      }, 500);
+      setTimeout(() => { document.body.removeChild(link); URL.revokeObjectURL(blobUrl); }, 500);
     }
-    
+
     async function sharePhotoIOS(photoData, fileName) {
       try {
         const blob = base64ToBlob(photoData);
         const file = new File([blob], fileName, { type: 'image/jpeg' });
         
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: fileName
-          });
-          return true;
-        } else {
-          forceDownloadPhoto(photoData, fileName);
-          return true;
+        // Cek apakah Web Share API tersedia dan mendukung file sharing
+        if (navigator.share && navigator.canShare) {
+          const shareData = { files: [file] };
+          
+          if (navigator.canShare(shareData)) {
+            await navigator.share(shareData);
+            return { success: true, method: 'share' };
+          }
         }
+        
+        // Fallback: buka gambar di tab baru untuk long-press save
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+        return { success: true, method: 'newtab' };
+        
       } catch (error) {
         if (error.name === 'AbortError') {
-          return true;
+          return { success: true, method: 'cancelled' };
         }
+        // Fallback terakhir
         forceDownloadPhoto(photoData, fileName);
-        return true;
+        return { success: true, method: 'download' };
       }
     }
-    
+
+    // Fungsi khusus untuk share multiple photos di iOS
+    async function shareMultiplePhotosIOS(photos, baseFileName) {
+      try {
+        // Buat array File dari semua foto
+        const files = photos.map((photo, index) => {
+          const blob = base64ToBlob(photo.fullData);
+          const fileName = photos.length === 1 
+            ? `${baseFileName}.jpg` 
+            : `${baseFileName}_${index + 1}.jpg`;
+          return new File([blob], fileName, { type: 'image/jpeg' });
+        });
+
+        // Cek apakah bisa share multiple files
+        if (navigator.share && navigator.canShare) {
+          const shareData = { files: files };
+          
+          if (navigator.canShare(shareData)) {
+            await navigator.share(shareData);
+            return { success: true, count: files.length };
+          }
+        }
+
+        // Fallback: share satu per satu
+        for (let i = 0; i < photos.length; i++) {
+          const fileName = photos.length === 1 
+            ? `${baseFileName}.jpg` 
+            : `${baseFileName}_${i + 1}.jpg`;
+          await sharePhotoIOS(photos[i].fullData, fileName);
+          
+          // Delay antar foto
+          if (i < photos.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 800));
+          }
+        }
+        return { success: true, count: photos.length };
+        
+      } catch (error) {
+        console.log('Share error:', error);
+        return { success: false, error: error.message };
+      }
+    }
+
     async function savePhotosToDevice(photos, baseFileName) {
       if (photos.length === 0) return;
-      
       const isIOS = isIOSDevice();
-      
       for (let i = 0; i < photos.length; i++) {
         const photo = photos[i];
-        const fileName = photos.length === 1 
-          ? `${baseFileName}.jpg` 
-          : `${baseFileName}_${i + 1}.jpg`;
-        
+        const fileName = photos.length === 1 ? `${baseFileName}.jpg` : `${baseFileName}_${i + 1}.jpg`;
         if (isIOS) {
           await sharePhotoIOS(photo.fullData, fileName);
-          if (i < photos.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-          }
+          if (i < photos.length - 1) await new Promise(resolve => setTimeout(resolve, 500));
         } else {
           forceDownloadPhoto(photo.fullData, fileName);
-          if (i < photos.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 200));
-          }
+          if (i < photos.length - 1) await new Promise(resolve => setTimeout(resolve, 200));
         }
       }
     }
@@ -1760,10 +1139,8 @@ function jsonResponse(data) {
     // ==================== SUBMIT ====================
     async function submitAbsensi() {
       const submitBtn = document.getElementById('submitBtn');
-      
       const now = new Date();
       const monthsId = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-      
       const tanggalFormatted = `${now.getDate()} ${monthsId[now.getMonth()]} ${now.getFullYear()}`;
       const jamFormatted = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
       
@@ -1774,24 +1151,20 @@ function jsonResponse(data) {
       
       const photosToProcess = [...capturedPhotos];
       const baseFileName = `Absen_${tanggalFormatted.replace(/ /g, '_')}_${jamFormatted.replace(':', '-')}`;
+      const isIOS = isIOSDevice();
       
-      // Mulai loading state
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Mengirim...';
+      submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Mengirim data...';
       
-      // STEP 1: Upload semua data (status absensi + foto ke Drive) DULU
+      // STEP 1: Upload data absensi dan foto ke server
       const uploadPromises = [];
       
-      // Upload foto ke Drive
       if (GOOGLE_SCRIPT_URL && photosToProcess.length > 0) {
         photosToProcess.forEach((photo, i) => {
-          uploadPromises.push(
-            uploadPhotoToDriveFast(photo.uploadData, photo.timestamp, i)
-          );
+          uploadPromises.push(uploadPhotoToDriveFast(photo.uploadData, photo.timestamp, i));
         });
       }
       
-      // Kirim data absensi ke spreadsheet
       if (GOOGLE_SCRIPT_URL) {
         uploadPromises.push(
           fetch(GOOGLE_SCRIPT_URL, {
@@ -1809,86 +1182,158 @@ function jsonResponse(data) {
         );
       }
       
-      // Tunggu semua upload selesai
-      if (uploadPromises.length > 0) {
-        await Promise.all(uploadPromises);
-      }
+      if (uploadPromises.length > 0) await Promise.all(uploadPromises);
       
-      // Reset form
+      // STEP 2: Reset form
       resetAllStatusSilent();
       capturedPhotos = [];
       renderPhotoThumbnails();
       
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<svg class="w-6 h-6 transform -rotate-45" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Kirim Absensi';
+      // STEP 3: Tampilkan pesan sukses
+      showToast('✅ Data absensi berhasil dikirim!');
       
-      // STEP 2: Setelah upload selesai, langsung muncul share sheet untuk simpan foto
+      // STEP 4: Jika ada foto, buka share sheet (khusus iPhone) atau download (Android/Desktop)
       if (photosToProcess.length > 0) {
-        // Sedikit delay agar UI update dulu
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        // Simpan foto ke device (share sheet untuk iOS, download untuk Android)
-        await savePhotosToDevice(photosToProcess, baseFileName);
+        if (isIOS) {
+          // Update button untuk proses share
+          submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Menyiapkan foto...';
+          
+          // Delay sedikit agar toast terlihat dulu
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Buka share sheet iOS untuk semua foto sekaligus
+          const shareResult = await shareMultiplePhotosIOS(photosToProcess, baseFileName);
+          
+          if (shareResult.success) {
+            showToast(`📸 ${photosToProcess.length} foto siap disimpan!`);
+          }
+        } else {
+          // Android/Desktop: langsung download
+          submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Menyimpan foto...';
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          for (let i = 0; i < photosToProcess.length; i++) {
+            const photo = photosToProcess[i];
+            const fileName = photosToProcess.length === 1 
+              ? `${baseFileName}.jpg` 
+              : `${baseFileName}_${i + 1}.jpg`;
+            forceDownloadPhoto(photo.fullData, fileName);
+            
+            if (i < photosToProcess.length - 1) {
+              await new Promise(resolve => setTimeout(resolve, 300));
+            }
+          }
+          showToast(`📸 ${photosToProcess.length} foto berhasil didownload!`);
+        }
       }
       
-      // Tampilkan toast berhasil setelah semua proses selesai
-      showToast('✅ Absensi berhasil dikirim!');
+      // Reset button
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<svg class="w-6 h-6 transform -rotate-45" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Kirim Absensi';
     }
-    
+
     async function uploadPhotoToDriveFast(photoData, timestamp, index = 0) {
       if (!GOOGLE_SCRIPT_URL) return { success: false };
-      
       const now = timestamp || new Date();
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       const folderName = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      const fileName = `Absen_${hours}-${minutes}-${seconds}_${index}.jpg`;
+      const fileName = `Absen_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}_${index}.jpg`;
       
       return new Promise((resolve) => {
         const timeoutId = setTimeout(() => resolve({ success: true }), 3000);
-        
         fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'uploadPhoto',
-            folderName: folderName,
-            fileName: fileName,
-            photoData: photoData
-          })
-        })
-        .then(() => { clearTimeout(timeoutId); resolve({ success: true }); })
-        .catch(() => { clearTimeout(timeoutId); resolve({ success: true }); });
+          body: JSON.stringify({ action: 'uploadPhoto', folderName, fileName, photoData })
+        }).then(() => { clearTimeout(timeoutId); resolve({ success: true }); })
+          .catch(() => { clearTimeout(timeoutId); resolve({ success: true }); });
       });
     }
 
     // ==================== RECAP ====================
-    let currentRecapDate = '';
-    
+    async function fetchRecapDataFromSheet() {
+      try {
+        const response = await fetch(RECAP_SHEETS_URL);
+        const text = await response.text();
+        const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?$/);
+        if (!jsonMatch) return [];
+        const data = JSON.parse(jsonMatch[1]);
+        const rows = data.table.rows;
+        const cols = data.table.cols;
+        if (!rows || rows.length < 3) return [];
+        
+        const result = [];
+        const tanggalRow = rows[0];
+        const jamRow = rows[1];
+        const numCols = cols.length;
+        
+        for (let col = 1; col < numCols; col++) {
+          const tanggalCell = tanggalRow.c && tanggalRow.c[col];
+          const jamCell = jamRow.c && jamRow.c[col];
+          let tanggal = tanggalCell ? (tanggalCell.v || tanggalCell.f || '') : '';
+          let jam = jamCell ? (jamCell.v || jamCell.f || '') : '';
+          if (!tanggal) continue;
+          const displayDate = String(tanggal);
+          const dateForComparison = convertToIdLocaleDate(displayDate);
+          
+          for (let row = 2; row < rows.length; row++) {
+            const workerRow = rows[row];
+            if (!workerRow.c) continue;
+            const workerNameCell = workerRow.c[0];
+            const statusCell = workerRow.c[col];
+            const workerName = workerNameCell ? (workerNameCell.v || workerNameCell.f || '') : '';
+            const status = statusCell ? (statusCell.v || statusCell.f || '') : '';
+            if (workerName && status) {
+              result.push({
+                type: 'attendance',
+                date: dateForComparison,
+                date_display: displayDate,
+                time: String(jam),
+                worker_name: String(workerName),
+                status: String(status)
+              });
+            }
+          }
+        }
+        return result;
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function convertToIdLocaleDate(dateStr) {
+      if (!dateStr) return '';
+      const str = String(dateStr).trim();
+      const monthMapId = { 'januari': 0, 'februari': 1, 'maret': 2, 'april': 3, 'mei': 4, 'juni': 5, 'juli': 6, 'agustus': 7, 'september': 8, 'oktober': 9, 'november': 10, 'desember': 11 };
+      const monthMapEn = { 'january': 0, 'february': 1, 'march': 2, 'april': 3, 'may': 4, 'june': 5, 'july': 6, 'august': 7, 'september': 8, 'october': 9, 'november': 10, 'december': 11 };
+      const match = str.match(/(\d{1,2})\s+(\w+)\s+(\d{4})/i);
+      if (match) {
+        const day = parseInt(match[1]);
+        const monthName = match[2].toLowerCase();
+        const year = parseInt(match[3]);
+        let monthIndex = monthMapId[monthName] ?? monthMapEn[monthName] ?? -1;
+        if (monthIndex >= 0) {
+          const date = new Date(year, monthIndex, day);
+          return date.toLocaleDateString('id-ID');
+        }
+      }
+      return str;
+    }
+
     async function showTodayRecap() {
       const today = new Date().toLocaleDateString('id-ID');
       currentRecapDate = today;
       currentStatusCardDate = today;
       document.getElementById('todayRecapDate').textContent = today;
-      
       showPage('todayRecapPage');
       
-      document.getElementById('todayRecapContent').innerHTML = `
-        <div class="p-8 flex flex-col items-center justify-center">
-          <div class="loading-spinner mb-4"></div>
-          <p class="text-gray-600">Memuat data dari spreadsheet...</p>
-        </div>
-      `;
+      document.getElementById('todayRecapContent').innerHTML = `<div class="p-8 flex flex-col items-center justify-center"><div class="loading-spinner mb-4"></div><p class="text-gray-600">Memuat data...</p></div>`;
       document.getElementById('todayStatusCards').innerHTML = '';
       
       const freshData = await fetchRecapDataFromSheet();
       allAbsensiData = freshData;
-      
       const todayData = allAbsensiData.filter(d => d.date === today && d.type === 'attendance');
-      
       renderStatusCards('todayStatusCards', today, allAbsensiData);
       renderRecapTable(todayData, 'todayRecapContent');
     }
@@ -1897,42 +1342,26 @@ function jsonResponse(data) {
       currentRecapDate = dateStr;
       currentStatusCardDate = dateStr;
       document.getElementById('dateRecapTitle').textContent = `Recap: ${dateStr}`;
-      
       showPage('dateRecapPage');
       
-      document.getElementById('dateRecapContent').innerHTML = `
-        <div class="p-8 flex flex-col items-center justify-center">
-          <div class="loading-spinner mb-4"></div>
-          <p class="text-gray-600">Memuat data dari spreadsheet...</p>
-        </div>
-      `;
+      document.getElementById('dateRecapContent').innerHTML = `<div class="p-8 flex flex-col items-center justify-center"><div class="loading-spinner mb-4"></div><p class="text-gray-600">Memuat data...</p></div>`;
       document.getElementById('dateStatusCards').innerHTML = '';
       
       const freshData = await fetchRecapDataFromSheet();
       allAbsensiData = freshData;
-      
       renderStatusCards('dateStatusCards', dateStr, allAbsensiData);
-      
       const dateData = allAbsensiData.filter(d => d.date === dateStr && d.type === 'attendance');
       renderRecapTable(dateData, 'dateRecapContent');
     }
 
     function renderRecapTable(data, containerId) {
       const container = document.getElementById(containerId);
-      
       if (data.length === 0) {
         container.innerHTML = '<div class="p-8 text-center text-gray-500"><p>Tidak ada data absensi untuk tanggal ini</p></div>';
         return;
       }
       
-      const statusBgColors = {
-        'Start Work': '#22c55e',
-        'Finish Work': '#3b82f6',
-        'Sakit': '#f97316',
-        'Standby': '#a855f7',
-        'Belum Absen': '#ef4444'
-      };
-      
+      const statusBgColors = { 'Start Work': '#22c55e', 'Finish Work': '#3b82f6', 'Sakit': '#f97316', 'Standby': '#a855f7', 'Belum Absen': '#ef4444' };
       const timeGroups = {};
       data.forEach(item => {
         if (!timeGroups[item.time]) timeGroups[item.time] = {};
@@ -1940,449 +1369,43 @@ function jsonResponse(data) {
       });
       
       const times = Object.keys(timeGroups).sort((a, b) => {
-        const parseTime = (t) => {
-          if (!t) return 0;
-          const parts = t.split(':');
-          return parseInt(parts[0] || 0) * 60 + parseInt(parts[1] || 0);
-        };
+        const parseTime = (t) => { if (!t) return 0; const parts = t.split(':'); return parseInt(parts[0] || 0) * 60 + parseInt(parts[1] || 0); };
         return parseTime(a) - parseTime(b);
       });
       
       const workerNamesInData = [...new Set(data.map(d => d.worker_name))];
-      
       let html = `<div class="overflow-x-auto"><table class="w-full border-collapse"><tbody>`;
-      
       html += `<tr><td class="border border-gray-300 px-4 py-3 bg-gray-100 font-bold text-gray-700">Jam</td>`;
-      times.forEach(time => {
-        html += `<td class="border border-gray-300 px-4 py-3 bg-white text-center font-medium">${time}</td>`;
-      });
+      times.forEach(time => { html += `<td class="border border-gray-300 px-4 py-3 bg-white text-center font-medium">${time}</td>`; });
       html += `</tr>`;
       
       workerNamesInData.forEach(workerName => {
         const workerInfo = workers.find(w => w.name === workerName);
         const photo = workerInfo ? workerInfo.photo : '';
-        
         html += `<tr><td class="border border-gray-300 px-4 py-3 bg-gray-50"><div class="flex items-center gap-2">`;
         html += photo ? `<img src="${photo}" class="w-8 h-8 rounded-lg object-cover" onerror="this.style.display='none'">` : `<div class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-lg">${getUserIcon(20)}</div>`;
         html += `<span class="font-medium text-gray-800 text-sm">${workerName}</span></div></td>`;
-        
         times.forEach(time => {
           const status = timeGroups[time][workerName] || 'Belum Absen';
           const bgColor = statusBgColors[status];
           html += `<td class="border border-gray-300 px-3 py-2 text-center" style="background-color: ${bgColor};"><span class="text-white font-medium text-sm">${status}</span></td>`;
         });
-        
         html += `</tr>`;
       });
-      
       html += `</tbody></table></div>`;
       container.innerHTML = html;
     }
 
-    // ==================== WORKER HOURS ====================
-    let currentWorkerHoursSource = 'today';
-    let currentWorkerHoursDate = '';
-
-    function showWorkerHoursPage(source) {
-      currentWorkerHoursSource = source;
-      
-      if (source === 'today') {
-        currentWorkerHoursDate = new Date().toLocaleDateString('id-ID');
-      } else {
-        currentWorkerHoursDate = currentRecapDate;
-      }
-      
-      document.getElementById('workerHoursDateLabel').textContent = `Tanggal: ${currentWorkerHoursDate}`;
-      
-      document.getElementById('workerHoursSearch').value = '';
-      document.getElementById('workerHoursResults').innerHTML = `
-        <div class="bg-white rounded-2xl shadow-lg p-8 text-center text-gray-500">
-          <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          <p>Ketik nama pekerja untuk melihat recap jam kerja</p>
-        </div>
-      `;
-      
-      showPage('workerHoursPage');
-    }
-
-    function goBackFromWorkerHours() {
-      if (currentWorkerHoursSource === 'today') {
-        showPage('todayRecapPage');
-      } else {
-        showPage('dateRecapPage');
-      }
-    }
-
-    function calculateWorkerHours(workerName, dateStr) {
-      const workerData = allAbsensiData.filter(d => 
-        d.worker_name === workerName && 
-        d.date === dateStr && 
-        d.type === 'attendance'
-      );
-      
-      const startTimes = [];
-      const finishTimes = [];
-      
-      workerData.forEach(d => {
-        if (d.status === 'Start Work' && d.time) {
-          startTimes.push(d.time);
-        } else if (d.status === 'Finish Work' && d.time) {
-          finishTimes.push(d.time);
-        }
-      });
-      
-      startTimes.sort();
-      finishTimes.sort();
-      
-      if (startTimes.length === 0) {
-        return { hasData: false, message: 'Tidak ada data Start Work' };
-      }
-      
-      if (finishTimes.length === 0) {
-        return { 
-          hasData: true, 
-          startTimes, 
-          finishTimes: [], 
-          totalMinutes: 0, 
-          message: 'Belum selesai kerja' 
-        };
-      }
-      
-      let totalMinutes = 0;
-      const pairs = Math.min(startTimes.length, finishTimes.length);
-      
-      for (let i = 0; i < pairs; i++) {
-        const startParts = startTimes[i].split(':');
-        const finishParts = finishTimes[i].split(':');
-        
-        const startMinutes = parseInt(startParts[0]) * 60 + parseInt(startParts[1] || 0);
-        const finishMinutes = parseInt(finishParts[0]) * 60 + parseInt(finishParts[1] || 0);
-        
-        if (finishMinutes > startMinutes) {
-          totalMinutes += finishMinutes - startMinutes;
-        }
-      }
-      
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-      
-      return {
-        hasData: true,
-        startTimes,
-        finishTimes,
-        totalMinutes,
-        totalFormatted: `${hours} jam ${minutes} menit`,
-        message: null
-      };
-    }
-
-    function renderWorkerHoursResults(searchQuery) {
-      const container = document.getElementById('workerHoursResults');
-      const query = searchQuery.toLowerCase().trim();
-      
-      if (!query) {
-        container.innerHTML = `
-          <div class="bg-white rounded-2xl shadow-lg p-8 text-center text-gray-500">
-            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            <p>Ketik nama pekerja untuk melihat recap jam kerja</p>
-          </div>
-        `;
-        return;
-      }
-      
-      const filteredWorkers = workers.filter(w => w.name.toLowerCase().includes(query));
-      
-      if (filteredWorkers.length === 0) {
-        container.innerHTML = `
-          <div class="bg-white rounded-2xl shadow-lg p-8 text-center text-gray-500">
-            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            <p>Tidak ditemukan pekerja dengan nama "${searchQuery}"</p>
-          </div>
-        `;
-        return;
-      }
-      
-      let html = '';
-      
-      filteredWorkers.forEach(worker => {
-        const result = calculateWorkerHours(worker.name, currentWorkerHoursDate);
-        
-        html += `
-          <div class="bg-white rounded-2xl shadow-lg p-6 fade-in">
-            <div class="flex items-center gap-4 mb-4">
-              <div class="flex-shrink-0">${getWorkerPhotoHtml(worker, 60)}</div>
-              <div>
-                <h3 class="text-xl font-bold text-gray-800">${worker.name}</h3>
-                <p class="text-sm text-gray-500">${currentWorkerHoursDate}</p>
-              </div>
-            </div>
-            
-            <div class="border-t pt-4 space-y-3">
-              ${result.hasData ? `
-                <div class="flex items-center gap-3">
-                  <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                  <span class="text-gray-600 font-medium">Start Work:</span>
-                  <span class="text-gray-800">${result.startTimes.length > 0 ? result.startTimes.join(', ') : '-'}</span>
-                </div>
-                <div class="flex items-center gap-3">
-                  <div class="w-3 h-3 rounded-full bg-blue-500"></div>
-                  <span class="text-gray-600 font-medium">Finish Work:</span>
-                  <span class="text-gray-800">${result.finishTimes.length > 0 ? result.finishTimes.join(', ') : '-'}</span>
-                </div>
-                <div class="flex items-center gap-3 pt-2 border-t">
-                  <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                  <span class="text-gray-600 font-medium">Total Jam Kerja:</span>
-                  <span class="text-lg font-bold ${result.message ? 'text-red-500' : 'text-amber-600'}">${result.message || result.totalFormatted}</span>
-                </div>
-              ` : `
-                <div class="text-center py-4 text-gray-500">
-                  <p>${result.message}</p>
-                </div>
-              `}
-            </div>
-          </div>
-        `;
-      });
-      
-      container.innerHTML = html;
-    }
-
-    // ==================== CALENDAR ====================
-    function renderCalendar() {
-      const year = calendarDate.getFullYear();
-      const month = calendarDate.getMonth();
-      const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-      
-      document.getElementById('calendarMonth').textContent = `${monthNames[month]} ${year}`;
-      
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const datesWithData = new Set(allAbsensiData.filter(d => d.type === 'attendance').map(d => d.date));
-      
-      const container = document.getElementById('calendarDays');
-      container.innerHTML = '';
-      
-      for (let i = 0; i < firstDay; i++) {
-        container.innerHTML += '<div class="p-2"></div>';
-      }
-      
-      for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = new Date(year, month, day).toLocaleDateString('id-ID');
-        const hasData = datesWithData.has(dateStr);
-        
-        const dayEl = document.createElement('button');
-        dayEl.className = `calendar-day p-2 text-center rounded-lg transition-all ${hasData ? 'has-data' : 'hover:bg-gray-100'}`;
-        dayEl.textContent = day;
-        dayEl.onclick = () => showDateRecap(dateStr);
-        
-        container.appendChild(dayEl);
-      }
-    }
-
-    function changeMonth(delta) {
-      calendarDate.setMonth(calendarDate.getMonth() + delta);
-      renderCalendar();
-    }
-
-    // ==================== NAVIGATION ====================
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
-      
-      if (pageId === 'calendarPage') renderCalendar();
-    }
-
-    // ==================== CLOCK ====================
-    function updateClock() {
-      const now = new Date();
-      const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-      
-      const dateStr = now.toLocaleDateString('id-ID', dateOptions);
-      const timeStr = now.toLocaleTimeString('id-ID', timeOptions);
-      
-      const offset = now.getTimezoneOffset();
-      const tz = offset === -420 ? 'WIB' : offset === -480 ? 'WITA' : offset === -540 ? 'WIT' : 'WIB';
-      
-      ['currentDate', 'currentDateRecap'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = dateStr;
-      });
-      
-      ['currentTime', 'currentTimeRecap'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = timeStr;
-      });
-      
-      ['timezone', 'timezoneRecap'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = tz;
-      });
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // ==================== UTILITIES ====================
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      toast.className = `fixed top-4 right-4 px-6 py-3 rounded-xl shadow-xl z-50 toast ${type === 'error' ? 'bg-red-500' : 'bg-green-500'} text-white`;
-      document.getElementById('toastMessage').textContent = message;
-      toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 3000);
-    }
-
-    function openSetupGuide() {
-      document.getElementById('setupGuideModal').classList.remove('hidden');
-      document.getElementById('scriptUrlInput').value = GOOGLE_SCRIPT_URL;
-    }
-
-    function closeSetupGuide() {
-      document.getElementById('setupGuideModal').classList.add('hidden');
-    }
-
-    function copyAppsScript() {
-      const code = document.getElementById('appsScriptCode').textContent;
-      navigator.clipboard.writeText(code).then(() => showToast('Kode berhasil dicopy!'));
-    }
-
-    function saveScriptUrl() {
-      const url = document.getElementById('scriptUrlInput').value.trim();
-      if (!url.startsWith('https://script.google.com/')) {
-        showToast('URL tidak valid!', 'error');
-        return;
-      }
-      localStorage.setItem('googleScriptUrl', url);
-      GOOGLE_SCRIPT_URL = url;
-      showToast('URL berhasil disimpan!');
-      closeSetupGuide();
-    }
-
-    // ==================== STATUS CARD POPUP ====================
-    function getWorkersByStatus(statusType, dateStr, dataSource = null) {
-      let sourceData = dataSource || allAbsensiData;
-      const dateData = sourceData.filter(d => d.date === dateStr && d.type === 'attendance');
-      
-      const workerStatusMap = {};
-      dateData.forEach(d => {
-        if (!workerStatusMap[d.worker_name]) {
-          workerStatusMap[d.worker_name] = new Set();
-        }
-        workerStatusMap[d.worker_name].add(d.status);
-      });
-      
-      const result = [];
-      
-      if (statusType === 'Belum Absen') {
-        const workersWithStatus = new Set();
-        Object.entries(workerStatusMap).forEach(([name, statuses]) => {
-          const hasRealStatus = [...statuses].some(s => s !== 'Belum Absen');
-          if (hasRealStatus) {
-            workersWithStatus.add(name);
-          }
-        });
-        
-        workers.forEach(w => {
-          if (!workersWithStatus.has(w.name)) {
-            result.push(w);
-          }
-        });
-      } else {
-        Object.entries(workerStatusMap).forEach(([name, statuses]) => {
-          if (statuses.has(statusType)) {
-            const workerInfo = workers.find(w => w.name === name);
-            if (workerInfo) {
-              result.push(workerInfo);
-            } else {
-              result.push({ name: name, photo: '' });
-            }
-          }
-        });
-      }
-      
-      return result;
-    }
-    
-    function showStatusCardPopup(statusType) {
-      const popup = document.getElementById('statusCardPopup');
-      const header = document.getElementById('statusCardPopupHeader');
-      const title = document.getElementById('statusCardPopupTitle');
-      const content = document.getElementById('statusCardPopupContent');
-      
-      const statusColors = {
-        'Start Work': 'bg-green-500',
-        'Finish Work': 'bg-blue-500',
-        'Sakit': 'bg-orange-500',
-        'Standby': 'bg-purple-500',
-        'Belum Absen': 'bg-red-500'
-      };
-      
-      header.className = `px-6 py-4 flex items-center justify-between ${statusColors[statusType] || 'bg-gray-500'}`;
-      title.textContent = `Daftar Pekerja - ${statusType}`;
-      
-      const workersList = getWorkersByStatus(statusType, currentStatusCardDate);
-      
-      if (workersList.length === 0) {
-        content.innerHTML = `
-          <div class="text-center py-8 text-gray-500">
-            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-            <p>Tidak ada pekerja dengan status ini</p>
-          </div>
-        `;
-      } else {
-        content.innerHTML = `
-          <div class="space-y-3">
-            ${workersList.map((worker, index) => `
-              <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl fade-in" style="animation-delay: ${index * 0.05}s">
-                <div class="flex-shrink-0">
-                  ${worker.photo ? 
-                    `<img src="${worker.photo}" alt="${worker.name}" class="w-12 h-12 rounded-xl object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                     <div style="display:none;width:48px;height:48px;border-radius:12px;" class="flex items-center justify-center bg-gray-200">${getUserIcon(28)}</div>` :
-                    `<div class="w-12 h-12 flex items-center justify-center bg-gray-200 rounded-xl">${getUserIcon(28)}</div>`
-                  }
-                </div>
-                <div class="flex-1">
-                  <h4 class="font-semibold text-gray-800">${worker.name}</h4>
-                </div>
-                <div class="flex-shrink-0">
-                  <span class="px-3 py-1 text-xs font-medium text-white rounded-full ${statusColors[statusType]}">${statusType}</span>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-          <div class="mt-4 pt-4 border-t text-center text-sm text-gray-500">
-            Total: <span class="font-bold">${workersList.length}</span> pekerja
-          </div>
-        `;
-      }
-      
-      popup.classList.remove('hidden');
-    }
-    
-    function closeStatusCardPopup() {
-      document.getElementById('statusCardPopup').classList.add('hidden');
-    }
-
-    // ==================== STATUS SUMMARY ====================
     function generateStatusCardsHTML(dateStr, dataSource = null) {
       let sourceData = dataSource || allAbsensiData;
       const dateData = sourceData.filter(d => d.date === dateStr && d.type === 'attendance');
-      
       const workerStatusMap = {};
       dateData.forEach(d => {
-        if (!workerStatusMap[d.worker_name]) {
-          workerStatusMap[d.worker_name] = new Set();
-        }
+        if (!workerStatusMap[d.worker_name]) workerStatusMap[d.worker_name] = new Set();
         workerStatusMap[d.worker_name].add(d.status);
       });
       
-      let startWork = 0;
-      let finishWork = 0;
-      let sakit = 0;
-      let standby = 0;
-      
+      let startWork = 0, finishWork = 0, sakit = 0, standby = 0;
       Object.values(workerStatusMap).forEach(statuses => {
         if (statuses.has('Start Work')) startWork++;
         if (statuses.has('Finish Work')) finishWork++;
@@ -2392,86 +1415,102 @@ function jsonResponse(data) {
       
       const workersWithStatus = new Set();
       Object.entries(workerStatusMap).forEach(([name, statuses]) => {
-        const hasRealStatus = [...statuses].some(s => s !== 'Belum Absen');
-        if (hasRealStatus) {
-          workersWithStatus.add(name);
-        }
+        if ([...statuses].some(s => s !== 'Belum Absen')) workersWithStatus.add(name);
       });
       
       const totalWorkers = workers.length || Object.keys(workerStatusMap).length;
       const belumAbsen = Math.max(0, totalWorkers - workersWithStatus.size);
       
       return `
-        <div class="bg-green-500 rounded-xl p-4 text-white shadow-lg text-center">
-          <div class="font-semibold text-sm mb-2">Start Work</div>
-          <div class="text-5xl font-bold">${startWork}</div>
-          <div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div>
-        </div>
-        
-        <div class="bg-blue-500 rounded-xl p-4 text-white shadow-lg text-center">
-          <div class="font-semibold text-sm mb-2">Finish Work</div>
-          <div class="text-5xl font-bold">${finishWork}</div>
-          <div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div>
-        </div>
-        
-        <div onclick="showStatusCardPopup('Sakit')" class="bg-orange-500 rounded-xl p-4 text-white shadow-lg text-center status-card-clickable">
-          <div class="font-semibold text-sm mb-2">Sakit</div>
-          <div class="text-5xl font-bold">${sakit}</div>
-          <div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div>
-          <div class="text-xs mt-2 opacity-70">👆 Klik untuk detail</div>
-        </div>
-        
-        <div onclick="showStatusCardPopup('Standby')" class="bg-purple-500 rounded-xl p-4 text-white shadow-lg text-center status-card-clickable">
-          <div class="font-semibold text-sm mb-2">Standby</div>
-          <div class="text-5xl font-bold">${standby}</div>
-          <div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div>
-          <div class="text-xs mt-2 opacity-70">👆 Klik untuk detail</div>
-        </div>
-        
-        <div class="bg-red-500 rounded-xl p-4 text-white shadow-lg text-center">
-          <div class="font-semibold text-sm mb-2">Belum Absen</div>
-          <div class="text-5xl font-bold">${belumAbsen}</div>
-          <div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div>
-        </div>
+        <div class="bg-green-500 rounded-xl p-4 text-white shadow-lg text-center"><div class="font-semibold text-sm mb-2">Start Work</div><div class="text-5xl font-bold">${startWork}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div></div>
+        <div class="bg-blue-500 rounded-xl p-4 text-white shadow-lg text-center"><div class="font-semibold text-sm mb-2">Finish Work</div><div class="text-5xl font-bold">${finishWork}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div></div>
+        <div onclick="showStatusCardPopup('Sakit')" class="bg-orange-500 rounded-xl p-4 text-white shadow-lg text-center status-card-clickable"><div class="font-semibold text-sm mb-2">Sakit</div><div class="text-5xl font-bold">${sakit}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div><div class="text-xs mt-2 opacity-70">👆 Klik untuk detail</div></div>
+        <div onclick="showStatusCardPopup('Standby')" class="bg-purple-500 rounded-xl p-4 text-white shadow-lg text-center status-card-clickable"><div class="font-semibold text-sm mb-2">Standby</div><div class="text-5xl font-bold">${standby}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div><div class="text-xs mt-2 opacity-70">👆 Klik untuk detail</div></div>
+        <div class="bg-red-500 rounded-xl p-4 text-white shadow-lg text-center"><div class="font-semibold text-sm mb-2">Belum Absen</div><div class="text-5xl font-bold">${belumAbsen}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div></div>
       `;
     }
-    
+
     function renderStatusCards(containerId, dateStr, dataSource = null) {
       const container = document.getElementById(containerId);
-      if (container) {
-        container.innerHTML = generateStatusCardsHTML(dateStr, dataSource);
-      }
+      if (container) container.innerHTML = generateStatusCardsHTML(dateStr, dataSource);
     }
 
-    // ==================== REFRESH DATA FUNCTION ====================
+    function getWorkersByStatus(statusType, dateStr, dataSource = null) {
+      let sourceData = dataSource || allAbsensiData;
+      const dateData = sourceData.filter(d => d.date === dateStr && d.type === 'attendance');
+      const workerStatusMap = {};
+      dateData.forEach(d => {
+        if (!workerStatusMap[d.worker_name]) workerStatusMap[d.worker_name] = new Set();
+        workerStatusMap[d.worker_name].add(d.status);
+      });
+      
+      const result = [];
+      if (statusType === 'Belum Absen') {
+        const workersWithStatus = new Set();
+        Object.entries(workerStatusMap).forEach(([name, statuses]) => {
+          if ([...statuses].some(s => s !== 'Belum Absen')) workersWithStatus.add(name);
+        });
+        workers.forEach(w => { if (!workersWithStatus.has(w.name)) result.push(w); });
+      } else {
+        Object.entries(workerStatusMap).forEach(([name, statuses]) => {
+          if (statuses.has(statusType)) {
+            const workerInfo = workers.find(w => w.name === name);
+            result.push(workerInfo || { name, photo: '' });
+          }
+        });
+      }
+      return result;
+    }
+
+    function showStatusCardPopup(statusType) {
+      const popup = document.getElementById('statusCardPopup');
+      const header = document.getElementById('statusCardPopupHeader');
+      const title = document.getElementById('statusCardPopupTitle');
+      const content = document.getElementById('statusCardPopupContent');
+      
+      const statusColors = { 'Start Work': 'bg-green-500', 'Finish Work': 'bg-blue-500', 'Sakit': 'bg-orange-500', 'Standby': 'bg-purple-500', 'Belum Absen': 'bg-red-500' };
+      header.className = `px-6 py-4 flex items-center justify-between ${statusColors[statusType] || 'bg-gray-500'}`;
+      title.textContent = `Daftar Pekerja - ${statusType}`;
+      
+      const workersList = getWorkersByStatus(statusType, currentStatusCardDate);
+      if (workersList.length === 0) {
+        content.innerHTML = `<div class="text-center py-8 text-gray-500"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><p>Tidak ada pekerja dengan status ini</p></div>`;
+      } else {
+        content.innerHTML = `<div class="space-y-3">${workersList.map((worker, index) => `
+          <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl fade-in" style="animation-delay: ${index * 0.05}s">
+            <div class="flex-shrink-0">${worker.photo ? `<img src="${worker.photo}" alt="${worker.name}" class="w-12 h-12 rounded-xl object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div style="display:none;width:48px;height:48px;border-radius:12px;" class="flex items-center justify-center bg-gray-200">${getUserIcon(28)}</div>` : `<div class="w-12 h-12 flex items-center justify-center bg-gray-200 rounded-xl">${getUserIcon(28)}</div>`}</div>
+            <div class="flex-1"><h4 class="font-semibold text-gray-800">${worker.name}</h4></div>
+            <div class="flex-shrink-0"><span class="px-3 py-1 text-xs font-medium text-white rounded-full ${statusColors[statusType]}">${statusType}</span></div>
+          </div>
+        `).join('')}</div><div class="mt-4 pt-4 border-t text-center text-sm text-gray-500">Total: <span class="font-bold">${workersList.length}</span> pekerja</div>`;
+      }
+      popup.classList.remove('hidden');
+    }
+
+    function closeStatusCardPopup() {
+      document.getElementById('statusCardPopup').classList.add('hidden');
+    }
+
     async function refreshDataFromSheet(page) {
       const btnId = page === 'today' ? 'refreshBtnToday' : 'refreshBtnDate';
       const btn = document.getElementById(btnId);
-      const icon = btn.querySelector('.refresh-icon');
-      
       btn.classList.add('btn-loading');
-      icon.classList.add('spinning');
       btn.innerHTML = `<svg class="w-5 h-5 refresh-icon spinning" fill="white" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> Memuat...`;
       
       try {
         const freshData = await fetchRecapDataFromSheet();
         allAbsensiData = freshData;
-        
         if (page === 'today') {
           const today = new Date().toLocaleDateString('id-ID');
           currentStatusCardDate = today;
-          const todayData = allAbsensiData.filter(d => d.date === today && d.type === 'attendance');
           renderStatusCards('todayStatusCards', today, allAbsensiData);
-          renderRecapTable(todayData, 'todayRecapContent');
+          renderRecapTable(allAbsensiData.filter(d => d.date === today && d.type === 'attendance'), 'todayRecapContent');
         } else {
           currentStatusCardDate = currentRecapDate;
-          const dateData = allAbsensiData.filter(d => d.date === currentRecapDate && d.type === 'attendance');
           renderStatusCards('dateStatusCards', currentRecapDate, allAbsensiData);
-          renderRecapTable(dateData, 'dateRecapContent');
+          renderRecapTable(allAbsensiData.filter(d => d.date === currentRecapDate && d.type === 'attendance'), 'dateRecapContent');
         }
-        
-        showToast(`Data berhasil diperbarui! (${allAbsensiData.length} record)`);
-        
+        showToast(`Data berhasil diperbarui!`);
       } catch (error) {
         showToast('Gagal memperbarui data!', 'error');
       }
@@ -2480,19 +1519,147 @@ function jsonResponse(data) {
       btn.innerHTML = `<svg class="w-5 h-5 refresh-icon" fill="white" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> Refresh Data`;
     }
 
+    // ==================== CALENDAR ====================
+    function renderCalendar() {
+      const year = calendarDate.getFullYear();
+      const month = calendarDate.getMonth();
+      const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      document.getElementById('calendarMonth').textContent = `${monthNames[month]} ${year}`;
+      
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const datesWithData = new Set(allAbsensiData.filter(d => d.type === 'attendance').map(d => d.date));
+      
+      const container = document.getElementById('calendarDays');
+      container.innerHTML = '';
+      for (let i = 0; i < firstDay; i++) container.innerHTML += '<div class="p-2"></div>';
+      
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = new Date(year, month, day).toLocaleDateString('id-ID');
+        const hasData = datesWithData.has(dateStr);
+        const dayEl = document.createElement('button');
+        dayEl.className = `calendar-day p-2 text-center rounded-lg transition-all ${hasData ? 'has-data' : 'hover:bg-gray-100'}`;
+        dayEl.textContent = day;
+        dayEl.onclick = () => showDateRecap(dateStr);
+        container.appendChild(dayEl);
+      }
+    }
+
+    function changeMonth(delta) {
+      calendarDate.setMonth(calendarDate.getMonth() + delta);
+      renderCalendar();
+    }
+
+    // ==================== PHOTO RECAP ====================
+    let cachedFolders = null;
+    let cachedPhotos = {};
+
+    async function showPhotoRecap() {
+      showPage('photoFoldersPage');
+      if (cachedFolders && cachedFolders.length > 0) {
+        document.getElementById('photoFoldersLoading').classList.add('hidden');
+        renderPhotoFolders(cachedFolders);
+        fetchPhotoFolders().then(folders => { if (folders && folders.length > 0) { cachedFolders = folders; renderPhotoFolders(folders); } });
+        return;
+      }
+      document.getElementById('photoFolders').classList.add('hidden');
+      document.getElementById('noPhotosMessage').classList.add('hidden');
+      document.getElementById('photoFoldersLoading').classList.remove('hidden');
+      const folders = await fetchPhotoFolders();
+      cachedFolders = folders;
+      renderPhotoFolders(folders);
+    }
+
+    async function fetchPhotoFolders() {
+      if (!GOOGLE_SCRIPT_URL) return [];
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getFolders`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        const data = await response.json();
+        return data.success ? data.folders : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function renderPhotoFolders(folders) {
+      document.getElementById('photoFoldersLoading').classList.add('hidden');
+      if (folders.length === 0) {
+        document.getElementById('noPhotosMessage').classList.remove('hidden');
+        return;
+      }
+      const container = document.getElementById('photoFolders');
+      container.classList.remove('hidden');
+      container.innerHTML = folders.map(folder => `
+        <button onclick="openPhotoFolder('${folder.id}', '${folder.name}')" class="photo-folder bg-white rounded-2xl p-6 shadow-lg text-center">
+          <svg class="w-12 h-12 mx-auto mb-3" fill="#1e3a5f" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+          <h3 class="font-semibold text-gray-800">${folder.name}</h3>
+        </button>
+      `).join('');
+    }
+
+    async function openPhotoFolder(folderId, folderName) {
+      showPage('photoGalleryPage');
+      document.getElementById('galleryTitle').textContent = `Foto: ${folderName}`;
+      if (cachedPhotos[folderId] && cachedPhotos[folderId].length > 0) {
+        document.getElementById('photoGalleryLoading').classList.add('hidden');
+        document.getElementById('photoGallery').classList.remove('hidden');
+        renderPhotoGallery(cachedPhotos[folderId]);
+        fetchPhotosFromFolder(folderId).then(photos => { if (photos && photos.length > 0) { cachedPhotos[folderId] = photos; renderPhotoGallery(photos); } });
+        return;
+      }
+      document.getElementById('photoGallery').classList.add('hidden');
+      document.getElementById('photoGalleryLoading').classList.remove('hidden');
+      const photos = await fetchPhotosFromFolder(folderId);
+      document.getElementById('photoGalleryLoading').classList.add('hidden');
+      document.getElementById('photoGallery').classList.remove('hidden');
+      cachedPhotos[folderId] = photos;
+      renderPhotoGallery(photos);
+    }
+
+    async function fetchPhotosFromFolder(folderId) {
+      if (!GOOGLE_SCRIPT_URL) return [];
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPhotos&folderId=${folderId}`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        const data = await response.json();
+        return data.success ? data.photos : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function renderPhotoGallery(photos) {
+      document.getElementById('photoGalleryLoading').classList.add('hidden');
+      if (photos.length === 0) {
+        document.getElementById('photoGallery').innerHTML = '<p class="col-span-full text-center text-gray-300 py-8">Tidak ada foto di folder ini</p>';
+        return;
+      }
+      const container = document.getElementById('photoGallery');
+      container.innerHTML = photos.map((photo, index) => `
+        <div class="gallery-photo rounded-xl overflow-hidden shadow-lg cursor-pointer" onclick="viewGalleryPhoto(${index})">
+          <img src="${photo.thumbnailUrl}" alt="Foto" class="w-full h-32 object-cover">
+        </div>
+      `).join('');
+      window.galleryPhotos = photos.map(p => p.fullUrl);
+    }
+
+    function viewGalleryPhoto(index) {
+      if (window.galleryPhotos) openPhotoViewer(index, window.galleryPhotos);
+    }
+
     // ==================== LOGIN ====================
-    let isLoggedIn = false;
-    
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value.trim();
       
       if (username === 'archipelago' && password === 'balivibes') {
-        isLoggedIn = true;
         document.getElementById('loginError').classList.add('hidden');
-        
         const submitBtn = e.target.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.textContent = 'Memuat...';
@@ -2502,12 +1669,36 @@ function jsonResponse(data) {
         getCurrentLocation();
         
         showPage('absensiPage');
-        
         submitBtn.disabled = false;
         submitBtn.textContent = 'Login';
-        
         showToast('Login berhasil! Selamat datang.');
       } else {
-        document.getElementById('loginError').classList.remove('hidden');</script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6f56bb250ee8a2',t:'MTc2NzI0MjQyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+        document.getElementById('loginError').classList.remove('hidden');
+      }
+    });
+
+    // ==================== ELEMENT SDK INIT ====================
+    async function initApp() {
+      if (window.elementSdk) {
+        await window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (cfg) => {
+            config = { ...defaultConfig, ...cfg };
+            const appTitleHeader = document.getElementById('appTitleHeader');
+            if (appTitleHeader) appTitleHeader.textContent = config.app_title || defaultConfig.app_title;
+            const companyNameLogin = document.getElementById('companyNameLogin');
+            if (companyNameLogin) companyNameLogin.textContent = config.company_name || defaultConfig.company_name;
+          },
+          mapToCapabilities: (cfg) => ({ recolorables: [], borderables: [], fontEditable: undefined, fontSizeable: undefined }),
+          mapToEditPanelValues: (cfg) => new Map([
+            ['app_title', cfg.app_title || defaultConfig.app_title],
+            ['company_name', cfg.company_name || defaultConfig.company_name]
+          ])
+        });
+      }
+    }
+    
+    initApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6f64e9914faa34',t:'MTc2NzI0MzAwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
