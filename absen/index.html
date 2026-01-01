@@ -366,43 +366,59 @@
     </main>
    </div><!-- RECAP MENU PAGE -->
    <div id="recapMenuPage" class="page flex-col min-h-full w-full soft-navy-bg">
-    <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-       <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">RECAP MENU</h1>
+    <header class="darker-header shadow-md px-3 sm:px-4 py-3 sm:py-4 sticky top-0 z-50">
+     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12 object-contain logo-white flex-shrink-0" onerror="this.style.display='none'">
+       <h1 class="text-xs sm:text-sm md:text-lg font-bold text-white uppercase tracking-wide truncate">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
+      </div>
+      <div class="flex items-center flex-shrink-0">
+       <div class="text-right">
+        <div id="recapMenuDate" class="text-[9px] sm:text-xs font-medium text-gray-300"></div>
+        <div class="flex items-center gap-1"><span id="recapMenuTime" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span> <span id="recapMenuTz" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span>
+        </div>
+       </div>
       </div>
      </div>
     </header>
-    <div class="flex justify-end gap-3 p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('absensiPage')" class="px-5 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-medium flex items-center gap-2">
-      <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
+    <div class="flex justify-end gap-2 p-3 sm:p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('absensiPage')" class="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-green-500 text-white rounded-lg sm:rounded-xl hover:bg-green-600 transition-all font-medium flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="white" viewbox="0 0 24 24">
        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </svg> Back to Home </button>
+      </svg><span class="hidden xs:inline">Back to</span> Home </button>
     </div>
-    <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
-     <h2 class="text-2xl font-bold text-white text-center mb-6">Menu Recap</h2>
-     <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><button onclick="showTodayRecap()" class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all text-left group">
-       <div class="mb-4">
-        <svg class="w-12 h-12" fill="#1e3a5f" viewbox="0 0 24 24">
+    <main class="flex-1 p-3 sm:p-6 max-w-4xl mx-auto w-full">
+     <h2 class="text-lg sm:text-2xl font-bold text-white text-center mb-4 sm:mb-6">Menu Recap</h2>
+     <div class="grid grid-cols-3 gap-2 sm:gap-6"><button onclick="showTodayRecap()" class="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-8 shadow-lg hover:shadow-xl transition-all text-center sm:text-left group">
+       <div class="mb-2 sm:mb-4 flex justify-center sm:justify-start">
+        <svg class="w-8 h-8 sm:w-12 sm:h-12" fill="#1e3a5f" viewbox="0 0 24 24">
          <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z" />
         </svg>
-       </div><h3 class="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-all">Recap Hari Ini</h3><p class="text-gray-500 mt-2">Lihat absensi hari ini</p></button> <button onclick="showPage('calendarPage')" class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all text-left group">
-       <div class="mb-4">
-        <svg class="w-12 h-12" fill="#1e3a5f" viewbox="0 0 24 24">
+       </div><h3 class="text-[10px] sm:text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-all leading-tight">Recap Hari Ini</h3><p class="text-gray-500 mt-1 sm:mt-2 text-[8px] sm:text-base hidden sm:block">Lihat absensi hari ini</p></button> <button onclick="showPage('calendarPage')" class="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-8 shadow-lg hover:shadow-xl transition-all text-center sm:text-left group">
+       <div class="mb-2 sm:mb-4 flex justify-center sm:justify-start">
+        <svg class="w-8 h-8 sm:w-12 sm:h-12" fill="#1e3a5f" viewbox="0 0 24 24">
          <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z" />
         </svg>
-       </div><h3 class="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-all">Recap Tanggal</h3><p class="text-gray-500 mt-2">Pilih tanggal di kalender</p></button> <button onclick="showPhotoRecap()" class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all text-left group">
-       <div class="mb-4">
-        <svg class="w-12 h-12" fill="#1e3a5f" viewbox="0 0 24 24">
+       </div><h3 class="text-[10px] sm:text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-all leading-tight">Recap Tanggal</h3><p class="text-gray-500 mt-1 sm:mt-2 text-[8px] sm:text-base hidden sm:block">Pilih tanggal di kalender</p></button> <button onclick="showPhotoRecap()" class="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-8 shadow-lg hover:shadow-xl transition-all text-center sm:text-left group">
+       <div class="mb-2 sm:mb-4 flex justify-center sm:justify-start">
+        <svg class="w-8 h-8 sm:w-12 sm:h-12" fill="#1e3a5f" viewbox="0 0 24 24">
          <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
         </svg>
-       </div><h3 class="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-all">Foto Absen</h3><p class="text-gray-500 mt-2">Galeri foto absensi</p></button>
+       </div><h3 class="text-[10px] sm:text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-all leading-tight">Foto Absen</h3><p class="text-gray-500 mt-1 sm:mt-2 text-[8px] sm:text-base hidden sm:block">Galeri foto absensi</p></button>
      </div>
     </main>
    </div><!-- TODAY RECAP PAGE -->
    <div id="todayRecapPage" class="page flex-col min-h-full w-full soft-navy-bg">
-    <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-      <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">RECAP HARI INI</h1>
+    <header class="darker-header shadow-md px-3 sm:px-4 py-3 sm:py-4 sticky top-0 z-50">
+     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12 object-contain logo-white flex-shrink-0" onerror="this.style.display='none'">
+       <h1 class="text-xs sm:text-sm md:text-lg font-bold text-white uppercase tracking-wide truncate">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
+      </div>
+      <div class="flex items-center flex-shrink-0">
+       <div class="text-right">
+        <div id="todayRecapHeaderDate" class="text-[9px] sm:text-xs font-medium text-gray-300"></div>
+        <div class="flex items-center gap-1"><span id="todayRecapHeaderTime" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span> <span id="todayRecapHeaderTz" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span>
+        </div>
+       </div>
+      </div>
      </div>
     </header>
     <div class="flex justify-between gap-2 p-3 sm:p-4 max-w-7xl mx-auto w-full flex-wrap"><button id="refreshBtnToday" onclick="refreshDataFromSheet('today')" class="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-cyan-500 text-white rounded-lg sm:rounded-xl hover:bg-cyan-600 transition-all font-medium flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
@@ -419,15 +435,25 @@
      </div>
     </div>
     <main class="flex-1 p-3 sm:p-6 max-w-4xl mx-auto w-full">
-     <div id="todayRecapDate" class="text-center text-sm sm:text-lg font-semibold text-gray-300 mb-3 sm:mb-4"></div>
+     <h2 class="text-base sm:text-xl font-bold text-white text-center mb-1 sm:mb-2">Recap Hari Ini</h2>
+     <div id="todayRecapDate" class="text-center text-xs sm:text-lg font-semibold text-gray-300 mb-3 sm:mb-4"></div>
      <div id="todayStatusCards" class="grid grid-cols-5 gap-1.5 sm:gap-3 mb-3 sm:mb-6"></div>
      <div id="todayRecapContent" class="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden"></div>
     </main>
    </div><!-- CALENDAR PAGE -->
    <div id="calendarPage" class="page flex-col min-h-full w-full soft-navy-bg">
-    <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-      <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">PILIH TANGGAL</h1>
+    <header class="darker-header shadow-md px-3 sm:px-4 py-3 sm:py-4 sticky top-0 z-50">
+     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12 object-contain logo-white flex-shrink-0" onerror="this.style.display='none'">
+       <h1 class="text-xs sm:text-sm md:text-lg font-bold text-white uppercase tracking-wide truncate">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
+      </div>
+      <div class="flex items-center flex-shrink-0">
+       <div class="text-right">
+        <div id="calendarHeaderDate" class="text-[9px] sm:text-xs font-medium text-gray-300"></div>
+        <div class="flex items-center gap-1"><span id="calendarHeaderTime" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span> <span id="calendarHeaderTz" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span>
+        </div>
+       </div>
+      </div>
      </div>
     </header>
     <div class="flex justify-end gap-2 p-3 sm:p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('recapMenuPage')" class="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-gray-500 text-white rounded-lg sm:rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
@@ -436,6 +462,7 @@
       </svg><span class="hidden xs:inline">Kembali</span> </button>
     </div>
     <main class="flex-1 p-3 sm:p-6 max-w-lg mx-auto w-full">
+     <h2 class="text-base sm:text-xl font-bold text-white text-center mb-3 sm:mb-4">Recap Berdasarkan Tanggal</h2>
      <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-6">
       <div class="flex items-center justify-between mb-3 sm:mb-6"><button onclick="changeMonth(-1)" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-all">
         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
@@ -474,9 +501,18 @@
     </main>
    </div><!-- DATE RECAP PAGE -->
    <div id="dateRecapPage" class="page flex-col min-h-full w-full soft-navy-bg">
-    <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-      <h1 id="dateRecapTitle" class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">RECAP TANGGAL</h1>
+    <header class="darker-header shadow-md px-3 sm:px-4 py-3 sm:py-4 sticky top-0 z-50">
+     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12 object-contain logo-white flex-shrink-0" onerror="this.style.display='none'">
+       <h1 class="text-xs sm:text-sm md:text-lg font-bold text-white uppercase tracking-wide truncate">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
+      </div>
+      <div class="flex items-center flex-shrink-0">
+       <div class="text-right">
+        <div id="dateRecapHeaderDate" class="text-[9px] sm:text-xs font-medium text-gray-300"></div>
+        <div class="flex items-center gap-1"><span id="dateRecapHeaderTime" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span> <span id="dateRecapHeaderTz" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span>
+        </div>
+       </div>
+      </div>
      </div>
     </header>
     <div class="flex justify-between gap-2 p-3 sm:p-4 max-w-7xl mx-auto w-full flex-wrap"><button id="refreshBtnDate" onclick="refreshDataFromSheet('date')" class="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-cyan-500 text-white rounded-lg sm:rounded-xl hover:bg-cyan-600 transition-all font-medium flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
@@ -493,22 +529,34 @@
      </div>
     </div>
     <main class="flex-1 p-3 sm:p-6 max-w-4xl mx-auto w-full">
+     <h2 class="text-base sm:text-xl font-bold text-white text-center mb-1 sm:mb-2">Recap Berdasarkan Tanggal</h2>
+     <div id="dateRecapTitle" class="text-center text-xs sm:text-lg font-semibold text-gray-300 mb-3 sm:mb-4"></div>
      <div id="dateStatusCards" class="grid grid-cols-5 gap-1.5 sm:gap-3 mb-3 sm:mb-6"></div>
      <div id="dateRecapContent" class="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden"></div>
     </main>
    </div><!-- PHOTO FOLDERS PAGE -->
    <div id="photoFoldersPage" class="page flex-col min-h-full w-full soft-navy-bg">
-    <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-      <h1 class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">FOTO ABSEN</h1>
+    <header class="darker-header shadow-md px-3 sm:px-4 py-3 sm:py-4 sticky top-0 z-50">
+     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12 object-contain logo-white flex-shrink-0" onerror="this.style.display='none'">
+       <h1 class="text-xs sm:text-sm md:text-lg font-bold text-white uppercase tracking-wide truncate">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
+      </div>
+      <div class="flex items-center flex-shrink-0">
+       <div class="text-right">
+        <div id="photoFoldersHeaderDate" class="text-[9px] sm:text-xs font-medium text-gray-300"></div>
+        <div class="flex items-center gap-1"><span id="photoFoldersHeaderTime" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span> <span id="photoFoldersHeaderTz" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span>
+        </div>
+       </div>
+      </div>
      </div>
     </header>
-    <div class="flex justify-end gap-3 p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('recapMenuPage')" class="px-5 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-2">
-      <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
+    <div class="flex justify-end gap-2 p-3 sm:p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('recapMenuPage')" class="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-gray-500 text-white rounded-lg sm:rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="white" viewbox="0 0 24 24">
        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-      </svg> Kembali </button>
+      </svg><span class="hidden xs:inline">Kembali</span> </button>
     </div>
-    <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
+    <main class="flex-1 p-3 sm:p-6 max-w-4xl mx-auto w-full">
+     <h2 class="text-base sm:text-xl font-bold text-white text-center mb-3 sm:mb-4">Foto Absen</h2>
      <div id="photoFoldersLoading" class="flex flex-col items-center justify-center py-8 sm:py-12">
       <div class="loading-spinner mb-3 sm:mb-4"></div>
       <p class="text-white font-medium text-sm sm:text-base">Memuat folder foto...</p>
@@ -523,17 +571,27 @@
     </main>
    </div><!-- PHOTO GALLERY PAGE -->
    <div id="photoGalleryPage" class="page flex-col min-h-full w-full soft-navy-bg">
-    <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-      <h1 id="galleryTitle" class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">GALERI FOTO</h1>
+    <header class="darker-header shadow-md px-3 sm:px-4 py-3 sm:py-4 sticky top-0 z-50">
+     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12 object-contain logo-white flex-shrink-0" onerror="this.style.display='none'">
+       <h1 class="text-xs sm:text-sm md:text-lg font-bold text-white uppercase tracking-wide truncate">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
+      </div>
+      <div class="flex items-center flex-shrink-0">
+       <div class="text-right">
+        <div id="galleryHeaderDate" class="text-[9px] sm:text-xs font-medium text-gray-300"></div>
+        <div class="flex items-center gap-1"><span id="galleryHeaderTime" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span> <span id="galleryHeaderTz" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span>
+        </div>
+       </div>
+      </div>
      </div>
     </header>
-    <div class="flex justify-end gap-3 p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('photoFoldersPage')" class="px-5 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-2">
-      <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
+    <div class="flex justify-end gap-2 p-3 sm:p-4 max-w-7xl mx-auto w-full"><button onclick="showPage('photoFoldersPage')" class="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-gray-500 text-white rounded-lg sm:rounded-xl hover:bg-gray-600 transition-all font-medium flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="white" viewbox="0 0 24 24">
        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-      </svg> Kembali </button>
+      </svg><span class="hidden xs:inline">Kembali</span> </button>
     </div>
-    <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
+    <main class="flex-1 p-3 sm:p-6 max-w-4xl mx-auto w-full">
+     <h2 id="galleryTitle" class="text-base sm:text-xl font-bold text-white text-center mb-3 sm:mb-4">Foto Absen</h2>
      <div id="photoGalleryLoading" class="flex flex-col items-center justify-center py-8 sm:py-12">
       <div class="loading-spinner mb-3 sm:mb-4"></div>
       <p class="text-white font-medium text-sm sm:text-base">Memuat foto...</p>
@@ -634,12 +692,25 @@
       const offset = now.getTimezoneOffset();
       const tz = offset === -420 ? 'WIB' : offset === -480 ? 'WITA' : offset === -540 ? 'WIT' : 'WIB';
       
-      const dateEl = document.getElementById('currentDate');
-      const timeEl = document.getElementById('currentTime');
-      const tzEl = document.getElementById('timezone');
-      if (dateEl) dateEl.textContent = dateStr;
-      if (timeEl) timeEl.textContent = timeStr;
-      if (tzEl) tzEl.textContent = tz;
+      // Update all clock elements across all pages
+      const clockElements = [
+        { date: 'currentDate', time: 'currentTime', tz: 'timezone' },
+        { date: 'recapMenuDate', time: 'recapMenuTime', tz: 'recapMenuTz' },
+        { date: 'todayRecapHeaderDate', time: 'todayRecapHeaderTime', tz: 'todayRecapHeaderTz' },
+        { date: 'calendarHeaderDate', time: 'calendarHeaderTime', tz: 'calendarHeaderTz' },
+        { date: 'dateRecapHeaderDate', time: 'dateRecapHeaderTime', tz: 'dateRecapHeaderTz' },
+        { date: 'photoFoldersHeaderDate', time: 'photoFoldersHeaderTime', tz: 'photoFoldersHeaderTz' },
+        { date: 'galleryHeaderDate', time: 'galleryHeaderTime', tz: 'galleryHeaderTz' }
+      ];
+      
+      clockElements.forEach(el => {
+        const dateEl = document.getElementById(el.date);
+        const timeEl = document.getElementById(el.time);
+        const tzEl = document.getElementById(el.tz);
+        if (dateEl) dateEl.textContent = dateStr;
+        if (timeEl) timeEl.textContent = timeStr;
+        if (tzEl) tzEl.textContent = tz;
+      });
     }
     setInterval(updateClock, 1000);
     updateClock();
@@ -1385,7 +1456,7 @@
     async function showDateRecap(dateStr) {
       currentRecapDate = dateStr;
       currentStatusCardDate = dateStr;
-      document.getElementById('dateRecapTitle').textContent = `Recap: ${dateStr}`;
+      document.getElementById('dateRecapTitle').textContent = dateStr;
       showPage('dateRecapPage');
       
       document.getElementById('dateRecapContent').innerHTML = `<div class="p-8 flex flex-col items-center justify-center"><div class="loading-spinner mb-4"></div><p class="text-gray-600">Memuat data...</p></div>`;
@@ -1646,7 +1717,7 @@
 
     async function openPhotoFolder(folderId, folderName) {
       showPage('photoGalleryPage');
-      document.getElementById('galleryTitle').textContent = `Foto: ${folderName}`;
+      document.getElementById('galleryTitle').textContent = `Foto Absen: ${folderName}`;
       if (cachedPhotos[folderId] && cachedPhotos[folderId].length > 0) {
         document.getElementById('photoGalleryLoading').classList.add('hidden');
         document.getElementById('photoGallery').classList.remove('hidden');
@@ -1744,5 +1815,5 @@
     
     initApp();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b709f5a5240e9d5',t:'MTc2NzI1NTg4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b70aeddc1dee9d5',t:'MTc2NzI1NjUyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
