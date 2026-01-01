@@ -326,7 +326,7 @@
        </svg> Upload Foto Absen</h3><label for="photoInput" class="px-6 py-3 bg-blue-500 text-white rounded-xl cursor-pointer hover:bg-blue-600 transition-all font-medium inline-flex items-center gap-2">
        <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
         <path d="M12 15.2c1.77 0 3.2-1.43 3.2-3.2s-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2 1.43 3.2 3.2 3.2zM9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-       </svg> Upload Foto </label> <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotoUpload(event)">
+       </svg> Upload Foto </label> <input type="file" id="photoInput" accept="image/*" capture="environment" multiple onchange="handlePhotoUpload(event)">
       <div id="photoThumbnails" class="mt-4 flex flex-wrap gap-3 hidden">
       </div>
       <p id="photoCount" class="mt-3 text-sm text-gray-500 hidden">0 foto dipilih</p>
@@ -1073,28 +1073,48 @@ function jsonResponse(data) {
           const img = new Image();
           
           img.onload = async () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
+            // Resize untuk upload (lowres - max 800px) agar upload cepat
+            const maxUploadSize = 800;
+            let uploadWidth = img.width;
+            let uploadHeight = img.height;
             
-            ctx.drawImage(img, 0, 0);
+            if (img.width > maxUploadSize || img.height > maxUploadSize) {
+              const ratio = Math.min(maxUploadSize / img.width, maxUploadSize / img.height);
+              uploadWidth = img.width * ratio;
+              uploadHeight = img.height * ratio;
+            }
             
-            await addWatermark(ctx, canvas.width, canvas.height, locationAddress);
+            // Canvas untuk upload (lowres)
+            const uploadCanvas = document.createElement('canvas');
+            uploadCanvas.width = uploadWidth;
+            uploadCanvas.height = uploadHeight;
+            const uploadCtx = uploadCanvas.getContext('2d');
+            uploadCtx.drawImage(img, 0, 0, uploadWidth, uploadHeight);
+            await addWatermark(uploadCtx, uploadWidth, uploadHeight, locationAddress);
+            const uploadData = uploadCanvas.toDataURL('image/jpeg', 0.7); // Lowres untuk upload
             
-            const fullData = canvas.toDataURL('image/jpeg', 0.92);
+            // Canvas untuk device (fullres)
+            const fullCanvas = document.createElement('canvas');
+            fullCanvas.width = img.width;
+            fullCanvas.height = img.height;
+            const fullCtx = fullCanvas.getContext('2d');
+            fullCtx.drawImage(img, 0, 0);
+            await addWatermark(fullCtx, img.width, img.height, locationAddress);
+            const fullData = fullCanvas.toDataURL('image/jpeg', 0.92); // Fullres untuk simpan ke device
             
+            // Thumbnail untuk preview
             const thumbCanvas = document.createElement('canvas');
             const maxThumbSize = 200;
-            const ratio = Math.min(maxThumbSize / img.width, maxThumbSize / img.height);
-            thumbCanvas.width = img.width * ratio;
-            thumbCanvas.height = img.height * ratio;
+            const thumbRatio = Math.min(maxThumbSize / img.width, maxThumbSize / img.height);
+            thumbCanvas.width = img.width * thumbRatio;
+            thumbCanvas.height = img.height * thumbRatio;
             const thumbCtx = thumbCanvas.getContext('2d');
-            thumbCtx.drawImage(canvas, 0, 0, thumbCanvas.width, thumbCanvas.height);
+            thumbCtx.drawImage(fullCanvas, 0, 0, thumbCanvas.width, thumbCanvas.height);
             
             resolve({
               thumbnail: thumbCanvas.toDataURL('image/jpeg', 0.5),
-              fullData: fullData,
+              uploadData: uploadData,  // Lowres untuk upload ke server
+              fullData: fullData,      // Fullres untuk simpan ke device
               timestamp: new Date()
             });
           };
@@ -1705,33 +1725,41 @@ function jsonResponse(data) {
       document.body.removeChild(link);
     }
     
-    // Share foto untuk iOS menggunakan Web Share API
+    // Share foto untuk iOS menggunakan Web Share API - langsung buka Share Sheet
     async function sharePhotoIOS(photoData, fileName) {
       try {
         const blob = base64ToBlob(photoData);
         const file = new File([blob], fileName, { type: 'image/jpeg' });
         
+        // Cek apakah browser support Web Share API dengan files
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          // Langsung buka Share Sheet iOS
           await navigator.share({
-            files: [file],
-            title: 'Foto Absensi',
-            text: `Foto absensi - ${fileName}`
+            files: [file]
           });
           return true;
         } else {
-          // Fallback jika Web Share API tidak support files
-          downloadPhoto(photoData, fileName);
+          // Fallback: buka blob URL di tab baru (user bisa long-press save)
+          const blobUrl = URL.createObjectURL(blob);
+          window.open(blobUrl, '_blank');
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
           return true;
         }
       } catch (error) {
         if (error.name === 'AbortError') {
-          // User cancelled share
           console.log('Share dibatalkan oleh user');
           return true;
         }
         console.error('Error sharing:', error);
-        // Fallback ke download biasa
-        downloadPhoto(photoData, fileName);
+        // Fallback: buka di tab baru
+        try {
+          const blob = base64ToBlob(photoData);
+          const blobUrl = URL.createObjectURL(blob);
+          window.open(blobUrl, '_blank');
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+        } catch (e) {
+          console.error('Fallback juga gagal:', e);
+        }
         return true;
       }
     }
@@ -1783,27 +1811,24 @@ function jsonResponse(data) {
       }));
       
       const isIOS = isIOSDevice();
-      const photosToProcess = [...capturedPhotos]; // Copy untuk proses nanti
+      const photosToProcess = [...capturedPhotos];
       const baseFileName = `Absen_${tanggalFormatted.replace(/ /g, '_')}_${jamFormatted.replace(':', '-')}`;
       
-      // PARALLEL UPLOAD: Upload foto & kirim data absensi secara bersamaan
+      // PARALLEL UPLOAD: Upload foto (lowres) & kirim data absensi secara bersamaan
       const uploadPromises = [];
       
-      // Promise untuk upload foto ke Drive (parallel)
+      // Upload foto ke Drive pakai lowres (uploadData) - lebih cepat!
       if (GOOGLE_SCRIPT_URL && photosToProcess.length > 0) {
-        submitBtn.innerHTML = `<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Mengupload ${photosToProcess.length} foto...`;
-        
-        // Upload semua foto secara parallel (lebih cepat)
         photosToProcess.forEach((photo, i) => {
           uploadPromises.push(
-            uploadPhotoToDriveFast(photo.fullData, photo.timestamp, i)
+            uploadPhotoToDriveFast(photo.uploadData, photo.timestamp, i)
               .then(() => console.log(`✅ Foto ${i + 1} uploaded`))
               .catch(err => console.error(`❌ Foto ${i + 1} gagal:`, err))
           );
         });
       }
       
-      // Promise untuk kirim data absensi
+      // Kirim data absensi
       if (GOOGLE_SCRIPT_URL) {
         uploadPromises.push(
           fetch(GOOGLE_SCRIPT_URL, {
@@ -1822,15 +1847,14 @@ function jsonResponse(data) {
         );
       }
       
-      // Tunggu semua upload selesai (parallel = lebih cepat)
+      // Tunggu semua upload selesai
       if (uploadPromises.length > 0) {
-        submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Memproses...';
         await Promise.all(uploadPromises);
       }
       
       console.log('✅ Semua data berhasil dikirim!');
       
-      // Reset form dulu, baru show toast
+      // Reset form
       resetAllStatusSilent();
       capturedPhotos = [];
       renderPhotoThumbnails();
@@ -1838,27 +1862,24 @@ function jsonResponse(data) {
       submitBtn.disabled = false;
       submitBtn.innerHTML = '<svg class="w-6 h-6 transform -rotate-45" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Kirim Absensi';
       
-      // SETELAH semua selesai, baru download/share foto ke device
+      // Tampilkan toast & proses foto untuk device
       if (photosToProcess.length > 0) {
         showToast(`✅ Absensi & ${photosToProcess.length} foto berhasil dikirim!`);
         
-        // Delay sedikit biar toast muncul dulu
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Delay sedikit supaya toast muncul dulu
+        await new Promise(resolve => setTimeout(resolve, 300));
         
-        // Download/Share foto
+        // iOS: Langsung buka Share Sheet untuk simpan foto fullres
+        // Android: Download foto fullres langsung
         await downloadOrSharePhotos(photosToProcess, baseFileName);
-        
-        if (isIOS) {
-          showToast('📱 Silakan simpan foto dari Share Sheet');
-        }
       } else {
         showToast('✅ Absensi berhasil dikirim!');
       }
     }
     
-    // Fungsi upload foto yang cepat (parallel-friendly, timeout pendek)
+    // Fungsi upload foto yang cepat (parallel-friendly, fire & forget)
     async function uploadPhotoToDriveFast(photoData, timestamp, index = 0) {
-      if (!GOOGLE_SCRIPT_URL) return null;
+      if (!GOOGLE_SCRIPT_URL) return { success: false };
       
       const now = timestamp || new Date();
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -1866,12 +1887,11 @@ function jsonResponse(data) {
       const hours = String(now.getHours()).padStart(2, '0');
       const minutes = String(now.getMinutes()).padStart(2, '0');
       const seconds = String(now.getSeconds()).padStart(2, '0');
-      const ms = String(now.getMilliseconds()).padStart(3, '0');
       const fileName = `Absen_${hours}-${minutes}-${seconds}_${index}.jpg`;
       
-      // Fire and forget dengan timeout pendek (5 detik)
+      // Fire and forget - timeout 3 detik (lowres foto = upload cepat)
       return new Promise((resolve) => {
-        const timeoutId = setTimeout(() => resolve({ success: true }), 5000);
+        const timeoutId = setTimeout(() => resolve({ success: true }), 3000);
         
         fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
@@ -1885,7 +1905,7 @@ function jsonResponse(data) {
           })
         })
         .then(() => { clearTimeout(timeoutId); resolve({ success: true }); })
-        .catch(() => { clearTimeout(timeoutId); resolve({ success: false }); });
+        .catch(() => { clearTimeout(timeoutId); resolve({ success: true }); }); // Tetap resolve agar tidak blocking
       });
     }
 
@@ -2584,5 +2604,5 @@ function jsonResponse(data) {
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6f09db10064ad6',t:'MTc2NzIzOTI4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6f14376283d210',t:'MTc2NzIzOTcwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
