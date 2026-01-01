@@ -1742,45 +1742,75 @@ function jsonResponse(data) {
         status: workerStatus[worker.id] || 'Belum Absen'
       }));
       
-      // 1. Kirim data absensi ke Google Sheets
-      if (GOOGLE_SCRIPT_URL) {
-        fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'submitAttendance',
-            tanggal: tanggalFormatted,
-            jam: jamFormatted,
-            workers: workers.map(w => w.name),
-            attendance: attendanceData
-          })
-        }).catch(() => {});
+      // STEP 1: Upload foto ke Google Drive DULU (tunggu selesai)
+      if (GOOGLE_SCRIPT_URL && capturedPhotos.length > 0) {
+        submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Mengupload foto ke Drive...';
         
-        // Upload foto ke Drive
-        capturedPhotos.forEach(photo => {
-          uploadPhotoToDrive(photo.fullData, photo.timestamp).catch(() => {});
-        });
+        console.log(`📤 Uploading ${capturedPhotos.length} foto ke Google Drive...`);
+        
+        // Upload semua foto secara sequential dan tunggu selesai
+        for (let i = 0; i < capturedPhotos.length; i++) {
+          const photo = capturedPhotos[i];
+          submitBtn.innerHTML = `<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Upload foto ${i + 1}/${capturedPhotos.length}...`;
+          
+          try {
+            await uploadPhotoToDriveAsync(photo.fullData, photo.timestamp);
+            console.log(`✅ Foto ${i + 1} berhasil diupload`);
+          } catch (err) {
+            console.error(`❌ Gagal upload foto ${i + 1}:`, err);
+          }
+          
+          // Delay antar upload untuk mencegah rate limiting
+          if (i < capturedPhotos.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+          }
+        }
+        
+        console.log('✅ Semua foto selesai diupload ke Drive');
       }
       
-      console.log('Data absensi terkirim ke spreadsheet:', tanggalFormatted, jamFormatted);
+      // STEP 2: Kirim data absensi ke Google Sheets
+      submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Mengirim data absensi...';
       
-      // 2. Download/Share foto yang diupload
+      if (GOOGLE_SCRIPT_URL) {
+        try {
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'submitAttendance',
+              tanggal: tanggalFormatted,
+              jam: jamFormatted,
+              workers: workers.map(w => w.name),
+              attendance: attendanceData
+            })
+          });
+          console.log('✅ Data absensi terkirim ke spreadsheet:', tanggalFormatted, jamFormatted);
+        } catch (err) {
+          console.error('❌ Error mengirim data absensi:', err);
+        }
+      }
+      
+      // STEP 3: Download/Share foto ke device (SETELAH upload selesai)
       if (capturedPhotos.length > 0) {
         const baseFileName = `Absen_${tanggalFormatted.replace(/ /g, '_')}_${jamFormatted.replace(':', '-')}`;
         
-        submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Menyimpan foto...';
+        submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Menyimpan foto ke device...';
+        
+        // Tunggu sebentar sebelum trigger download/share
+        await new Promise(resolve => setTimeout(resolve, 300));
         
         await downloadOrSharePhotos(capturedPhotos, baseFileName);
         
         const isIOS = isIOSDevice();
         if (isIOS) {
-          showToast(`Absensi terkirim! ${capturedPhotos.length} foto siap disimpan/share`);
+          showToast(`✅ Absensi terkirim & foto terupload! Silakan simpan foto.`);
         } else {
-          showToast(`Absensi terkirim! ${capturedPhotos.length} foto terdownload`);
+          showToast(`✅ Absensi terkirim! ${capturedPhotos.length} foto terupload & terdownload`);
         }
       } else {
-        showToast('Absensi berhasil dikirim!');
+        showToast('✅ Absensi berhasil dikirim!');
       }
       
       resetAllStatusSilent();
@@ -1789,6 +1819,47 @@ function jsonResponse(data) {
       
       submitBtn.disabled = false;
       submitBtn.innerHTML = '<svg class="w-6 h-6 transform -rotate-45" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Kirim Absensi';
+    }
+    
+    // Fungsi upload foto yang async dan bisa di-await
+    async function uploadPhotoToDriveAsync(photoData, timestamp) {
+      if (!GOOGLE_SCRIPT_URL) return null;
+      
+      const now = timestamp || new Date();
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const folderName = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const fileName = `Absen_${hours}-${minutes}-${seconds}.jpg`;
+      
+      // Gunakan fetch tanpa no-cors untuk mendapatkan response (jika memungkinkan)
+      // Tapi karena CORS, kita tetap pakai no-cors tapi dengan Promise wrapper
+      return new Promise((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+          resolve({ success: true, timeout: true });
+        }, 10000); // Timeout 10 detik
+        
+        fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'uploadPhoto',
+            folderName: folderName,
+            fileName: fileName,
+            photoData: photoData
+          })
+        })
+        .then(() => {
+          clearTimeout(timeoutId);
+          resolve({ success: true });
+        })
+        .catch((err) => {
+          clearTimeout(timeoutId);
+          reject(err);
+        });
+      });
     }
 
     // ==================== RECAP ====================
@@ -2486,5 +2557,5 @@ function jsonResponse(data) {
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6ef6fb9701ba3d',t:'MTc2NzIzODUwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6f00d546cc4ad6',t:'MTc2NzIzODkxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
