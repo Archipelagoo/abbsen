@@ -153,7 +153,6 @@
       100% { transform: rotate(360deg); }
     }
     
-    /* Camera styles */
     .camera-container {
       position: fixed;
       inset: 0;
@@ -195,7 +194,6 @@
       transform: scale(0.95);
     }
     
-    /* Photo preview thumbnails */
     .photo-thumbnail {
       width: 80px;
       height: 80px;
@@ -211,7 +209,6 @@
       transform: scale(1.05);
     }
     
-    /* Popup overlay */
     .popup-overlay {
       position: fixed;
       inset: 0;
@@ -257,8 +254,6 @@
     .nav-btn.next {
       right: 20px;
     }
-    
-
   </style>
   <style>@view-transition { navigation: auto; }</style>
  </head>
@@ -324,19 +319,19 @@
        <div class="flex items-center gap-2"><span class="text-red-500 font-bold text-lg" id="unselectedCount">0</span> <span class="text-gray-600 text-sm">Belum Dipilih</span>
        </div>
       </div>
-     </div><!-- Loading State -->
+     </div>
      <div id="loadingWorkers" class="flex flex-col items-center justify-center py-12">
       <div class="loading-spinner mb-4"></div>
       <p class="text-white font-medium">Memuat data pekerja...</p>
-     </div><!-- Search Results -->
+     </div>
      <div id="searchResults" class="hidden mb-6">
       <div class="w-full">
        <div id="searchResultsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
        </div>
       </div>
-     </div><!-- Worker Grid -->
+     </div>
      <div id="workerGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-6 hidden">
-     </div><!-- Photo Upload -->
+     </div>
      <div class="bg-white rounded-2xl p-6 shadow-lg mb-4 w-full">
       <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
        <svg class="w-6 h-6" fill="#1e3a5f" viewbox="0 0 24 24">
@@ -344,11 +339,11 @@
        </svg> Upload Foto Absen</h3><button id="openCameraBtn" onclick="openCamera()" class="px-6 py-3 bg-blue-500 text-white rounded-xl cursor-pointer hover:bg-blue-600 transition-all font-medium inline-flex items-center gap-2">
        <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
         <path d="M12 15.2c1.77 0 3.2-1.43 3.2-3.2s-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2 1.43 3.2 3.2 3.2zM9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-       </svg> Buka Kamera </button> <!-- Photo Thumbnails -->
+       </svg> Buka Kamera </button>
       <div id="photoThumbnails" class="mt-4 flex flex-wrap gap-3 hidden">
       </div>
       <p id="photoCount" class="mt-3 text-sm text-gray-500 hidden">0 foto dipilih</p>
-     </div><!-- Submit Button -->
+     </div>
      <div class="mb-8 w-full"><button id="submitBtn" onclick="submitAbsensi()" class="w-full py-4 bg-green-500 text-white rounded-xl font-bold text-lg shadow-xl hover:bg-green-600 hover:shadow-2xl transition-all flex items-center justify-center gap-2">
        <svg class="w-6 h-6 transform -rotate-45" fill="white" viewbox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
        </svg> Kirim Absensi </button>
@@ -544,7 +539,8 @@
    <div id="cameraView" class="camera-container hidden">
     <video id="cameraVideo" class="camera-video" autoplay playsinline></video>
     <div id="locationStatus" class="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg text-sm"><span id="locationText">📍 Mendapatkan lokasi...</span>
-    </div><button onclick="closeCamera()" class="absolute top-4 right-4 bg-black bg-opacity-50 text-white w-10 h-10 rounded-full flex items-center justify-center">
+    </div>
+    <div id="orientationDebug" class="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-lg text-xs hidden"></div><button onclick="closeCamera()" class="absolute top-4 right-4 bg-black bg-opacity-50 text-white w-10 h-10 rounded-full flex items-center justify-center">
      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
      </svg></button>
     <div class="camera-controls"><button onclick="switchCamera()" class="bg-black bg-opacity-50 text-white w-12 h-12 rounded-full flex items-center justify-center">
@@ -553,7 +549,7 @@
       </svg></button> <button onclick="capturePhoto()" class="capture-btn"></button>
      <div class="w-12"></div>
     </div>
-   </div><!-- PHOTO PREVIEW POPUP (After Capture) -->
+   </div><!-- PHOTO PREVIEW POPUP -->
    <div id="capturePreview" class="popup-overlay hidden"><img id="capturedImage" src="" alt="Captured" class="popup-image">
     <div class="flex gap-4 mt-6"><button onclick="retakePhoto()" class="px-8 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-all flex items-center gap-2">
       <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
@@ -563,7 +559,7 @@
        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
       </svg> Pilih Foto </button>
     </div>
-   </div><!-- PHOTO VIEWER POPUP (View uploaded photos) -->
+   </div><!-- PHOTO VIEWER POPUP -->
    <div id="photoViewer" class="popup-overlay hidden"><button onclick="closePhotoViewer()" class="absolute top-4 right-4 bg-black bg-opacity-50 text-white w-10 h-10 rounded-full flex items-center justify-center z-10">
      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
      </svg></button> <button onclick="prevPhoto()" class="nav-btn prev">
@@ -592,21 +588,14 @@
        </div>
        <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-xs overflow-x-auto max-h-64">
         <pre id="appsScriptCode">// Google Apps Script for Absen Archipelago
-// Handles: Photo upload to Drive, Attendance to Sheets
-
 const DRIVE_FOLDER_ID = '1CJ46h8M89mzc3XKEg-4hJPV-2voMN3OD';
 const SPREADSHEET_ID = '1FllBcwBjTr_jfPylhyWwHt6ZE16j6fJpSa0C9hYEw44';
 
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
-    
-    if (data.action === 'uploadPhoto') {
-      return uploadPhoto(data);
-    } else if (data.action === 'submitAttendance') {
-      return submitAttendance(data);
-    }
-    
+    if (data.action === 'uploadPhoto') return uploadPhoto(data);
+    if (data.action === 'submitAttendance') return submitAttendance(data);
     return jsonResponse({ success: false, error: 'Unknown action' });
   } catch (error) {
     return jsonResponse({ success: false, error: error.toString() });
@@ -616,14 +605,9 @@ function doPost(e) {
 function doGet(e) {
   try {
     const action = e.parameter.action;
-    
-    if (action === 'getFolders') {
-      return getFolders();
-    } else if (action === 'getPhotos') {
-      return getPhotos(e.parameter.folderId);
-    }
-    
-    return jsonResponse({ status: 'OK', message: 'Absen API is running' });
+    if (action === 'getFolders') return getFolders();
+    if (action === 'getPhotos') return getPhotos(e.parameter.folderId);
+    return jsonResponse({ status: 'OK' });
   } catch (error) {
     return jsonResponse({ success: false, error: error.toString() });
   }
@@ -631,67 +615,45 @@ function doGet(e) {
 
 function uploadPhoto(data) {
   const parentFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
-  const folderName = data.folderName; // e.g., "31 January 2025"
-  const fileName = data.fileName; // e.g., "Absen, 23:34.jpg"
+  const folderName = data.folderName;
+  const fileName = data.fileName;
   const base64Data = data.photoData.split(',')[1];
   const blob = Utilities.newBlob(Utilities.base64Decode(base64Data), 'image/jpeg', fileName);
   
-  // Find or create date folder
   let dateFolder;
   const folders = parentFolder.getFoldersByName(folderName);
-  if (folders.hasNext()) {
-    dateFolder = folders.next();
-  } else {
-    dateFolder = parentFolder.createFolder(folderName);
-  }
+  if (folders.hasNext()) dateFolder = folders.next();
+  else dateFolder = parentFolder.createFolder(folderName);
   
-  // Upload file
   const file = dateFolder.createFile(blob);
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   
-  return jsonResponse({
-    success: true,
-    fileId: file.getId(),
-    fileUrl: file.getUrl(),
-    thumbnailUrl: 'https://drive.google.com/thumbnail?id=' + file.getId() + '&amp;sz=w200',
-    fullUrl: 'https://drive.google.com/thumbnail?id=' + file.getId() + '&amp;sz=w1920'
-  });
+  return jsonResponse({ success: true, fileId: file.getId() });
 }
 
 function submitAttendance(data) {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   let sheet = ss.getSheetByName('Absen recap');
+  if (!sheet) sheet = ss.insertSheet('Absen recap');
   
-  if (!sheet) {
-    sheet = ss.insertSheet('Absen recap');
-  }
-  
-  // Setup headers if needed
   sheet.getRange('A1').setValue('Tanggal');
   sheet.getRange('A2').setValue('Jam');
   
-  // Add workers in column A
   if (data.workers &amp;&amp; data.workers.length &gt; 0) {
     for (let i = 0; i &lt; data.workers.length; i++) {
       sheet.getRange(i + 3, 1).setValue(data.workers[i]);
     }
   }
   
-  // Find next column
   const lastCol = sheet.getLastColumn();
   const newCol = Math.max(lastCol + 1, 2);
   
-  // Add date and time
   sheet.getRange(1, newCol).setValue(data.tanggal);
   sheet.getRange(2, newCol).setValue(data.jam);
   
-  // Add attendance with colors
   const colors = {
-    'Start Work': '#22c55e',
-    'Finish Work': '#3b82f6',
-    'Sakit': '#f97316',
-    'Standby': '#a855f7',
-    'Belum Absen': '#ef4444'
+    'Start Work': '#22c55e', 'Finish Work': '#3b82f6',
+    'Sakit': '#f97316', 'Standby': '#a855f7', 'Belum Absen': '#ef4444'
   };
   
   for (let j = 0; j &lt; data.attendance.length; j++) {
@@ -703,26 +665,18 @@ function submitAttendance(data) {
     cell.setHorizontalAlignment('center');
   }
   
-  return jsonResponse({ success: true, column: newCol });
+  return jsonResponse({ success: true });
 }
 
 function getFolders() {
   const parentFolder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
   const folders = parentFolder.getFolders();
   const result = [];
-  
   while (folders.hasNext()) {
     const folder = folders.next();
-    result.push({
-      id: folder.getId(),
-      name: folder.getName(),
-      created: folder.getDateCreated().toISOString()
-    });
+    result.push({ id: folder.getId(), name: folder.getName() });
   }
-  
-  // Sort by name (date) descending
   result.sort((a, b) =&gt; b.name.localeCompare(a.name));
-  
   return jsonResponse({ success: true, folders: result });
 }
 
@@ -730,29 +684,22 @@ function getPhotos(folderId) {
   const folder = DriveApp.getFolderById(folderId);
   const files = folder.getFiles();
   const result = [];
-  
   while (files.hasNext()) {
     const file = files.next();
     if (file.getMimeType().startsWith('image/')) {
       result.push({
-        id: file.getId(),
-        name: file.getName(),
+        id: file.getId(), name: file.getName(),
         thumbnailUrl: 'https://drive.google.com/thumbnail?id=' + file.getId() + '&amp;sz=w200',
-        fullUrl: 'https://drive.google.com/thumbnail?id=' + file.getId() + '&amp;sz=w1920',
-        created: file.getDateCreated().toISOString()
+        fullUrl: 'https://drive.google.com/thumbnail?id=' + file.getId() + '&amp;sz=w1920'
       });
     }
   }
-  
-  // Sort by name
   result.sort((a, b) =&gt; a.name.localeCompare(b.name));
-  
   return jsonResponse({ success: true, photos: result });
 }
 
 function jsonResponse(data) {
-  return ContentService.createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
 }</pre>
        </div><button onclick="copyAppsScript()" class="mt-2 px-4 py-2 bg-indigo-500 text-white rounded text-sm hover:bg-indigo-600"> Copy Kode </button>
        <div class="mt-4"><label class="block text-sm font-medium text-gray-700 mb-2">URL Web App:</label> <input type="text" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/..." class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:border-indigo-500 focus:outline-none"> <button onclick="saveScriptUrl()" class="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-medium hover:bg-green-600"> Simpan URL </button>
@@ -760,7 +707,7 @@ function jsonResponse(data) {
       </div>
      </div>
     </div>
-   </div><!-- Toast Notification -->
+   </div><!-- Toast -->
    <div id="toast" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-xl hidden z-50"><span id="toastMessage">Berhasil!</span>
    </div><!-- Loading Overlay -->
    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -781,16 +728,13 @@ function jsonResponse(data) {
     let allAbsensiData = [];
     let calendarDate = new Date();
 
-    // Workers data
     let workers = [];
     let workerStatus = {};
     
-    // Photos state
-    let capturedPhotos = []; // Array of {thumbnail, fullData, location, timestamp}
+    let capturedPhotos = [];
     let currentViewerIndex = 0;
     let currentViewerPhotos = [];
     
-    // Camera state
     let videoStream = null;
     let currentFacingMode = 'environment';
     let currentLocation = null;
@@ -798,9 +742,9 @@ function jsonResponse(data) {
     const MAX_LOCATION_RETRIES = 3;
     const LOCATION_TIMEOUT = 3000;
     
-
+    // Screen orientation tracking
+    let screenOrientation = null;
     
-    // Google config
     const SHEET_ID = '1FllBcwBjTr_jfPylhyWwHt6ZE16j6fJpSa0C9hYEw44';
     const SHEET_NAME = 'Form responses 1';
     const SHEETS_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
@@ -808,7 +752,30 @@ function jsonResponse(data) {
     
     let GOOGLE_SCRIPT_URL = localStorage.getItem('googleScriptUrl') || 'https://script.google.com/macros/s/AKfycbzTjKB4lTiZKafD34Ts-NWEC-qq6RTAYudu_r4X8eijJSDCUzz1RvRY1a4S2XTENBHxjQ/exec';
 
+    // ==================== ORIENTATION DETECTION ====================
+    function getScreenOrientation() {
+      // Try screen.orientation API first
+      if (screen.orientation && screen.orientation.type) {
+        return screen.orientation.type;
+      }
+      // Fallback to window dimensions
+      return window.innerHeight > window.innerWidth ? 'portrait-primary' : 'landscape-primary';
+    }
 
+    function isPortraitOrientation() {
+      const orientation = getScreenOrientation();
+      return orientation.includes('portrait');
+    }
+
+    // Listen for orientation changes
+    if (screen.orientation) {
+      screen.orientation.addEventListener('change', () => {
+        screenOrientation = getScreenOrientation();
+      });
+    }
+    window.addEventListener('resize', () => {
+      screenOrientation = getScreenOrientation();
+    });
 
     // ==================== LOCATION ====================
     async function getLocationWithRetry() {
@@ -825,7 +792,6 @@ function jsonResponse(data) {
             });
           });
           
-          // Reverse geocode
           const address = await reverseGeocode(position.coords.latitude, position.coords.longitude);
           currentLocation = address;
           document.getElementById('locationText').textContent = '📍 ' + address;
@@ -848,11 +814,8 @@ function jsonResponse(data) {
         const data = await response.json();
         
         if (data.display_name) {
-          // Shorten the address
           const parts = data.display_name.split(', ');
-          if (parts.length > 4) {
-            return parts.slice(0, 4).join(', ');
-          }
+          if (parts.length > 4) return parts.slice(0, 4).join(', ');
           return data.display_name;
         }
         return 'Location unavailable';
@@ -867,12 +830,15 @@ function jsonResponse(data) {
         document.getElementById('cameraView').classList.remove('hidden');
         document.getElementById('locationText').textContent = '📍 Mendapatkan lokasi...';
         
-        // Start getting location in background
+        screenOrientation = getScreenOrientation();
         getLocationWithRetry();
         
-        // Start camera
         videoStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: currentFacingMode, width: { ideal: 1920 }, height: { ideal: 1080 } },
+          video: { 
+            facingMode: currentFacingMode, 
+            width: { ideal: 1920 }, 
+            height: { ideal: 1080 }
+          },
           audio: false
         });
         
@@ -914,31 +880,63 @@ function jsonResponse(data) {
       const video = document.getElementById('cameraVideo');
       const canvas = document.createElement('canvas');
       
-      // Get actual video dimensions
       const videoWidth = video.videoWidth;
       const videoHeight = video.videoHeight;
       
-      // Simple approach: just use video dimensions as-is
-      // Modern browsers handle rotation automatically via video stream
-      // The video element already shows the correct orientation
-      canvas.width = videoWidth;
-      canvas.height = videoHeight;
+      // Detect if we need rotation
+      // Phone cameras often report landscape dimensions even in portrait mode
+      const isScreenPortrait = isPortraitOrientation();
+      const isVideoPortrait = videoHeight > videoWidth;
+      const isFrontCamera = currentFacingMode === 'user';
+      
+      // Determine if rotation is needed
+      // If screen is portrait but video dimensions are landscape, rotate 90°
+      let needsRotation = isScreenPortrait && !isVideoPortrait;
+      
+      // Set canvas dimensions
+      if (needsRotation) {
+        canvas.width = videoHeight;
+        canvas.height = videoWidth;
+      } else {
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
+      }
+      
       const ctx = canvas.getContext('2d');
       
-      // Draw video frame directly
-      ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+      // Apply transformations
+      ctx.save();
+      
+      if (needsRotation) {
+        // Rotate 90 degrees clockwise for portrait
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(90 * Math.PI / 180);
+        
+        if (isFrontCamera) {
+          // Mirror for front camera
+          ctx.scale(-1, 1);
+        }
+        
+        ctx.drawImage(video, -videoWidth / 2, -videoHeight / 2, videoWidth, videoHeight);
+      } else {
+        if (isFrontCamera) {
+          // Mirror horizontally for front camera
+          ctx.translate(canvas.width, 0);
+          ctx.scale(-1, 1);
+        }
+        ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+      }
+      
+      ctx.restore();
       
       // Add watermark
-      await addWatermark(ctx, canvas.width, canvas.height, videoWidth, videoHeight);
+      await addWatermark(ctx, canvas.width, canvas.height);
       
-      // Get full quality image
       const fullData = canvas.toDataURL('image/jpeg', 0.95);
       
-      // Show preview
       document.getElementById('capturedImage').src = fullData;
       document.getElementById('capturePreview').classList.remove('hidden');
       
-      // Store temporarily
       window.tempCapturedPhoto = {
         fullData: fullData,
         location: currentLocation || 'Location unavailable',
@@ -946,7 +944,7 @@ function jsonResponse(data) {
       };
     }
 
-    // Preload watermark logo globally
+    // Preload watermark logo
     let watermarkLogoLoaded = null;
     const WATERMARK_LOGO_URL = 'https://lh3.googleusercontent.com/d/1zaavYZSem-yNHztE724qeIAWw9uGJgen=s200';
     
@@ -964,15 +962,13 @@ function jsonResponse(data) {
         };
         img.onerror = () => resolve(null);
         img.src = WATERMARK_LOGO_URL;
-        // Timeout fallback
         setTimeout(() => resolve(watermarkLogoLoaded), 2000);
       });
     }
     
-    // Preload on page load
     preloadWatermarkLogo();
 
-    async function addWatermark(ctx, width, height, videoWidth, videoHeight) {
+    async function addWatermark(ctx, width, height) {
       const now = new Date();
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -988,61 +984,53 @@ function jsonResponse(data) {
       const timeStr = `${hours}:${minutes}`;
       const locationStr = currentLocation || 'Location unavailable';
       
-      // Scale based on shorter side for consistent sizing
       const baseSize = Math.min(width, height);
       const scale = baseSize / 1080;
       
-      // Watermark sizing - increased spacing
       const padding = 35 * scale;
       const logoSize = 60 * scale;
       const fontSize = 20 * scale;
       const lineHeight = 28 * scale;
-      const sectionGap = 15 * scale; // Gap between logo and text
+      const sectionGap = 25 * scale; // Increased from 15 to 25
       
-      // Shadow for text readability
       ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
       ctx.shadowBlur = 6 * scale;
       ctx.shadowOffsetX = 2 * scale;
       ctx.shadowOffsetY = 2 * scale;
       
-      // ========== KIRI BAWAH ==========
-      // Calculate total height needed: logo + gap + date + time + location
       const textBlockHeight = lineHeight * 3.5;
-      const totalHeight = logoSize + sectionGap + textBlockHeight;
       const startX = padding;
       
-      // Position from bottom
       let currentY = height - padding - textBlockHeight;
       
-      // Baris 4 (dari bawah): Lokasi (putih)
+      // Location (white)
       ctx.font = `${fontSize * 0.75}px Poppins, sans-serif`;
       ctx.fillStyle = '#ffffff';
       const maxLocWidth = width * 0.55;
       const truncatedLoc = truncateText(ctx, locationStr, maxLocWidth);
       ctx.fillText('📍 ' + truncatedLoc, startX, currentY + textBlockHeight);
       
-      // Baris 3: Waktu (orange)
+      // Time (orange)
       ctx.font = `bold ${fontSize * 1.3}px Poppins, sans-serif`;
       ctx.fillStyle = '#f59e0b';
       ctx.fillText(timeStr, startX, currentY + textBlockHeight - lineHeight * 1.2);
       
-      // Baris 2: Hari & Tanggal (putih)
+      // Date (white)
       ctx.font = `bold ${fontSize * 0.95}px Poppins, sans-serif`;
       ctx.fillStyle = '#ffffff';
       ctx.fillText(dateStr, startX, currentY + textBlockHeight - lineHeight * 2.5);
       
-      // Baris 1: Logo (paling atas, dengan jarak dari teks)
+      // Logo (with 25px gap from text)
       const logoY = currentY + textBlockHeight - lineHeight * 2.5 - sectionGap - logoSize;
       const logoImg = await preloadWatermarkLogo();
       if (logoImg && logoImg.complete && logoImg.naturalWidth > 0) {
         ctx.drawImage(logoImg, startX, logoY, logoSize, logoSize);
       }
       
-      // ========== KANAN ATAS ==========
+      // Top right: Timemark
       const rightPadding = padding;
       const topY = padding + fontSize;
       
-      // "Time" (orange) + "mark" (putih)
       ctx.font = `bold ${fontSize * 1.1}px Poppins, sans-serif`;
       const timeText = 'Time';
       const markText = 'mark';
@@ -1052,20 +1040,18 @@ function jsonResponse(data) {
       
       const rightX = width - rightPadding - totalTextWidth;
       
-      ctx.fillStyle = '#f59e0b'; // Orange
+      ctx.fillStyle = '#f59e0b';
       ctx.fillText(timeText, rightX, topY);
       
-      ctx.fillStyle = '#ffffff'; // Putih
+      ctx.fillStyle = '#ffffff';
       ctx.fillText(markText, rightX + timeWidth, topY);
       
-      // "100% photo verified" (putih, lebih kecil)
       ctx.font = `${fontSize * 0.65}px Poppins, sans-serif`;
       ctx.fillStyle = '#ffffff';
       const verifiedText = '100% photo verified';
       const verifiedWidth = ctx.measureText(verifiedText).width;
       ctx.fillText(verifiedText, width - rightPadding - verifiedWidth, topY + lineHeight * 0.7);
       
-      // Reset shadow
       ctx.shadowColor = 'transparent';
       ctx.shadowBlur = 0;
       ctx.shadowOffsetX = 0;
@@ -1089,7 +1075,6 @@ function jsonResponse(data) {
 
     function selectPhoto() {
       if (window.tempCapturedPhoto) {
-        // Create thumbnail (smaller version)
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
@@ -1182,10 +1167,7 @@ function jsonResponse(data) {
 
     // ==================== DRIVE INTEGRATION ====================
     async function uploadPhotoToDrive(photoData, timestamp) {
-      if (!GOOGLE_SCRIPT_URL) {
-        console.log('Google Script URL not configured');
-        return null;
-      }
+      if (!GOOGLE_SCRIPT_URL) return null;
       
       const now = timestamp || new Date();
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -1195,7 +1177,7 @@ function jsonResponse(data) {
       const fileName = `Absen, ${hours}:${minutes}.jpg`;
       
       try {
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
+        await fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
@@ -1206,56 +1188,43 @@ function jsonResponse(data) {
             photoData: photoData
           })
         });
-        
         return { success: true };
       } catch (error) {
-        console.error('Upload error:', error);
         return null;
       }
     }
 
     async function fetchPhotoFolders() {
-      if (!GOOGLE_SCRIPT_URL) {
-        return [];
-      }
-      
+      if (!GOOGLE_SCRIPT_URL) return [];
       try {
         const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getFolders`);
         const data = await response.json();
         return data.success ? data.folders : [];
       } catch (error) {
-        console.error('Fetch folders error:', error);
         return [];
       }
     }
 
     async function fetchPhotosFromFolder(folderId) {
-      if (!GOOGLE_SCRIPT_URL) {
-        return [];
-      }
-      
+      if (!GOOGLE_SCRIPT_URL) return [];
       try {
         const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPhotos&folderId=${folderId}`);
         const data = await response.json();
         return data.success ? data.photos : [];
       } catch (error) {
-        console.error('Fetch photos error:', error);
         return [];
       }
     }
 
     // ==================== PHOTO RECAP ====================
-    // Cache for folders and photos
     let cachedFolders = null;
     let cachedPhotos = {};
     
     async function showPhotoRecap() {
       showPage('photoFoldersPage');
       
-      // Use cache if available
       if (cachedFolders) {
         renderPhotoFolders(cachedFolders);
-        // Refresh in background
         fetchPhotoFolders().then(folders => {
           cachedFolders = folders;
           renderPhotoFolders(folders);
@@ -1293,10 +1262,8 @@ function jsonResponse(data) {
       showPage('photoGalleryPage');
       document.getElementById('galleryTitle').textContent = `Foto: ${folderName}`;
       
-      // Use cache if available
       if (cachedPhotos[folderId]) {
         renderPhotoGallery(cachedPhotos[folderId]);
-        // Refresh in background
         fetchPhotosFromFolder(folderId).then(photos => {
           cachedPhotos[folderId] = photos;
           renderPhotoGallery(photos);
@@ -1326,7 +1293,6 @@ function jsonResponse(data) {
         </div>
       `).join('');
       
-      // Store photos for viewer
       window.galleryPhotos = photos.map(p => p.fullUrl);
     }
 
@@ -1371,7 +1337,6 @@ function jsonResponse(data) {
         workers.forEach(w => workerStatus[w.id] = null);
         return true;
       } catch (error) {
-        console.error('Error fetching workers:', error);
         return false;
       }
     }
@@ -1528,19 +1493,15 @@ function jsonResponse(data) {
       submitBtn.innerHTML = '<div class="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div> Mengirim...';
       
       const now = new Date();
-      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       const monthsId = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
       
       const tanggalFormatted = `${now.getDate()} ${monthsId[now.getMonth()]} ${now.getFullYear()}`;
       const jamFormatted = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
       
       try {
-        // Upload photos to Drive (background, no popup)
         const photoPromises = capturedPhotos.map(photo => 
           uploadPhotoToDrive(photo.fullData, photo.timestamp)
         );
-        
-        // Submit attendance to sheet (parallel with photo uploads)
         
         const attendanceData = workers.map((worker, index) => ({
           row: index + 3,
@@ -1562,7 +1523,6 @@ function jsonResponse(data) {
           });
         }
         
-        // Wait for all uploads and save to Data SDK in parallel
         const dataPromises = [];
         if (window.dataSdk) {
           const dateStr = now.toLocaleDateString('id-ID');
@@ -1583,7 +1543,6 @@ function jsonResponse(data) {
           }
         }
         
-        // Wait for all parallel operations
         await Promise.all([...photoPromises, ...dataPromises]);
         
         showToast('Absensi berhasil dikirim! ✅');
@@ -1592,7 +1551,6 @@ function jsonResponse(data) {
         renderPhotoThumbnails();
         
       } catch (error) {
-        console.error('Submit error:', error);
         showToast('Gagal mengirim absensi!', 'error');
       } finally {
         submitBtn.disabled = false;
@@ -1755,13 +1713,6 @@ function jsonResponse(data) {
       setTimeout(() => toast.classList.add('hidden'), 3000);
     }
 
-    function showLoading(show, text = 'Memproses...') {
-      const overlay = document.getElementById('loadingOverlay');
-      document.getElementById('loadingText').textContent = text;
-      if (show) overlay.classList.remove('hidden');
-      else overlay.classList.add('hidden');
-    }
-
     function openSetupGuide() {
       document.getElementById('setupGuideModal').classList.remove('hidden');
       document.getElementById('scriptUrlInput').value = GOOGLE_SCRIPT_URL;
@@ -1845,5 +1796,5 @@ function jsonResponse(data) {
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6c7a27b1b5e9d5',t:'MTc2NzIxMjQyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6c8dae10b6e9d5',t:'MTc2NzIxMzIyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
