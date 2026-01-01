@@ -123,11 +123,20 @@
     }
     
     .worker-photo-img {
-      width: 60px;
-      height: 60px;
-      border-radius: 12px;
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
       object-fit: cover;
-      border: 3px solid #e5e7eb;
+      border: 2px solid #e5e7eb;
+    }
+    
+    @media (min-width: 640px) {
+      .worker-photo-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        border: 3px solid #e5e7eb;
+      }
     }
     
     .worker-card.selected .worker-photo-img {
@@ -149,13 +158,22 @@
     }
     
     .photo-thumbnail {
-      width: 80px;
-      height: 80px;
-      border-radius: 12px;
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
       object-fit: cover;
       cursor: pointer;
-      border: 3px solid transparent;
+      border: 2px solid transparent;
       transition: all 0.2s;
+    }
+    
+    @media (min-width: 640px) {
+      .photo-thumbnail {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        border: 3px solid transparent;
+      }
     }
     
     .photo-thumbnail:hover {
@@ -227,67 +245,84 @@
       transform: scale(1.05);
       box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
+    
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    /* Safe area untuk iPhone notch */
+    @supports (padding-top: env(safe-area-inset-top)) {
+      .safe-top {
+        padding-top: env(safe-area-inset-top);
+      }
+      .safe-bottom {
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full soft-navy-bg">
   <div id="app" class="h-full w-full overflow-auto"><!-- LOGIN PAGE -->
-   <div id="loginPage" class="page active flex-col items-center justify-center min-h-full w-full soft-navy-bg p-4">
-    <div class="bg-white rounded-3xl p-8 md:p-12 w-full max-w-md fade-in shadow-2xl">
-     <div class="flex justify-center mb-6"><img id="loginLogo" src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w200" alt="Logo Archipelago" class="w-32 h-32 object-contain" onerror="this.style.display='none'">
+   <div id="loginPage" class="page active flex-col items-center justify-center min-h-full w-full soft-navy-bg px-4 py-6 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 w-full max-w-md fade-in shadow-2xl">
+     <div class="flex justify-center mb-4 sm:mb-6"><img id="loginLogo" src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w200" alt="Logo Archipelago" class="w-24 h-24 sm:w-32 sm:h-32 object-contain" onerror="this.style.display='none'">
      </div>
-     <h1 id="companyNameLogin" class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">ARCHIPELAGO DAILY WORKER</h1>
-     <form id="loginForm" class="space-y-5">
-      <div><label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label> <input type="text" id="username" placeholder="Masukkan username" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none transition-all text-gray-800 bg-white">
+     <h1 id="companyNameLogin" class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6 sm:mb-8">ARCHIPELAGO DAILY WORKER</h1>
+     <form id="loginForm" class="space-y-4 sm:space-y-5">
+      <div><label for="username" class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Username</label> <input type="text" id="username" placeholder="Masukkan username" class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none transition-all text-gray-800 bg-white text-sm sm:text-base">
       </div>
-      <div><label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label> <input type="password" id="password" placeholder="Masukkan password" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none transition-all text-gray-800 bg-white">
+      <div><label for="password" class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Password</label> <input type="password" id="password" placeholder="Masukkan password" class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none transition-all text-gray-800 bg-white text-sm sm:text-base">
       </div>
-      <div id="loginError" class="text-red-500 text-sm hidden">
+      <div id="loginError" class="text-red-500 text-xs sm:text-sm hidden">
        Username atau password salah!
-      </div><button type="submit" class="w-full py-3 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition-all shadow-lg"> Login </button>
+      </div><button type="submit" class="w-full py-2.5 sm:py-3 bg-green-500 text-white font-semibold rounded-lg sm:rounded-xl hover:bg-green-600 transition-all shadow-lg text-sm sm:text-base"> Login </button>
      </form>
     </div>
    </div><!-- MAIN ABSENSI PAGE -->
    <div id="absensiPage" class="page flex-col min-h-full w-full soft-navy-bg">
-    <header class="darker-header shadow-md px-4 py-4 sticky top-0 z-50">
-     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-4"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-12 h-12 object-contain logo-white" onerror="this.style.display='none'">
-       <h1 id="appTitleHeader" class="text-lg md:text-xl font-bold text-white uppercase tracking-wide">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
+    <header class="darker-header shadow-md px-3 sm:px-4 py-3 sm:py-4 sticky top-0 z-50">
+     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0"><img src="https://drive.google.com/thumbnail?id=10un5eCNXYwHkgznim3T4lRMwICFWQ8Bw&amp;sz=w100" alt="Logo" class="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12 object-contain logo-white flex-shrink-0" onerror="this.style.display='none'">
+       <h1 id="appTitleHeader" class="text-xs sm:text-sm md:text-lg font-bold text-white uppercase tracking-wide truncate">ABSEN ONLINE DAILY WORKER I.B.L.</h1>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center flex-shrink-0">
        <div class="text-right">
-        <div id="currentDate" class="text-sm font-medium text-gray-300"></div>
-        <div class="flex items-center gap-2"><span id="currentTime" class="text-2xl font-bold clock-time"></span> <span id="timezone" class="text-2xl font-bold clock-time"></span>
+        <div id="currentDate" class="text-[10px] sm:text-xs font-medium text-gray-300 hidden sm:block"></div>
+        <div class="flex items-center gap-1"><span id="currentTime" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span> <span id="timezone" class="text-base sm:text-xl md:text-2xl font-bold clock-time"></span>
         </div>
        </div>
       </div>
      </div>
     </header>
-    <main class="flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full">
-     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-      <div class="flex gap-3"><button onclick="setAllPresent()" class="px-5 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-semibold shadow-lg flex items-center gap-2">
-        <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
+    <main class="flex-1 px-3 py-4 sm:p-4 md:p-6 max-w-7xl mx-auto w-full">
+     <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3 mb-4">
+      <div class="flex gap-2 sm:gap-3"><button onclick="setAllPresent()" class="px-3 sm:px-4 py-2 sm:py-3 bg-green-500 text-white rounded-lg sm:rounded-xl hover:bg-green-600 transition-all font-semibold shadow-lg flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="white" viewbox="0 0 24 24">
          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-        </svg> Hadir Semua </button> <button onclick="resetAllStatus()" class="px-5 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all font-semibold shadow-lg flex items-center gap-2">
-        <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
+        </svg><span class="hidden xs:inline">Hadir</span> Semua </button> <button onclick="resetAllStatus()" class="px-3 sm:px-4 py-2 sm:py-3 bg-red-500 text-white rounded-lg sm:rounded-xl hover:bg-red-600 transition-all font-semibold shadow-lg flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="white" viewbox="0 0 24 24">
          <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
         </svg> Reset </button>
-      </div><button onclick="showPage('recapMenuPage')" class="px-5 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all font-semibold shadow-lg flex items-center gap-2">
-       <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
+      </div><button onclick="showPage('recapMenuPage')" class="px-3 sm:px-4 py-2 sm:py-3 bg-indigo-600 text-white rounded-lg sm:rounded-xl hover:bg-indigo-700 transition-all font-semibold shadow-lg flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+       <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="white" viewbox="0 0 24 24">
         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
-       </svg> Recap Absen </button>
+       </svg> Recap </button>
      </div>
-     <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-      <div class="relative w-full md:w-1/2"><input type="text" id="searchInput" placeholder="Cari nama pekerja..." class="w-full px-5 py-3 rounded-xl border-2 border-gray-300 focus:border-indigo-500 focus:outline-none transition-all text-gray-800 pl-12 bg-white">
-       <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+     <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4 sm:mb-6">
+      <div class="relative flex-1"><input type="text" id="searchInput" placeholder="Cari nama pekerja..." class="w-full px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-2 border-gray-300 focus:border-indigo-500 focus:outline-none transition-all text-gray-800 pl-10 sm:pl-12 bg-white text-sm sm:text-base">
+       <svg class="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
        </svg>
       </div>
-      <div class="bg-white rounded-xl px-5 py-3 shadow-lg flex items-center gap-6">
-       <div class="flex items-center gap-2"><span class="text-green-500 font-bold text-lg" id="selectedCount">0</span> <span class="text-gray-600 text-sm">Dipilih</span>
+      <div class="bg-white rounded-lg sm:rounded-xl px-3 sm:px-5 py-2 sm:py-3 shadow-lg flex items-center justify-center gap-4 sm:gap-6">
+       <div class="flex items-center gap-1.5 sm:gap-2"><span class="text-green-500 font-bold text-base sm:text-lg" id="selectedCount">0</span> <span class="text-gray-600 text-xs sm:text-sm">Dipilih</span>
        </div>
-       <div class="w-px h-6 bg-gray-300"></div>
-       <div class="flex items-center gap-2"><span class="text-red-500 font-bold text-lg" id="unselectedCount">0</span> <span class="text-gray-600 text-sm">Belum Dipilih</span>
+       <div class="w-px h-5 sm:h-6 bg-gray-300"></div>
+       <div class="flex items-center gap-1.5 sm:gap-2"><span class="text-red-500 font-bold text-base sm:text-lg" id="unselectedCount">0</span> <span class="text-gray-600 text-xs sm:text-sm">Belum</span>
        </div>
       </div>
      </div>
@@ -297,26 +332,26 @@
      </div>
      <div id="searchResults" class="hidden mb-6">
       <div class="w-full">
-       <div id="searchResultsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+       <div id="searchResultsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
        </div>
       </div>
      </div>
-     <div id="workerGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-6 hidden">
+     <div id="workerGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 hidden">
      </div>
-     <div class="bg-white rounded-2xl p-6 shadow-lg mb-4 w-full">
-      <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-       <svg class="w-6 h-6" fill="#1e3a5f" viewbox="0 0 24 24">
+     <div class="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg mb-3 sm:mb-4 w-full">
+      <h3 class="font-semibold text-gray-800 mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base">
+       <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="#1e3a5f" viewbox="0 0 24 24">
         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-       </svg> Upload Foto Absen</h3><label for="photoInput" class="px-6 py-3 bg-blue-500 text-white rounded-xl cursor-pointer hover:bg-blue-600 transition-all font-medium inline-flex items-center gap-2">
-       <svg class="w-5 h-5" fill="white" viewbox="0 0 24 24">
+       </svg> Upload Foto Absen</h3><label for="photoInput" class="px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-500 text-white rounded-lg sm:rounded-xl cursor-pointer hover:bg-blue-600 transition-all font-medium inline-flex items-center gap-2 text-sm sm:text-base">
+       <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="white" viewbox="0 0 24 24">
         <path d="M12 15.2c1.77 0 3.2-1.43 3.2-3.2s-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2 1.43 3.2 3.2 3.2zM9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
        </svg> Upload Foto </label> <input type="file" id="photoInput" accept="image/*" capture="environment" multiple onchange="handlePhotoUpload(event)">
-      <div id="photoThumbnails" class="mt-4 flex flex-wrap gap-3 hidden">
+      <div id="photoThumbnails" class="mt-3 sm:mt-4 flex flex-wrap gap-2 sm:gap-3 hidden">
       </div>
-      <p id="photoCount" class="mt-3 text-sm text-gray-500 hidden">0 foto dipilih</p>
+      <p id="photoCount" class="mt-2 sm:mt-3 text-xs sm:text-sm text-gray-500 hidden">0 foto dipilih</p>
      </div>
-     <div class="mb-8 w-full"><button id="submitBtn" onclick="submitAbsensi()" class="w-full py-4 bg-green-500 text-white rounded-xl font-bold text-lg shadow-xl hover:bg-green-600 hover:shadow-2xl transition-all flex items-center justify-center gap-2">
-       <svg class="w-6 h-6 transform -rotate-45" fill="white" viewbox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+     <div class="mb-6 sm:mb-8 w-full"><button id="submitBtn" onclick="submitAbsensi()" class="w-full py-3 sm:py-4 bg-green-500 text-white rounded-xl font-bold text-base sm:text-lg shadow-xl hover:bg-green-600 hover:shadow-2xl transition-all flex items-center justify-center gap-2">
+       <svg class="w-5 h-5 sm:w-6 sm:h-6 transform -rotate-45" fill="white" viewbox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
        </svg> Kirim Absensi </button>
      </div>
     </main>
@@ -376,7 +411,7 @@
     </div>
     <main class="flex-1 p-6 max-w-4xl mx-auto w-full">
      <div id="todayRecapDate" class="text-center text-lg font-semibold text-gray-300 mb-4"></div>
-     <div id="todayStatusCards" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6"></div>
+     <div id="todayStatusCards" class="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3 mb-4 sm:mb-6"></div>
      <div id="todayRecapContent" class="bg-white rounded-2xl shadow-lg overflow-hidden"></div>
     </main>
    </div><!-- CALENDAR PAGE -->
@@ -676,7 +711,7 @@
         let currentLine = '📍 ';
         words.forEach(word => {
           const testLine = currentLine + word + ' ';
-          if (ctx.measureText(testLine).width > maxLocationWidth && currentLine !== '📍 ') {
+          if (ctx.measureText(testLine).width > maxLocationWidth && currentLine !== '�� ') {
             lines.push(currentLine.trim());
             currentLine = '   ' + word + ' ';
           } else {
@@ -923,18 +958,18 @@
         };
         
         const card = document.createElement('div');
-        card.className = `worker-card bg-white rounded-2xl p-4 shadow-lg transition-all cursor-pointer ${isSelected ? 'selected' : ''}`;
+        card.className = `worker-card bg-white rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-lg transition-all cursor-pointer ${isSelected ? 'selected' : ''}`;
         card.innerHTML = `
-          <div class="text-center mb-3">
-            <div class="mb-2 flex justify-center">${getWorkerPhotoHtml(worker, 60)}</div>
-            <h3 class="worker-name font-semibold text-gray-800 text-sm">${worker.name}</h3>
-            <p class="status-text text-xs mt-1 ${status ? 'text-gray-600' : 'text-gray-400'}">${status || 'Belum dipilih'}</p>
+          <div class="text-center mb-2 sm:mb-3">
+            <div class="mb-1.5 sm:mb-2 flex justify-center">${getWorkerPhotoHtml(worker, 50)}</div>
+            <h3 class="worker-name font-semibold text-gray-800 text-xs sm:text-sm leading-tight line-clamp-2">${worker.name}</h3>
+            <p class="status-text text-[10px] sm:text-xs mt-0.5 sm:mt-1 ${status ? 'text-gray-600' : 'text-gray-400'}">${status || 'Belum dipilih'}</p>
           </div>
-          <div class="grid grid-cols-2 gap-1">
-            <button onclick="event.stopPropagation(); toggleStatus(${worker.id}, 'Start Work')" class="${getStatusBtnClass('Start Work', 'bg-green-500')} whitespace-nowrap text-[10px]">Start Work</button>
-            <button onclick="event.stopPropagation(); toggleStatus(${worker.id}, 'Finish Work')" class="${getStatusBtnClass('Finish Work', 'bg-blue-500')} whitespace-nowrap text-[10px]">Finish Work</button>
-            <button onclick="event.stopPropagation(); toggleStatus(${worker.id}, 'Sakit')" class="${getStatusBtnClass('Sakit', 'bg-orange-500')} text-[10px]">Sakit</button>
-            <button onclick="event.stopPropagation(); toggleStatus(${worker.id}, 'Standby')" class="${getStatusBtnClass('Standby', 'bg-purple-500')} text-[10px]">Standby</button>
+          <div class="grid grid-cols-2 gap-0.5 sm:gap-1">
+            <button onclick="event.stopPropagation(); toggleStatus(${worker.id}, 'Start Work')" class="${getStatusBtnClass('Start Work', 'bg-green-500')} whitespace-nowrap text-[8px] sm:text-[10px] py-1 sm:py-1.5">Start</button>
+            <button onclick="event.stopPropagation(); toggleStatus(${worker.id}, 'Finish Work')" class="${getStatusBtnClass('Finish Work', 'bg-blue-500')} whitespace-nowrap text-[8px] sm:text-[10px] py-1 sm:py-1.5">Finish</button>
+            <button onclick="event.stopPropagation(); toggleStatus(${worker.id}, 'Sakit')" class="${getStatusBtnClass('Sakit', 'bg-orange-500')} text-[8px] sm:text-[10px] py-1 sm:py-1.5">Sakit</button>
+            <button onclick="event.stopPropagation(); toggleStatus(${worker.id}, 'Standby')" class="${getStatusBtnClass('Standby', 'bg-purple-500')} text-[8px] sm:text-[10px] py-1 sm:py-1.5">Standby</button>
           </div>
         `;
         grid.appendChild(card);
@@ -993,18 +1028,18 @@
           return `status-btn px-2 py-1 ${color} text-white rounded-lg text-xs ${isActive ? 'selected font-bold' : 'font-medium'} hover:opacity-80`;
         };
         const card = document.createElement('div');
-        card.className = `worker-card bg-white rounded-2xl p-4 shadow-lg transition-all cursor-pointer fade-in ${isSelected ? 'selected' : ''}`;
+        card.className = `worker-card bg-white rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-lg transition-all cursor-pointer fade-in ${isSelected ? 'selected' : ''}`;
         card.innerHTML = `
-          <div class="text-center mb-3">
-            <div class="mb-2 flex justify-center">${getWorkerPhotoHtml(worker, 60)}</div>
-            <h3 class="worker-name font-semibold text-gray-800 text-sm">${worker.name}</h3>
-            <p class="status-text text-xs mt-1 ${status ? 'text-gray-600' : 'text-gray-400'}">${status || 'Belum dipilih'}</p>
+          <div class="text-center mb-2 sm:mb-3">
+            <div class="mb-1.5 sm:mb-2 flex justify-center">${getWorkerPhotoHtml(worker, 50)}</div>
+            <h3 class="worker-name font-semibold text-gray-800 text-xs sm:text-sm leading-tight line-clamp-2">${worker.name}</h3>
+            <p class="status-text text-[10px] sm:text-xs mt-0.5 sm:mt-1 ${status ? 'text-gray-600' : 'text-gray-400'}">${status || 'Belum dipilih'}</p>
           </div>
-          <div class="grid grid-cols-2 gap-1">
-            <button onclick="event.stopPropagation(); setStatus(${worker.id}, 'Start Work')" class="${getStatusBtnClass('Start Work', 'bg-green-500')} whitespace-nowrap text-[10px]">Start Work</button>
-            <button onclick="event.stopPropagation(); setStatus(${worker.id}, 'Finish Work')" class="${getStatusBtnClass('Finish Work', 'bg-blue-500')} whitespace-nowrap text-[10px]">Finish Work</button>
-            <button onclick="event.stopPropagation(); setStatus(${worker.id}, 'Sakit')" class="${getStatusBtnClass('Sakit', 'bg-orange-500')} text-[10px]">Sakit</button>
-            <button onclick="event.stopPropagation(); setStatus(${worker.id}, 'Standby')" class="${getStatusBtnClass('Standby', 'bg-purple-500')} text-[10px]">Standby</button>
+          <div class="grid grid-cols-2 gap-0.5 sm:gap-1">
+            <button onclick="event.stopPropagation(); setStatus(${worker.id}, 'Start Work')" class="${getStatusBtnClass('Start Work', 'bg-green-500')} whitespace-nowrap text-[8px] sm:text-[10px] py-1 sm:py-1.5">Start</button>
+            <button onclick="event.stopPropagation(); setStatus(${worker.id}, 'Finish Work')" class="${getStatusBtnClass('Finish Work', 'bg-blue-500')} whitespace-nowrap text-[8px] sm:text-[10px] py-1 sm:py-1.5">Finish</button>
+            <button onclick="event.stopPropagation(); setStatus(${worker.id}, 'Sakit')" class="${getStatusBtnClass('Sakit', 'bg-orange-500')} text-[8px] sm:text-[10px] py-1 sm:py-1.5">Sakit</button>
+            <button onclick="event.stopPropagation(); setStatus(${worker.id}, 'Standby')" class="${getStatusBtnClass('Standby', 'bg-purple-500')} text-[8px] sm:text-[10px] py-1 sm:py-1.5">Standby</button>
           </div>
         `;
         container.appendChild(card);
@@ -1422,11 +1457,11 @@
       const belumAbsen = Math.max(0, totalWorkers - workersWithStatus.size);
       
       return `
-        <div class="bg-green-500 rounded-xl p-4 text-white shadow-lg text-center"><div class="font-semibold text-sm mb-2">Start Work</div><div class="text-5xl font-bold">${startWork}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div></div>
-        <div class="bg-blue-500 rounded-xl p-4 text-white shadow-lg text-center"><div class="font-semibold text-sm mb-2">Finish Work</div><div class="text-5xl font-bold">${finishWork}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div></div>
-        <div onclick="showStatusCardPopup('Sakit')" class="bg-orange-500 rounded-xl p-4 text-white shadow-lg text-center status-card-clickable"><div class="font-semibold text-sm mb-2">Sakit</div><div class="text-5xl font-bold">${sakit}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div><div class="text-xs mt-2 opacity-70">👆 Klik untuk detail</div></div>
-        <div onclick="showStatusCardPopup('Standby')" class="bg-purple-500 rounded-xl p-4 text-white shadow-lg text-center status-card-clickable"><div class="font-semibold text-sm mb-2">Standby</div><div class="text-5xl font-bold">${standby}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div><div class="text-xs mt-2 opacity-70">👆 Klik untuk detail</div></div>
-        <div class="bg-red-500 rounded-xl p-4 text-white shadow-lg text-center"><div class="font-semibold text-sm mb-2">Belum Absen</div><div class="text-5xl font-bold">${belumAbsen}</div><div class="text-xs opacity-80 mt-1">dari ${totalWorkers} pekerja</div></div>
+        <div class="bg-green-500 rounded-lg sm:rounded-xl p-3 sm:p-4 text-white shadow-lg text-center"><div class="font-semibold text-xs sm:text-sm mb-1 sm:mb-2">Start Work</div><div class="text-3xl sm:text-5xl font-bold">${startWork}</div><div class="text-[10px] sm:text-xs opacity-80 mt-0.5 sm:mt-1">dari ${totalWorkers}</div></div>
+        <div class="bg-blue-500 rounded-lg sm:rounded-xl p-3 sm:p-4 text-white shadow-lg text-center"><div class="font-semibold text-xs sm:text-sm mb-1 sm:mb-2">Finish Work</div><div class="text-3xl sm:text-5xl font-bold">${finishWork}</div><div class="text-[10px] sm:text-xs opacity-80 mt-0.5 sm:mt-1">dari ${totalWorkers}</div></div>
+        <div onclick="showStatusCardPopup('Sakit')" class="bg-orange-500 rounded-lg sm:rounded-xl p-3 sm:p-4 text-white shadow-lg text-center status-card-clickable"><div class="font-semibold text-xs sm:text-sm mb-1 sm:mb-2">Sakit</div><div class="text-3xl sm:text-5xl font-bold">${sakit}</div><div class="text-[10px] sm:text-xs opacity-80 mt-0.5 sm:mt-1">dari ${totalWorkers}</div><div class="text-[10px] sm:text-xs mt-1 sm:mt-2 opacity-70">👆 Detail</div></div>
+        <div onclick="showStatusCardPopup('Standby')" class="bg-purple-500 rounded-lg sm:rounded-xl p-3 sm:p-4 text-white shadow-lg text-center status-card-clickable"><div class="font-semibold text-xs sm:text-sm mb-1 sm:mb-2">Standby</div><div class="text-3xl sm:text-5xl font-bold">${standby}</div><div class="text-[10px] sm:text-xs opacity-80 mt-0.5 sm:mt-1">dari ${totalWorkers}</div><div class="text-[10px] sm:text-xs mt-1 sm:mt-2 opacity-70">👆 Detail</div></div>
+        <div class="bg-red-500 rounded-lg sm:rounded-xl p-3 sm:p-4 text-white shadow-lg text-center"><div class="font-semibold text-xs sm:text-sm mb-1 sm:mb-2">Belum Absen</div><div class="text-3xl sm:text-5xl font-bold">${belumAbsen}</div><div class="text-[10px] sm:text-xs opacity-80 mt-0.5 sm:mt-1">dari ${totalWorkers}</div></div>
       `;
     }
 
@@ -1700,5 +1735,5 @@
     
     initApp();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6f64e9914faa34',t:'MTc2NzI0MzAwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b709262b1a6e9d5',t:'MTc2NzI1NTM1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
