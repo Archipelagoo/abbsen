@@ -837,8 +837,6 @@ function jsonResponse(data) {
     let GOOGLE_SCRIPT_URL = localStorage.getItem('googleScriptUrl') || 'https://script.google.com/macros/s/AKfycbzTjKB4lTiZKafD34Ts-NWEC-qq6RTAYudu_r4X8eijJSDCUzz1RvRY1a4S2XTENBHxjQ/exec';
 
     let watermarkLogoLoaded = null;
-    
-    // Variable untuk menyimpan tanggal recap saat ini
     let currentStatusCardDate = '';
     
     function preloadWatermarkLogo() {
@@ -868,25 +866,17 @@ function jsonResponse(data) {
         const text = await response.text();
         const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?$/);
         
-        if (!jsonMatch) {
-          console.log('No recap data found or sheet empty');
-          return [];
-        }
+        if (!jsonMatch) return [];
         
         const data = JSON.parse(jsonMatch[1]);
         const rows = data.table.rows;
         const cols = data.table.cols;
         
-        if (!rows || rows.length < 3) {
-          console.log('Not enough data in recap sheet');
-          return [];
-        }
+        if (!rows || rows.length < 3) return [];
         
         const result = [];
-        
         const tanggalRow = rows[0];
         const jamRow = rows[1];
-        
         const numCols = cols.length;
         
         for (let col = 1; col < numCols; col++) {
@@ -924,11 +914,9 @@ function jsonResponse(data) {
           }
         }
         
-        console.log(`Loaded ${result.length} attendance records from Google Sheets`);
         return result;
         
       } catch (error) {
-        console.error('Error fetching recap data:', error);
         return [];
       }
     }
@@ -1073,7 +1061,6 @@ function jsonResponse(data) {
           const img = new Image();
           
           img.onload = async () => {
-            // Resize untuk upload (lowres - max 800px) agar upload cepat
             const maxUploadSize = 800;
             let uploadWidth = img.width;
             let uploadHeight = img.height;
@@ -1084,25 +1071,22 @@ function jsonResponse(data) {
               uploadHeight = img.height * ratio;
             }
             
-            // Canvas untuk upload (lowres)
             const uploadCanvas = document.createElement('canvas');
             uploadCanvas.width = uploadWidth;
             uploadCanvas.height = uploadHeight;
             const uploadCtx = uploadCanvas.getContext('2d');
             uploadCtx.drawImage(img, 0, 0, uploadWidth, uploadHeight);
             await addWatermark(uploadCtx, uploadWidth, uploadHeight, locationAddress);
-            const uploadData = uploadCanvas.toDataURL('image/jpeg', 0.7); // Lowres untuk upload
+            const uploadData = uploadCanvas.toDataURL('image/jpeg', 0.7);
             
-            // Canvas untuk device (fullres)
             const fullCanvas = document.createElement('canvas');
             fullCanvas.width = img.width;
             fullCanvas.height = img.height;
             const fullCtx = fullCanvas.getContext('2d');
             fullCtx.drawImage(img, 0, 0);
             await addWatermark(fullCtx, img.width, img.height, locationAddress);
-            const fullData = fullCanvas.toDataURL('image/jpeg', 0.92); // Fullres untuk simpan ke device
+            const fullData = fullCanvas.toDataURL('image/jpeg', 0.92);
             
-            // Thumbnail untuk preview
             const thumbCanvas = document.createElement('canvas');
             const maxThumbSize = 200;
             const thumbRatio = Math.min(maxThumbSize / img.width, maxThumbSize / img.height);
@@ -1113,8 +1097,8 @@ function jsonResponse(data) {
             
             resolve({
               thumbnail: thumbCanvas.toDataURL('image/jpeg', 0.5),
-              uploadData: uploadData,  // Lowres untuk upload ke server
-              fullData: fullData,      // Fullres untuk simpan ke device
+              uploadData: uploadData,
+              fullData: fullData,
               timestamp: new Date()
             });
           };
@@ -1362,7 +1346,6 @@ function jsonResponse(data) {
     async function fetchPhotoFolders() {
       if (!GOOGLE_SCRIPT_URL) return [];
       try {
-        // Timeout 8 detik untuk fetch folders
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
         
@@ -1374,7 +1357,6 @@ function jsonResponse(data) {
         const data = await response.json();
         return data.success ? data.folders : [];
       } catch (error) {
-        console.log('Fetch folders timeout/error:', error.message);
         return [];
       }
     }
@@ -1382,7 +1364,6 @@ function jsonResponse(data) {
     async function fetchPhotosFromFolder(folderId) {
       if (!GOOGLE_SCRIPT_URL) return [];
       try {
-        // Timeout 10 detik untuk fetch photos
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000);
         
@@ -1394,7 +1375,6 @@ function jsonResponse(data) {
         const data = await response.json();
         return data.success ? data.photos : [];
       } catch (error) {
-        console.log('Fetch photos timeout/error:', error.message);
         return [];
       }
     }
@@ -1406,11 +1386,9 @@ function jsonResponse(data) {
     async function showPhotoRecap() {
       showPage('photoFoldersPage');
       
-      // Tampilkan cache dulu jika ada (instant load)
       if (cachedFolders && cachedFolders.length > 0) {
         document.getElementById('photoFoldersLoading').classList.add('hidden');
         renderPhotoFolders(cachedFolders);
-        // Background refresh tanpa blocking
         fetchPhotoFolders().then(folders => {
           if (folders && folders.length > 0) {
             cachedFolders = folders;
@@ -1420,7 +1398,6 @@ function jsonResponse(data) {
         return;
       }
       
-      // Tampilkan loading indicator
       document.getElementById('photoFolders').classList.add('hidden');
       document.getElementById('noPhotosMessage').classList.add('hidden');
       document.getElementById('photoFoldersLoading').classList.remove('hidden');
@@ -1452,12 +1429,10 @@ function jsonResponse(data) {
       showPage('photoGalleryPage');
       document.getElementById('galleryTitle').textContent = `Foto: ${folderName}`;
       
-      // Tampilkan cache dulu jika ada (instant load)
       if (cachedPhotos[folderId] && cachedPhotos[folderId].length > 0) {
         document.getElementById('photoGalleryLoading').classList.add('hidden');
         document.getElementById('photoGallery').classList.remove('hidden');
         renderPhotoGallery(cachedPhotos[folderId]);
-        // Background refresh tanpa blocking
         fetchPhotosFromFolder(folderId).then(photos => {
           if (photos && photos.length > 0) {
             cachedPhotos[folderId] = photos;
@@ -1467,13 +1442,11 @@ function jsonResponse(data) {
         return;
       }
       
-      // Tampilkan loading indicator, sembunyikan gallery
       document.getElementById('photoGallery').classList.add('hidden');
       document.getElementById('photoGalleryLoading').classList.remove('hidden');
       
       const photos = await fetchPhotosFromFolder(folderId);
       
-      // Sembunyikan loading, tampilkan gallery
       document.getElementById('photoGalleryLoading').classList.add('hidden');
       document.getElementById('photoGallery').classList.remove('hidden');
       
@@ -1694,12 +1667,17 @@ function jsonResponse(data) {
       }, 500);
     }
 
-    // ==================== SUBMIT ====================
+    // ==================== DEVICE DETECTION & PHOTO HANDLING ====================
     
     // Deteksi iOS device
     function isIOSDevice() {
       return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    }
+    
+    // Deteksi Android device
+    function isAndroidDevice() {
+      return /Android/i.test(navigator.userAgent);
     }
     
     // Konversi base64 ke Blob
@@ -1715,57 +1693,58 @@ function jsonResponse(data) {
       return new Blob([uint8Array], { type: contentType });
     }
     
-    // Download foto untuk Android & Desktop
-    function downloadPhoto(photoData, fileName) {
+    // Download foto untuk Android - LANGSUNG tanpa popup/konfirmasi
+    function forceDownloadPhoto(photoData, fileName) {
+      // Konversi base64 ke blob
+      const blob = base64ToBlob(photoData);
+      const blobUrl = URL.createObjectURL(blob);
+      
+      // Buat hidden link dan trigger download langsung
       const link = document.createElement('a');
-      link.href = photoData;
+      link.href = blobUrl;
       link.download = fileName;
+      link.style.cssText = 'position:absolute;left:-9999px;visibility:hidden;';
       document.body.appendChild(link);
+      
+      // Force click - langsung download tanpa konfirmasi
       link.click();
-      document.body.removeChild(link);
+      
+      // Cleanup setelah delay
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      }, 500);
     }
     
-    // Share foto untuk iOS menggunakan Web Share API - langsung buka Share Sheet
+    // Share foto untuk iOS - trigger native Share Sheet
     async function sharePhotoIOS(photoData, fileName) {
       try {
         const blob = base64ToBlob(photoData);
         const file = new File([blob], fileName, { type: 'image/jpeg' });
         
-        // Cek apakah browser support Web Share API dengan files
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          // Langsung buka Share Sheet iOS
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
-            files: [file]
+            files: [file],
+            title: fileName
           });
           return true;
         } else {
-          // Fallback: buka blob URL di tab baru (user bisa long-press save)
-          const blobUrl = URL.createObjectURL(blob);
-          window.open(blobUrl, '_blank');
-          setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+          // Fallback - download langsung
+          forceDownloadPhoto(photoData, fileName);
           return true;
         }
       } catch (error) {
         if (error.name === 'AbortError') {
-          console.log('Share dibatalkan oleh user');
           return true;
         }
-        console.error('Error sharing:', error);
-        // Fallback: buka di tab baru
-        try {
-          const blob = base64ToBlob(photoData);
-          const blobUrl = URL.createObjectURL(blob);
-          window.open(blobUrl, '_blank');
-          setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
-        } catch (e) {
-          console.error('Fallback juga gagal:', e);
-        }
+        // Fallback ke download jika share gagal
+        forceDownloadPhoto(photoData, fileName);
         return true;
       }
     }
     
-    // Download/Share semua foto
-    async function downloadOrSharePhotos(photos, baseFileName) {
+    // Process foto ke device - Android langsung download, iOS via Share Sheet
+    async function savePhotosToDevice(photos, baseFileName) {
       if (photos.length === 0) return;
       
       const isIOS = isIOSDevice();
@@ -1779,21 +1758,20 @@ function jsonResponse(data) {
         if (isIOS) {
           // iOS: Gunakan Share Sheet
           await sharePhotoIOS(photo.fullData, fileName);
-          // Tunggu sebentar antar foto untuk iOS
           if (i < photos.length - 1) {
             await new Promise(resolve => setTimeout(resolve, 500));
           }
         } else {
-          // Android & Desktop: Download langsung
-          downloadPhoto(photo.fullData, fileName);
-          // Delay kecil antar download untuk mencegah browser block
+          // Android & Desktop: Download langsung tanpa konfirmasi
+          forceDownloadPhoto(photo.fullData, fileName);
           if (i < photos.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 300));
+            await new Promise(resolve => setTimeout(resolve, 200));
           }
         }
       }
     }
-    
+
+    // ==================== SUBMIT ====================
     async function submitAbsensi() {
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.disabled = true;
@@ -1810,20 +1788,17 @@ function jsonResponse(data) {
         status: workerStatus[worker.id] || 'Belum Absen'
       }));
       
-      const isIOS = isIOSDevice();
       const photosToProcess = [...capturedPhotos];
       const baseFileName = `Absen_${tanggalFormatted.replace(/ /g, '_')}_${jamFormatted.replace(':', '-')}`;
       
-      // PARALLEL UPLOAD: Upload foto (lowres) & kirim data absensi secara bersamaan
+      // PARALLEL UPLOAD
       const uploadPromises = [];
       
-      // Upload foto ke Drive pakai lowres (uploadData) - lebih cepat!
+      // Upload foto ke Drive (lowres)
       if (GOOGLE_SCRIPT_URL && photosToProcess.length > 0) {
         photosToProcess.forEach((photo, i) => {
           uploadPromises.push(
             uploadPhotoToDriveFast(photo.uploadData, photo.timestamp, i)
-              .then(() => console.log(`✅ Foto ${i + 1} uploaded`))
-              .catch(err => console.error(`❌ Foto ${i + 1} gagal:`, err))
           );
         });
       }
@@ -1842,8 +1817,7 @@ function jsonResponse(data) {
               workers: workers.map(w => w.name),
               attendance: attendanceData
             })
-          }).then(() => console.log('✅ Data absensi terkirim'))
-            .catch(err => console.error('❌ Error absensi:', err))
+          })
         );
       }
       
@@ -1851,8 +1825,6 @@ function jsonResponse(data) {
       if (uploadPromises.length > 0) {
         await Promise.all(uploadPromises);
       }
-      
-      console.log('✅ Semua data berhasil dikirim!');
       
       // Reset form
       resetAllStatusSilent();
@@ -1862,22 +1834,19 @@ function jsonResponse(data) {
       submitBtn.disabled = false;
       submitBtn.innerHTML = '<svg class="w-6 h-6 transform -rotate-45" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Kirim Absensi';
       
-      // Tampilkan toast & proses foto untuk device
+      // Tampilkan toast
       if (photosToProcess.length > 0) {
         showToast(`✅ Absensi & ${photosToProcess.length} foto berhasil dikirim!`);
         
-        // Delay sedikit supaya toast muncul dulu
+        // Simpan foto ke device - Android langsung download, iOS via Share Sheet
         await new Promise(resolve => setTimeout(resolve, 300));
-        
-        // iOS: Langsung buka Share Sheet untuk simpan foto fullres
-        // Android: Download foto fullres langsung
-        await downloadOrSharePhotos(photosToProcess, baseFileName);
+        await savePhotosToDevice(photosToProcess, baseFileName);
       } else {
         showToast('✅ Absensi berhasil dikirim!');
       }
     }
     
-    // Fungsi upload foto yang cepat (parallel-friendly, fire & forget)
+    // Fungsi upload foto yang cepat
     async function uploadPhotoToDriveFast(photoData, timestamp, index = 0) {
       if (!GOOGLE_SCRIPT_URL) return { success: false };
       
@@ -1889,7 +1858,6 @@ function jsonResponse(data) {
       const seconds = String(now.getSeconds()).padStart(2, '0');
       const fileName = `Absen_${hours}-${minutes}-${seconds}_${index}.jpg`;
       
-      // Fire and forget - timeout 3 detik (lowres foto = upload cepat)
       return new Promise((resolve) => {
         const timeoutId = setTimeout(() => resolve({ success: true }), 3000);
         
@@ -1905,7 +1873,7 @@ function jsonResponse(data) {
           })
         })
         .then(() => { clearTimeout(timeoutId); resolve({ success: true }); })
-        .catch(() => { clearTimeout(timeoutId); resolve({ success: true }); }); // Tetap resolve agar tidak blocking
+        .catch(() => { clearTimeout(timeoutId); resolve({ success: true }); });
       });
     }
 
@@ -1928,13 +1896,10 @@ function jsonResponse(data) {
       `;
       document.getElementById('todayStatusCards').innerHTML = '';
       
-      console.log('Fetching data terbaru dari Google Sheets...');
       const freshData = await fetchRecapDataFromSheet();
       allAbsensiData = freshData;
-      console.log('Data berhasil diperbarui. Total:', allAbsensiData.length);
       
       const todayData = allAbsensiData.filter(d => d.date === today && d.type === 'attendance');
-      console.log('Data hari ini ditemukan:', todayData.length);
       
       renderStatusCards('todayStatusCards', today, allAbsensiData);
       renderRecapTable(todayData, 'todayRecapContent');
@@ -1955,7 +1920,6 @@ function jsonResponse(data) {
       `;
       document.getElementById('dateStatusCards').innerHTML = '';
       
-      console.log('Fetching data terbaru dari Google Sheets...');
       const freshData = await fetchRecapDataFromSheet();
       allAbsensiData = freshData;
       
@@ -2322,7 +2286,6 @@ function jsonResponse(data) {
       const result = [];
       
       if (statusType === 'Belum Absen') {
-        // Cari pekerja yang belum punya status apapun atau hanya punya status "Belum Absen"
         const workersWithStatus = new Set();
         Object.entries(workerStatusMap).forEach(([name, statuses]) => {
           const hasRealStatus = [...statuses].some(s => s !== 'Belum Absen');
@@ -2337,7 +2300,6 @@ function jsonResponse(data) {
           }
         });
       } else {
-        // Cari pekerja dengan status tertentu
         Object.entries(workerStatusMap).forEach(([name, statuses]) => {
           if (statuses.has(statusType)) {
             const workerInfo = workers.find(w => w.name === name);
@@ -2359,7 +2321,6 @@ function jsonResponse(data) {
       const title = document.getElementById('statusCardPopupTitle');
       const content = document.getElementById('statusCardPopupContent');
       
-      // Set warna header sesuai status
       const statusColors = {
         'Start Work': 'bg-green-500',
         'Finish Work': 'bg-blue-500',
@@ -2371,7 +2332,6 @@ function jsonResponse(data) {
       header.className = `px-6 py-4 flex items-center justify-between ${statusColors[statusType] || 'bg-gray-500'}`;
       title.textContent = `Daftar Pekerja - ${statusType}`;
       
-      // Ambil data pekerja dengan status tersebut
       const workersList = getWorkersByStatus(statusType, currentStatusCardDate);
       
       if (workersList.length === 0) {
@@ -2506,10 +2466,8 @@ function jsonResponse(data) {
       btn.innerHTML = `<svg class="w-5 h-5 refresh-icon spinning" fill="white" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> Memuat...`;
       
       try {
-        console.log('🔄 Refreshing data from Google Sheets...');
         const freshData = await fetchRecapDataFromSheet();
         allAbsensiData = freshData;
-        console.log(`✅ Data refreshed! Total: ${allAbsensiData.length} records`);
         
         if (page === 'today') {
           const today = new Date().toLocaleDateString('id-ID');
@@ -2527,7 +2485,6 @@ function jsonResponse(data) {
         showToast(`Data berhasil diperbarui! (${allAbsensiData.length} record)`);
         
       } catch (error) {
-        console.error('❌ Error refreshing data:', error);
         showToast('Gagal memperbarui data!', 'error');
       }
       
@@ -2551,58 +2508,6 @@ function jsonResponse(data) {
             ['company_name', cfg.company_name || defaultConfig.company_name]
           ])
         });
-        config = { ...defaultConfig, ...window.elementSdk.config };
-      }
-    }
-
-    // ==================== DATA SDK ====================
-    const dataHandler = {
-      onDataChanged(data) {}
-    };
-
-    async function initDataSdk() {
-      if (window.dataSdk) {
-        await window.dataSdk.init(dataHandler);
-      }
-    }
-
-    // ==================== LOGIN ====================
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      
-      if (username === 'archipelago' && password === 'balivibes') {
-        document.getElementById('loginError').classList.add('hidden');
-        showPage('absensiPage');
-        getCurrentLocation();
-      } else {
-        document.getElementById('loginError').classList.remove('hidden');
-      }
-    });
-
-    // ==================== INIT ====================
-    async function init() {
-      await initElementSdk();
-      await initDataSdk();
-      
-      await fetchWorkersFromSheet();
-      renderWorkerGrid();
-      
-      console.log('Fetching recap data from Google Sheets...');
-      const recapData = await fetchRecapDataFromSheet();
-      allAbsensiData = recapData;
-      console.log(`Loaded ${allAbsensiData.length} total attendance records`);
-      
-      const workerHoursSearch = document.getElementById('workerHoursSearch');
-      if (workerHoursSearch) {
-        workerHoursSearch.addEventListener('input', (e) => {
-          renderWorkerHoursResults(e.target.value);
-        });
-      }
-    }
-
-    init();
-  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6f14376283d210',t:'MTc2NzIzOTcwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+        config = { ...defaultConfig, ...</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6f29b8964a0ddc',t:'MTc2NzI0MDU4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
